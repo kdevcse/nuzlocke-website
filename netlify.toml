@@ -2,8 +2,7 @@
 
     publish = "src"
 
-    command = ""
+    command = "npx babel --watch src --out-dir . --presets react-app/prod"
 
 [dev]
-
     publish = "src"

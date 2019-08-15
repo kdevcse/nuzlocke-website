@@ -1,0 +1,9 @@
+[build]
+
+    publish = "src"
+
+    command = ""
+
+[dev]
+
+    publish = "src"

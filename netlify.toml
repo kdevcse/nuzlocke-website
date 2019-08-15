@@ -1,8 +1,8 @@
 [build]
 
-    publish = "src"
+    publish = "build"
 
-    command = "npx babel --watch src --out-dir . --presets react-app/prod"
+    command = "echo 'Hello World'"
 
 [dev]
-    publish = "src"
+    publish = "public"

@@ -1,8 +1,12 @@
 [build]
 
-    publish = "build"
+    publish = "public"
 
-    command = "npm run build"
+    command = "npx babel src --out-dir build --presets react-app/prod"
 
 [dev]
-    publish = "build"
+    publish = "public"
+
+    #Honestly forget this nonsense. 
+    #Just use: npx babel src --watch public --out-dir build --presets react-app/prod
+    #command = "npx babel src --out-dir build --presets react-app/prod"

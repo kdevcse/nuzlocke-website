@@ -1,5 +1,11 @@
 'use strict'
 
+function LoginButton(){
+    return(
+        <button id="login-button">Login</button>
+    );
+}
+
 class NavBar extends React.Component{
     constructor(props){
         super(props);
@@ -7,14 +13,14 @@ class NavBar extends React.Component{
 
     render(){
         return(
-            <div>
-                <a>Home</a>
-                <a>Create</a>
-                <a>View</a>
-                <a><button>Login</button></a>
+            <div id="nav-bar">
+                <a href="./index.html">Home</a>
+                <a href="./create/index.html">Create</a>
+                <a href="./view/index.html">View</a>
+                <LoginButton></LoginButton>
             </div>
         );
     }
 }
 
-ReactDOM.render(<NavBar/>,document.getElementById("nav-bar"));
+ReactDOM.render(<NavBar/>,document.getElementById("nav-container"));

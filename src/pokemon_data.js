@@ -9,7 +9,7 @@ class PokemonData extends React.Component {
     render() {
         return (
         <div>
-            Hello how is it going? I am a react application.
+            Hello how is it going? I am a react application. Hahahaha. yo. Wassup.
         </div>
         );
     }

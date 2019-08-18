@@ -1,0 +1,7 @@
+#nav-bar{
+    width: 100%;
+}
+#nav-bar > a{
+    margin-left: 5%;
+    margin-right: 5%;
+}

@@ -2,7 +2,7 @@
 
     publish = "build"
 
-    command = "npx babel public src --out-dir build --presets react-app/prod"
+    command = "npx babel public src --out-dir build --presets react-app/prod; copyfiles -u 1 public/* build;"
 
 [dev]
     publish = "build"

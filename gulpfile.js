@@ -11,12 +11,13 @@ function clean(cb){
     cb();
 }
 
-function createBuild(){
+function createBuild(cb){
     exec('mkdir build', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
     });
+    cb();
 }
 
 function compile(cb) {

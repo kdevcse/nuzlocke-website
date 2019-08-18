@@ -25,8 +25,9 @@ function compile(cb) {
     cb();
 }
   
-exports.build = series(clean,compile);
-exports.default = function() {
+exports.rebuild = series(clean,compile);
+exports.development = function() {
     // The task will be executed upon startup
     watch(['src/*','public/*'], { ignoreInitial: false },series(clean,compile));
-  };
+};
+exports.production = compile;

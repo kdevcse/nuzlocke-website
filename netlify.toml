@@ -2,7 +2,7 @@
 
     publish = "build"
 
-    command = "gulp build"
+    command = "gulp production"
 
 [dev]
     publish = "build"

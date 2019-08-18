@@ -7,7 +7,6 @@ function clean(cb){
         console.log(stderr);
         cb(err);
       });
-    createBuild();
     cb();
 }
 
@@ -35,9 +34,9 @@ function compile(cb) {
     cb();
 }
   
-exports.rebuild = series(clean,compile);
+exports.rebuild = series(clean,createBuild,compile);
 exports.development = function() {
     // The task will be executed upon startup
-    watch(['src/*','public/*'], { ignoreInitial: false },series(clean,compile));
+    watch(['src/*','public/*'], { ignoreInitial: false },series(clean,createBuild,compile));
 };
 exports.production = series(createBuild,compile);

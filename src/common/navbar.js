@@ -14,9 +14,9 @@ class NavBar extends React.Component{
     render(){
         return(
             <div id="nav-bar">
-                <a href="./index.html">Home</a>
-                <a href="./create/index.html">Create</a>
-                <a href="./view/index.html">View</a>
+                <a href="/index.html">Home</a>
+                <a href="/create/index.html">Create</a>
+                <a href="/view/index.html">View</a>
                 <LoginButton></LoginButton>
             </div>
         );

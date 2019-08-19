@@ -1,5 +1,5 @@
-'use strict'
-import 'navbar.css';
+'use strict';
+import './navbar.css';
 
 function LoginButton(){
     return(

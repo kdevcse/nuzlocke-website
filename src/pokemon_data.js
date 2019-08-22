@@ -1,4 +1,3 @@
-'use strict';
 
 class PokemonData extends React.Component {
     //react constructor: constructor() with JS consructor: super()

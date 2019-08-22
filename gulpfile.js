@@ -26,7 +26,7 @@ function compile(cb) {
         console.log(stderr);
         cb(err);
       });
-    exec('cp -v -f -R src/ build', function (err, stdout, stderr) {
+    exec('cp -v -f -R src/* build', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);

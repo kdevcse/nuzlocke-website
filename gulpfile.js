@@ -21,12 +21,12 @@ function createBuild(cb){
 
 function compile(cb) {
     // place code for your default task here
-    exec('cp -v -f -R src/*.html src/*.css build', function (err, stdout, stderr) {
+    exec('cp -v -f -R src build', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
       });
-    exec('npx babel src --out-dir build --presets react-app/prod', function (err, stdout, stderr) {
+    exec('npx babel src --out-dir src --presets react-app/prod', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);

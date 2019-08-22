@@ -1,5 +1,3 @@
-import './navbar.css';
-
 function LoginButton(){
     return(
         <button id="login-button">Login</button>

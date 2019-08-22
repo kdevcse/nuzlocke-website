@@ -1,3 +1,4 @@
+'use strict'
 import 'navbar.css';
 
 function LoginButton(){

@@ -21,7 +21,7 @@ function createBuild(cb){
 
 function compile(cb) {
     // place code for your default task here
-    exec('cp -v -f -R public/* build', function (err, stdout, stderr) {
+    exec('cp -v -f -R src/*.html src/*.css build', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
@@ -33,10 +33,10 @@ function compile(cb) {
       });
     cb();
 }
-  
+
 exports.rebuild = series(clean,createBuild,compile);
 exports.development = function() {
     // The task will be executed upon startup
-    watch(['src/*','public/*'], { ignoreInitial: false },series(clean,createBuild,compile));
+    watch(['src/*'], { ignoreInitial: false },series(clean,createBuild,compile));
 };
 exports.production = series(createBuild,compile);

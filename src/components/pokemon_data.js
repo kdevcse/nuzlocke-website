@@ -13,3 +13,5 @@ class PokemonData extends React.Component {
         );
     }
 }
+
+module.exports = PokemonData;

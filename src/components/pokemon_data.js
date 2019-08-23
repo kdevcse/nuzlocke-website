@@ -8,11 +8,8 @@ class PokemonData extends React.Component {
     render() {
         return (
         <div>
-            Hello how is it going? I am a react application. Hahahaha. yo. yuuh
+            Hello how is it going? I am a react application.
         </div>
         );
     }
 }
-
-let domContainer = document.querySelector('.pokemon');
-ReactDOM.render(<PokemonData />, domContainer);

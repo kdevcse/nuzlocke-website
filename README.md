@@ -1,7 +1,9 @@
 # nuzlocke-website
-A website that allows users to create and store their pokemon nuzlocke runs.
+This application will provide a way for users to track their Pokemon Nuzlocke Runs online and even live display their progress on the web to others. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can read more about Nuzlocke runs [here](https://bulbapedia.bulbagarden.net/wiki/Nuzlocke_Challenge)
+
+This site is at the very early stages of development, as I am currently experimenting with all of the capabilities a react application will provide in this context.
 
 #On Build
 - Run babel JSX preprocessor and move them to build directory

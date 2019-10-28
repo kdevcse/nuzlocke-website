@@ -1,8 +1,0 @@
-[build]
-
-    publish = "build"
-
-    command = "gulp production"
-
-[dev]
-    publish = "build"

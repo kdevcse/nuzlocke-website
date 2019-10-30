@@ -1,0 +1,11 @@
+.Nav {
+    color: white;
+}
+.Nav a {
+    list-style: none;
+    color: white;
+    text-decoration: none;
+}
+/*.Nav li{
+    border-bottom: white solid 1px;
+}*/

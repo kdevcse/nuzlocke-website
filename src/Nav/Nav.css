@@ -1,11 +1,27 @@
 .Nav {
     color: white;
+    margin: 0;
+    padding: 30px;
+    width: 230px;
+    height: 100%;
+    position: fixed;
+    border-right: white solid 1px;
+}
+.Nav ul {
+    list-style-type: none;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 .Nav a {
     list-style: none;
     color: white;
     text-decoration: none;
 }
-/*.Nav li{
-    border-bottom: white solid 1px;
-}*/
+.Nav li{
+    padding: 5px 0 5px 0;
+}
+.Nav a:hover{
+    text-decoration: underline;
+}

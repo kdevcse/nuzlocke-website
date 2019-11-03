@@ -14,3 +14,10 @@
 .App-link {
   color: #09d3ac;
 }
+
+.content{
+  position: fixed;
+  padding: 30px;
+  left: 291px;
+  justify-content: center;
+}

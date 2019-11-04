@@ -1,18 +1,19 @@
 .Nav {
-    color: white;
+    flex: 5;
     margin: 0;
     padding: 30px;
     width: 230px;
     height: 100%;
     position: fixed;
     border-right: white solid 1px;
+    color: white;
+    text-align: center;
 }
 .Nav ul {
     list-style-type: none;
     overflow: auto;
     margin: 0;
     padding: 0;
-    text-align: center;
 }
 .Nav a {
     list-style: none;
@@ -22,6 +23,11 @@
 .Nav li{
     padding: 5px 0 5px 0;
 }
-.Nav a:hover{
-    text-decoration: underline;
+.Nav a:hover li{
+    text-decoration: underline #09d3ac;
+}
+.Nav .NavLogin{
+    color: #09d3ac;
+    font-size: large;
+    margin-bottom: 30px;
 }

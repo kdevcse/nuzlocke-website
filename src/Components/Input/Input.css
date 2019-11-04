@@ -1,0 +1,9 @@
+.InputContainer{
+    margin-bottom: 15px;
+}
+.InputContainer p {
+    margin-bottom: 5px;
+}
+.InputContainer input {
+    width: 100%;
+}

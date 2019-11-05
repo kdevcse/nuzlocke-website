@@ -1,3 +1,9 @@
 .Dashboard {
     color: white;
 }
+
+.Dashboard .PartyContainer {
+    border: solid 1px #09d3ac;
+    border-radius: 5px;
+    padding: 30px;
+}

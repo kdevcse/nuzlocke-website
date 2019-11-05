@@ -9,7 +9,7 @@ function Login() {
     <form className="LoginForm">
       <Input type='text' text='Email'/>
       <Input type='password' text='Password'/>
-      <LoginButton text='Login2'></LoginButton>
+      <LoginButton></LoginButton>
     </form>
   );
 }

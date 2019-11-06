@@ -9,7 +9,7 @@ function Nav() {
         <p className='NavLogin'>Login</p>
       </Link>
       <ul>
-        <Link to='/'>
+        <Link to='/dashboard'>
           <li>Dashboard</li>
         </Link>
         <Link to='/about'>

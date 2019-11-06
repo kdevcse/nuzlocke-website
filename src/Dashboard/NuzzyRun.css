@@ -1,0 +1,23 @@
+.nuzzy-run {
+    color: white;
+}
+
+.nuzzy-run .run-title{
+    margin-bottom: 2px;
+}
+
+.nuzzy-run .version b, .nuzzy-run .badges b{
+    color: #09ccd3;
+}
+
+.nuzzy-run .badges {
+    margin-bottom: 50px;
+}
+
+.nuzzy-run .party-container {
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    border: solid 1px #09ccd3;
+    border-radius: 5px;
+    padding: 30px;
+}

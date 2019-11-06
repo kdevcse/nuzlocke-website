@@ -3,6 +3,7 @@
   height: 100%;
   position: absolute;
   display: inline-flex;
+  color: white;
 }
 
 .App-link {

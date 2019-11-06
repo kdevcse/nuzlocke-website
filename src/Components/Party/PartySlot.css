@@ -1,0 +1,14 @@
+.party-slot{
+    border: 1px solid #09ccd3;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.party-slot .party-slot-title{
+    color: white;
+}
+
+.party-slot .party-slot-level{
+    margin: 5px 0 5px 0;
+}

@@ -9,11 +9,6 @@ import Login from '../Components/Login/Login';
 
 function App() {
   //TODO: NuzzyRun route needs to be loaded dynamically
-  
-  //store.subscribe(() => console.log(store.getState()));
-  
-  //DISPATCH
-  //store.dispatch(pokeStore.increment());
 
   return (
     <Router>

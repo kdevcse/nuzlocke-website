@@ -1,9 +1,9 @@
-import counterReducer from './Reducers/counter';
+import runReducer from './Reducers/runReducer';
 import loggedInReducer from './Reducers/loggedIn';
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
 let allReducers = combineReducers({
-    counter: counterReducer,
+    runs: runReducer,
     isLoggedIn: loggedInReducer
 });
 

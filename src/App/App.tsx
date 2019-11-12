@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import Nav from '../Nav/Nav';
 import About from '../About/About';
-import NuzzyRun from '../Dashboard/NuzzyRun';
+import { NuzzyRun } from '../Dashboard/NuzzyRun';
 import Dashboard from "../Dashboard/Dashboard";
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login';
 
 function App() {

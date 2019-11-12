@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App/App';
 import * as serviceWorker from './serviceWorker';
-import { createStore } from 'redux';
-import allReducers from './Datastore/Store';
-import { Provider } from 'react-redux';
+import { NuzInfo } from './Dashboard/NuzzyRun';
+import { PokeContext } from './Datastore/Store';
 
-const pokestore = createStore(allReducers, 
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__());
+const init = new NuzInfo(
+  ['Pikachu','Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+  "Kevin's NuzzyRun",
+  "Blue",
+  6
+);
 
 ReactDOM.render(
-    <Provider store={pokestore}>
-        <App/>
-    </Provider>, 
-    document.getElementById('root')
+  <PokeContext.Provider value={init}>
+    <App/>
+  </PokeContext.Provider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

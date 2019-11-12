@@ -1,10 +1,3 @@
-import runReducer from './Reducers/runReducer';
-import loggedInReducer from './Reducers/loggedIn';
-import { combineReducers } from 'redux';
+import React from 'react';
 
-let allReducers = combineReducers({
-    runs: runReducer,
-    isLoggedIn: loggedInReducer
-});
-
-export default allReducers;
+export const PokeContext = React.createContext({});

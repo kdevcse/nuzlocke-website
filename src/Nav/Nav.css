@@ -23,11 +23,11 @@
 .Nav li{
     padding: 5px 0 5px 0;
 }
-.Nav a:hover li{
+.nav-run:hover, .nav-header:hover{
     text-decoration: underline #09d3ac;
 }
-.Nav .NavLogin{
+.nav-header{
     color: #09d3ac;
     font-size: large;
-    margin-bottom: 30px;
+    margin-top: 10px;
 }

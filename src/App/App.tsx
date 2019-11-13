@@ -2,30 +2,54 @@ import React from 'react';
 import './App.css';
 import Nav from '../Nav/Nav';
 import About from '../About/About';
-import { NuzzyRun } from '../Dashboard/NuzzyRun';
+import { NuzzyRun, NuzInfo } from '../Dashboard/NuzzyRun';
 import Dashboard from "../Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login';
 
-function App() {
-  //TODO: NuzzyRun route needs to be loaded dynamically
+interface IState {
+  runs: NuzInfo[];
+}
 
-  return (
-    <Router>
-      <div className="App">
-        <Nav></Nav>
-        <div className="content">
-          <Switch>
-            <Route path="/" exact component={Dashboard}/>
-            <Route path="/dashboard" exact component={Dashboard}/>
-            <Route path="/dashboard/NuzlockeRun1" exact component={NuzzyRun}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/about" component={About}/>
-          </Switch>
+class App extends React.Component<{}, IState>{
+  //TODO: NuzzyRun route needs to be loaded dynamically
+  
+  constructor(props: any){
+    super(props);
+    this.state = {
+      runs: [
+        new NuzInfo(['Pikachu','Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+          "Kevin's NuzzyRun",
+          "Blue",
+          6
+        ),
+        new NuzInfo(['Pikachu','Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+          "Some other run",
+          "Blue",
+          6
+        ),
+      ]
+    };
+  }
+
+  render(){
+    return (
+      <Router>
+        <div className="App">
+          <Nav runs={this.state.runs}/>
+          <div className="content">
+            <Switch>
+              <Route path="/" exact component={Dashboard}/>
+              <Route path="/dashboard" exact component={Dashboard}/>
+              <Route path="/dashboard/:runid" exact render={({match}) => <NuzzyRun run={this.state.runs.find(x => x.RunTitle === match.params.runid)}/>}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/about" component={About}/>
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
-  );
+      </Router>
+    );
+  }
 }
 
 export default App;

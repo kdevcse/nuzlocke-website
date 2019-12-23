@@ -6,7 +6,7 @@ import { NuzzyRun, NuzInfo } from '../Dashboard/NuzzyRun';
 import Dashboard from "../Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login';
-import data from '../Datastore/pokedex.json';
+import data from '../Database/pokedex.json';
 
 interface IState {
   runs: NuzInfo[];

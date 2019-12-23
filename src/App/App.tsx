@@ -23,7 +23,7 @@ function getRandomPokemon(floor: number): Pokemon{
   }
   return {
     Name: data[id].name.english,
-    Id: id,
+    Id: id + 1,
     Type: t,
     Nickname: "Bob",
     Level: Math.floor(Math.random() * 100) + 1

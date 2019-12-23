@@ -28,12 +28,12 @@ export function NuzzyRun(props: any){
       </div>
       <h3>Current Party:</h3>
       <div className='party-container'>
-        <PartySlot Poke={props.run.Party[0]} Level={34} Route={'44'} Nickname={'Daisy'}></PartySlot>
-        <PartySlot Poke={props.run.Party[1]} Level={42} Route={'54'} Nickname={'Wondo'}></PartySlot>
-        <PartySlot Poke={props.run.Party[2]} Level={57} Route={'27'} Nickname={'Wario'}></PartySlot>
-        <PartySlot Poke={props.run.Party[3]} Level={23} Route={'11'} Nickname={'Mario'}></PartySlot>
-        <PartySlot Poke={props.run.Party[4]} Level={67} Route={'14'} Nickname={'Luigi'}></PartySlot>
-        <PartySlot Poke={props.run.Party[5]} Level={99} Route={'Saffron City'} Nickname={'Falc'}></PartySlot>
+        <PartySlot Poke={props.run.Party[0]} Route={'44'}></PartySlot>
+        <PartySlot Poke={props.run.Party[1]} Route={'54'}></PartySlot>
+        <PartySlot Poke={props.run.Party[2]} Route={'27'}></PartySlot>
+        <PartySlot Poke={props.run.Party[3]} Route={'11'}></PartySlot>
+        <PartySlot Poke={props.run.Party[4]} Route={'14'}></PartySlot>
+        <PartySlot Poke={props.run.Party[5]} Route={'Saffron City'}></PartySlot>
       </div>
     </div>
   );

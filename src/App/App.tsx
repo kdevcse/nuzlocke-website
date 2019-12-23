@@ -7,9 +7,24 @@ import Dashboard from "../Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login';
 import data from '../Database/pokedex.json';
+import { Pokemon } from '../Components/Party/PartySlot';
 
 interface IState {
   runs: NuzInfo[];
+}
+
+function getRandomPokemon(floor: number): Pokemon{
+  let id = Math.floor(Math.random() * floor);
+  let t = "";
+  for(let i = 0; i < data[id].type.length; i++){
+    t += data[id].type[i];
+    if (i + 1 < data[id].type.length)
+      t += "/";
+  }
+  return {
+    Name: data[id].name.english,
+    Type: t
+  }
 }
 
 class App extends React.Component<{}, IState>{
@@ -19,15 +34,31 @@ class App extends React.Component<{}, IState>{
     super(props);
     this.state = {
       runs: [
-        new NuzInfo([data[0].name.english,'Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+        new NuzInfo(
+          [
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151)
+          ],
           "Kevin's NuzzyRun",
-          "Blue",
+          "Red",
           6
         ),
-        new NuzInfo(['Raichu','Articuno','Mew','Geodude','Drowzee','Butxterfree'],
-          "Some other run",
+        new NuzInfo(
+          [
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151),
+            getRandomPokemon(151)
+          ],
+          "Other NuzzyRun",
           "Blue",
-          6
+          4
         ),
       ]
     };

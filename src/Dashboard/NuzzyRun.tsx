@@ -1,15 +1,15 @@
 import React from 'react';
 import './NuzzyRun.css';
-import PartySlot from '../Components/Party/PartySlot';
+import PartySlot, { Pokemon } from '../Components/Party/PartySlot';
 
 export class NuzInfo{
-  Pokemon: string[];
+  Party: Pokemon[];
   RunTitle: string;
   Version: string;
   Badges: number;
 
-  constructor(party: string[], title: string, version: string, badges: number){
-    this.Pokemon = party;
+  constructor(party: Pokemon[], title: string, version: string, badges: number){
+    this.Party = party;
     this.RunTitle = title;
     this.Version = version;
     this.Badges = badges;
@@ -28,12 +28,12 @@ export function NuzzyRun(props: any){
       </div>
       <h3>Current Party:</h3>
       <div className='party-container'>
-        <PartySlot Pokemon={props.run.Pokemon[0]} Type={'Electric'} Level={34} Route={'44'} Nickname={'Daisy'}></PartySlot>
-        <PartySlot Pokemon={props.run.Pokemon[1]} Type={'Electric/Flying'}Level={42} Route={'54'} Nickname={'Wondo'}></PartySlot>
-        <PartySlot Pokemon={props.run.Pokemon[2]} Type={'Psychic'}Level={57} Route={'27'} Nickname={'Wario'}></PartySlot>
-        <PartySlot Pokemon={props.run.Pokemon[3]} Type={'Poison/Water'}Level={23} Route={'11'} Nickname={'Mario'}></PartySlot>
-        <PartySlot Pokemon={props.run.Pokemon[4]} Type={'Normal'}Level={67} Route={'14'} Nickname={'Luigi'}></PartySlot>
-        <PartySlot Pokemon={props.run.Pokemon[5]} Type={'Rock'} Level={99} Route={'Saffron City'} Nickname={'Falc'}></PartySlot>
+        <PartySlot Poke={props.run.Party[0]} Level={34} Route={'44'} Nickname={'Daisy'}></PartySlot>
+        <PartySlot Poke={props.run.Party[1]} Level={42} Route={'54'} Nickname={'Wondo'}></PartySlot>
+        <PartySlot Poke={props.run.Party[2]} Level={57} Route={'27'} Nickname={'Wario'}></PartySlot>
+        <PartySlot Poke={props.run.Party[3]} Level={23} Route={'11'} Nickname={'Mario'}></PartySlot>
+        <PartySlot Poke={props.run.Party[4]} Level={67} Route={'14'} Nickname={'Luigi'}></PartySlot>
+        <PartySlot Poke={props.run.Party[5]} Level={99} Route={'Saffron City'} Nickname={'Falc'}></PartySlot>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { NuzzyRun, NuzInfo } from '../Dashboard/NuzzyRun';
 import Dashboard from "../Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login';
+import data from '../Datastore/pokedex.json';
 
 interface IState {
   runs: NuzInfo[];
@@ -18,12 +19,12 @@ class App extends React.Component<{}, IState>{
     super(props);
     this.state = {
       runs: [
-        new NuzInfo(['Pikachu','Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+        new NuzInfo([data[0].name.english,'Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
           "Kevin's NuzzyRun",
           "Blue",
           6
         ),
-        new NuzInfo(['Pikachu','Zapdos','Mewtwo','Tentacruel','Jigglypuff','Onix'],
+        new NuzInfo(['Raichu','Articuno','Mew','Geodude','Drowzee','Butxterfree'],
           "Some other run",
           "Blue",
           6

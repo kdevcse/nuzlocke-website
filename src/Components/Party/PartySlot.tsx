@@ -7,20 +7,21 @@ export interface Pokemon {
     Type: string
     Nickname: string,
     Level: number,
+    Image: string
 }
 
 class PartySlot extends React.Component<{Poke:Pokemon, Route: string}> {
     render() {
         return (
             <div className="party-slot">
-                <div className="party-slot-header">
+                <img className="party-slot-img" src={require(`../../Database/thumbnails/${this.props.Poke.Image}.png`)}/>
+                <div className="party-slot-info">
                     <h2 className="party-slot-title">{this.props.Poke.Name}</h2>
-                    <img className="party-slot-img" src={require(`../../Database/sprites/${this.getImgName(this.props.Poke.Id)}MS.png`)}/>
+                    <p className="party-slot-type">{this.props.Poke.Type}</p>
+                    <p className="party-slot-level">Lvl. {this.props.Poke.Level}</p>
+                    <p className="party-slot-level">Route: {this.props.Route}</p>
+                    <p className="party-slot-level">Nickname: {this.props.Poke.Nickname}</p>
                 </div>
-                <p className="party-slot-type">{this.props.Poke.Type}</p>
-                <p className="party-slot-level">Lvl. {this.props.Poke.Level}</p>
-                <p className="party-slot-level">Route: {this.props.Route}</p>
-                <p className="party-slot-level">Nickname: {this.props.Poke.Nickname}</p>
             </div>
         );
   }

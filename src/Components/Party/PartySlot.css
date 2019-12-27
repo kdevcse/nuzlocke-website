@@ -1,16 +1,18 @@
 .party-slot{
     border: 1px solid #09ccd3;
-    padding: 10px;
+    padding: 20px;
     border-radius: 5px;
     margin: 10px;
 }
-.party-slot-header{
-    display: inline-block;
-    width: 100%;
+.party-slot:hover{
+    cursor: pointer;
+    border-color: chartreuse;
+}
+.party-slot-info{
+    margin-left: 150px;
 }
 .party-slot .party-slot-title{
     color: white;
-    float: left;
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -19,8 +21,10 @@
     margin-bottom: 2px;
 }
 .party-slot-img{
-    float: right;
-    margin-right: 5px;
+    float: left;
+    margin-top: auto;
+    width: 100px;
+    height: 100px;
 }
 .party-slot .party-slot-level{
     margin: 5px 0 5px 0;

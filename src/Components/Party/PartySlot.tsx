@@ -14,7 +14,7 @@ class PartySlot extends React.Component<{Poke:Pokemon, Route: string}> {
     render() {
         return (
             <div className="party-slot">
-                <img className="party-slot-img" src={require(`../../Database/thumbnails/${this.props.Poke.Image}.png`)}/>
+                <img alt={this.props.Poke.Name} className="party-slot-img" src={require(`../../Database/thumbnails/${this.props.Poke.Image}.png`)}/>
                 <div className="party-slot-info">
                     <h2 className="party-slot-title">{this.props.Poke.Name}</h2>
                     <p className="party-slot-type">{this.props.Poke.Type}</p>

@@ -1,6 +1,7 @@
 <template>
 	<div id="all-pokes-container">
 		<div class="poke-container" v-for="p in poke_data" v-bind:key="p.id">
+			<p class="poke-lvl">Lvl.{{p.lvl}}</p>
 			<div class="poke-info-container">
 				<img class="poke-img" :src="p.img_url">
 				<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
@@ -44,6 +45,7 @@ export default {
 			const pokeStruct = {
 				real_name: result.name.charAt(0).toUpperCase() + result.name.slice(1),
 				nickname: pokemon.nickname,
+				lvl: pokemon.lvl,
 				img_url: result.sprites.front_default
 			};
 			this.poke_data.push(pokeStruct);
@@ -68,6 +70,9 @@ export default {
 .poke-info-container {
 	margin-left: 10px;
 	text-align: center;
+}
+.poke-lvl {
+	margin: 0;
 }
 .poke-real-name{
 	margin-top: 5px;

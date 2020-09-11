@@ -17,12 +17,13 @@ export default {
     firebase.firestore().collection('runs')
     .where('guid', '==', firebase.auth().currentUser.uid)
     .get().then((result) => {
-      this.userRuns = result.docs.map(doc => doc.data());
+      const runData = result.docs.map(doc => doc.data());
+      this.$store.commit('set_runs', runData);
     });
   },
-  data: function() {
-    return {
-      userRuns: []
+  computed: {
+    userRuns() {
+      return this.$store.state.runs;
     }
   }
 }

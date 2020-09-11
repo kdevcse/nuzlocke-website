@@ -27,7 +27,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     userSettings: {},
-    isLoggedIn: false
+    isLoggedIn: false,
+    runs: []
   },
   mutations: {
     set_user_settings(state, settings){
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
     },
     set_login_status(state, status){
       state.isLoggedIn = status;
+    },
+    set_runs(state, userRuns){
+      state.runs = userRuns;
     }
   }
 });

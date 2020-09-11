@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<p>{{this.poke_data.name}}</p>
+		<div v-for="p in poke_data" v-bind:key="p.id">
+			<p>{{p.name}}</p>
+		</div>
 	</div>
 </template>
 
@@ -12,20 +14,32 @@ export default {
   components: {
   },
   mounted() {
-		const p = new Pokedex.Pokedex();
-		console.log(this.$route.params.id); //Run_id: Now make request for data from run
-
-		//Then get info for each poke
-    p.getPokemonByName('golduck').then(result => {
-			this.poke_data = result;
-			console.log(this.poke_data);
-    });
+		const run = this.$store.state.runs.find(r => r.run_id == this.$route.params.id);
+		if(run){
+			this.getAllPokemonData(run);
+		} else {
+			console.error(`Run with id '${this.$route.params.id}' not found`);
+			this.$router.push({ name: 'Home' });
+		}
   },
   data: function(){
 		return {
-			poke_data: {}
+			poke_data: []
 		}
-  }
+	},
+	methods: {
+		getAllPokemonData(run) {
+			const pokes = run.pokemon;
+			const p = new Pokedex.Pokedex();
+
+			for(var i = 0; i < pokes.length; i++){
+				//Then get info for each poke
+				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(result => {
+					this.poke_data.push(result);
+				});
+			}
+		}
+	}
 }
 </script>
 <style scoped>

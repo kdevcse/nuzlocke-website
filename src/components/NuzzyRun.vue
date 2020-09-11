@@ -1,7 +1,10 @@
 <template>
-	<div>
-		<div v-for="p in poke_data" v-bind:key="p.id">
-			<p>{{p.name}}</p>
+	<div id="all-pokes-container">
+		<div class="poke-container" v-for="p in poke_data" v-bind:key="p.id">
+			<div class="poke-info-container">
+				<img class="poke-img" :src="p.img_url">
+				<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
+			</div>
 		</div>
 	</div>
 </template>
@@ -34,14 +37,43 @@ export default {
 
 			for(var i = 0; i < pokes.length; i++){
 				//Then get info for each poke
-				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(result => {
-					this.poke_data.push(result);
-				});
+				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(this.constructData.bind(null, pokes[i]));
 			}
+		},
+		constructData(pokemon, result) {
+			const pokeStruct = {
+				real_name: result.name.charAt(0).toUpperCase() + result.name.slice(1),
+				nickname: pokemon.nickname,
+				img_url: result.sprites.front_default
+			};
+			this.poke_data.push(pokeStruct);
+			console.log(result);
 		}
 	}
 }
 </script>
 <style scoped>
-
+#all-pokes-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 50px;
+}
+.poke-container {
+	text-align: left;
+	border: 1px solid #80ED99;
+	padding: 10px;
+	margin: 10px 0px;
+	border-radius: 6px;
+}
+.poke-info-container {
+	margin-left: 10px;
+	text-align: center;
+}
+.poke-real-name{
+	margin-top: 5px;
+}
+.poke-img {
+	width: 96px;
+	height: 96px;
+}
 </style>

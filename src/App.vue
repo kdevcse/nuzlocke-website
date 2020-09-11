@@ -43,6 +43,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #80ED99;
+  margin: 0 30px;
 }
 #app-container.darkmode {
   background-color: #121212;

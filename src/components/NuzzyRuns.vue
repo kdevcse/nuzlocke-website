@@ -23,9 +23,6 @@ export default {
 }
 </script>
 <style scoped>
-#runs-container {
-  padding: 0px 30px;
-}
 .run-container {
   text-align: left;
   padding: 10px;

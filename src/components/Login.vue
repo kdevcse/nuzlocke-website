@@ -1,29 +1,28 @@
 <template>
   <div id="login-container">
-    <h2>Login to Sluglocke</h2>
+    <h1>Login</h1>
     <div id="login-form-container">
       <b-form v-if="loginReady" @submit="login">
-        <b-form-group
-          label="Email"
-          label-for="loginEmail">
+        <b-form-group>
           <b-form-input 
             id="loginEmail"
             type="email"
+            v-model="form.email"
             required
-            placeholder="Email">
+            placeholder="Email"
+            autocomplete="username">
           </b-form-input>
         </b-form-group>
-        <b-form-group
-          label="Password"
-          label-for="loginPwd">
+        <b-form-group>
           <b-form-input
             id="loginPwd"
             type="password"
+            v-model="form.password"
             required
             placeholder="Password"
             autocomplete="current-password"/>
         </b-form-group>
-        <b-button id="loginBtn" variant="primary" type="submit">Login</b-button>
+        <b-button block id="loginBtn" variant="primary" type="submit">Login</b-button>
         <p id="error-txt" :class="{error: showError}">{{errorMessage}}</p>
       </b-form>
     </div>
@@ -41,14 +40,19 @@ export default {
   data: function() {
     return {
       loginReady: false,
+      form: {
+        email: '',
+        password: '',
+      },
       errorMessage: 'Login unsuccessful',
       showError: false
     }
   },
   methods: {
     async login(e) {
-      const email = e.target[0].value;
-      const pwd = e.target[1].value;
+      const email = this.form.email;
+      const pwd = this.form.password;
+      console.log(e);
       const loginResult = await firebase.auth().signInWithEmailAndPassword(email, pwd).then(function() {
         console.log('Success!');
         return true;
@@ -81,19 +85,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #login-container {
-  position: absolute;
-  top: 30%;
-  left: 40%;
-}
-#login-form-container {
-  align-items: center;
-  align-self: center;;
-  height: 300px;
-  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
-  justify-content: center;
-  box-shadow: 0 5px 10px rgba(154,160,185,.08), 0 15px 40px rgba(166,173,201,.3);
-  border-radius: 6px;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
 }
 #loginBtn {
   margin-top: 20px;

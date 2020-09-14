@@ -33,17 +33,24 @@ export default {
 </script>
 
 <style>
+html {
+  height: 100%;
+}
 body {
+  height: 100%;
   margin: 0;
-  background-color: #22577A;
+  background-color: #f5f5f5;
 }
 #app-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 30px;
+  height: 100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #80ED99;
-  margin: 0 30px;
+  color: black;
 }
 #app-container.darkmode {
   background-color: #121212;

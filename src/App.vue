@@ -8,12 +8,16 @@
         {{alertMsg}}
     </b-alert>
     <div id="app" v-if="isLoggedIn">
-      <div id="nav">
+      <b-button v-b-toggle.sidebar-nav>Toggle Sidebar</b-button>
+      <b-sidebar id="sidebar-nav"
+        bg-variant="dark"
+        text-variant="light"
+        shadow>
+        <h2>Welcome {{userSettings.username}}!</h2>
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link>
-        <p>Welcome {{userSettings.username}}!</p>
-      </div>
-      <router-view/>
+      </b-sidebar>
+      <router-view id="current-view"/>
     </div>
     <Login v-else></Login>
   </div>
@@ -62,7 +66,6 @@ body {
 #app-container {
   display: flex;
   justify-content: center;
-  margin: 0 30px;
   height: 100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -73,7 +76,10 @@ body {
 #app-container.darkmode {
   background-color: #121212;
 }
-#nav {
+#current-view {
+  margin: 30px;
+}
+/*#nav {
   padding: 30px;
 }
 #nav a {
@@ -82,5 +88,5 @@ body {
 }
 #nav a.router-link-exact-active {
   color: #80ED99;
-}
+}*/
 </style>

@@ -1,5 +1,12 @@
 <template>
   <div id="app-container" :class="{darkmode: userSettings.dark}">
+    <b-alert 
+      dismissible
+      variant="info"
+      @dismissed="dismissAlert"
+      v-show="showAlert">
+        {{alertMsg}}
+    </b-alert>
     <div id="app" v-if="isLoggedIn">
       <div id="nav">
         <router-link to="/">Home</router-link> |
@@ -27,6 +34,17 @@ export default {
     },
     userSettings() {
       return this.$store.state.userSettings;
+    },
+    alertMsg() {
+      return this.$store.state.alertMsg;
+    },
+    showAlert() {
+      return this.$store.state.alertMsg != null;
+    }
+  },
+  methods: {
+    dismissAlert(){
+      this.$store.state.alertMsg = null;
     }
   }
 }

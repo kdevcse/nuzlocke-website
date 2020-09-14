@@ -1,10 +1,13 @@
 <template>
     <div id="runs-container">
-      <div v-for="run in runs" v-bind:key="run.run_id" class="run-container"  @click="openRun(run.run_id)">
-        <h3>{{run.name}}</h3>
-        <h4>Version: {{run.version}}</h4>
-        <h4>Badges: {{run.badges}}</h4>
-      </div>
+      <b-card v-for="run in runs" 
+        v-bind:key="run.run_id" 
+        class="run-container text-left"  
+        @click="openRun(run.run_id)"
+        :header="run.name">
+        <b-card-text>Version: {{run.version}}</b-card-text>
+        <b-card-text>Badges: {{run.badges}}</b-card-text>
+      </b-card>
     </div>
 </template>
 
@@ -25,13 +28,9 @@ export default {
 <style scoped>
 .run-container {
   text-align: left;
-  padding: 10px;
-  border: 1px solid slategrey;
-  background-color: rgba(255, 255, 255, 0.25);
   border-radius: 6px;
 }
 .run-container:hover {
   cursor: pointer;
-  border-color: #80ED99;
 }
 </style>

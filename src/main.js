@@ -31,7 +31,8 @@ const store = new Vuex.Store({
   state: {
     userSettings: {},
     isLoggedIn: false,
-    runs: []
+    runs: [],
+    alertMsg: null
   },
   mutations: {
     set_user_settings(state, settings){
@@ -42,6 +43,9 @@ const store = new Vuex.Store({
     },
     set_runs(state, userRuns){
       state.runs = userRuns;
+    },
+    set_alert_msg(state, msg){
+      state.alertMsg = msg;
     }
   }
 });

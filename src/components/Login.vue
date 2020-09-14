@@ -2,18 +2,30 @@
   <div id="login-container">
     <h2>Login to Sluglocke</h2>
     <div id="login-form-container">
-      <form v-if="loginReady" @submit="login">
-        <div>
-          <h3>Email</h3>
-          <input id="loginEmail" autocomplete="username">
-        </div>
-        <div>
-          <h3>Password</h3>
-          <input id="loginPwd" type="password" autocomplete="current-password">
-        </div>
-        <button id="loginBtn" type="submit">Login</button>
+      <b-form v-if="loginReady" @submit="login">
+        <b-form-group
+          label="Email"
+          label-for="loginEmail">
+          <b-form-input 
+            id="loginEmail"
+            type="email"
+            required
+            placeholder="Email">
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Password"
+          label-for="loginPwd">
+          <b-form-input
+            id="loginPwd"
+            type="password"
+            required
+            placeholder="Password"
+            autocomplete="current-password"/>
+        </b-form-group>
+        <b-button id="loginBtn" variant="primary" type="submit">Login</b-button>
         <p id="error-txt" :class="{error: showError}">{{errorMessage}}</p>
-      </form>
+      </b-form>
     </div>
   </div>
 </template>

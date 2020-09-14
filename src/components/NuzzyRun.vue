@@ -5,6 +5,7 @@
 			<div class="poke-info-container">
 				<img class="poke-img" :src="p.img_url">
 				<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
+				<p>Caught: {{p.location}}</p>
 			</div>
 		</div>
 	</div>
@@ -20,6 +21,7 @@ export default {
   mounted() {
 		const run = this.$store.state.runs.find(r => r.run_id == this.$route.params.id);
 		if(run){
+			this.getAllRunInfo(run);
 			this.getAllPokemonData(run);
 		} else {
 			console.error(`Run with id '${this.$route.params.id}' not found`);
@@ -32,12 +34,17 @@ export default {
 		}
 	},
 	methods: {
+		getAllRunInfo(run) {
+			const p = new Pokedex.Pokedex();
+			p.getVersionByName(run.version).then(result => {
+				console.log(result);
+			});
+		},
 		getAllPokemonData(run) {
 			const pokes = run.pokemon;
 			const p = new Pokedex.Pokedex();
 
 			for(var i = 0; i < pokes.length; i++){
-				//Then get info for each poke
 				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(this.constructData.bind(null, pokes[i]));
 			}
 		},
@@ -46,6 +53,7 @@ export default {
 				real_name: result.name.charAt(0).toUpperCase() + result.name.slice(1),
 				nickname: pokemon.nickname,
 				lvl: pokemon.lvl,
+				location: pokemon.location,
 				img_url: result.sprites.front_default
 			};
 			this.poke_data.push(pokeStruct);

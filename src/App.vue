@@ -65,13 +65,15 @@ body {
 }
 #app-container {
   display: flex;
-  justify-content: center;
   height: 100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: black;
+}
+#app {
+  flex: 1;
 }
 #app-container.darkmode {
   background-color: #121212;

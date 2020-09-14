@@ -70,10 +70,11 @@ export default {
 }
 .poke-container {
 	text-align: left;
-	border: 1px solid #80ED99;
+	border: 1px solid;
 	padding: 10px;
 	margin: 10px 0px;
 	border-radius: 6px;
+	background-color: white;
 }
 .poke-info-container {
 	margin-left: 10px;

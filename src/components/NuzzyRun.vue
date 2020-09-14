@@ -1,11 +1,13 @@
 <template>
-	<div id="all-pokes-container">
-		<div class="poke-container" v-for="p in poke_data" v-bind:key="p.id">
-			<p class="poke-lvl">Lvl.{{p.lvl}}</p>
-			<div class="poke-info-container">
-				<img class="poke-img" :src="p.img_url">
-				<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
-				<p>Caught: {{p.location}}</p>
+	<div>
+		<div id="all-pokes-container">
+			<div class="poke-container" v-for="p in poke_data" v-bind:key="p.id">
+				<p class="poke-lvl">Lvl.{{p.lvl}}</p>
+				<div class="poke-info-container">
+					<img class="poke-img" :src="p.img_url">
+					<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
+					<p>Caught: {{p.location}}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -66,7 +68,7 @@ export default {
 #all-pokes-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 50px;
+	grid-column-gap: 15px;
 }
 .poke-container {
 	text-align: left;
@@ -74,7 +76,7 @@ export default {
 	padding: 10px;
 	margin: 10px 0px;
 	border-radius: 6px;
-	background-color: white;
+	background-color: #fff;
 }
 .poke-info-container {
 	margin-left: 10px;

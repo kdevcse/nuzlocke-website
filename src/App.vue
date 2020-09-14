@@ -8,15 +8,22 @@
         {{alertMsg}}
     </b-alert>
     <div id="app" v-if="isLoggedIn">
-      <b-button v-b-toggle.sidebar-nav>Toggle Sidebar</b-button>
+      <!--Save for mobile -->
       <b-sidebar id="sidebar-nav"
         bg-variant="dark"
         text-variant="light"
         shadow>
         <h2>Welcome {{userSettings.username}}!</h2>
-        <router-link to="/">Home</router-link> |
+        <router-link to="/">Dashboard</router-link> |
         <router-link to="/about">About</router-link>
       </b-sidebar>
+      <!--End-->
+      <b-nav id="sidebar-nav" vertical class="w-25">
+        <h2>Welcome {{userSettings.username}}!</h2>
+        <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
+        <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
+        <b-button id="logout-btn" pill variant="light" @click="logout">Logout</b-button>
+      </b-nav>
       <router-view id="current-view"/>
     </div>
     <Login v-else></Login>
@@ -25,7 +32,8 @@
 
 <script>
 // @ is an alias to /src
-import Login from '@/components/Login.vue'
+import Login from '@/components/Login.vue';
+import firebase from 'firebase';
 
 export default {
   name: 'Home',
@@ -49,6 +57,13 @@ export default {
   methods: {
     dismissAlert(){
       this.$store.state.alertMsg = null;
+    },
+    logout() {
+      firebase.auth().signOut().then(() => {
+        this.$store.commit('set_login_status', false);
+        this.$store.commit('set_user_settings', {});
+        this.$store.commit('set_runs', []);
+      });
     }
   }
 }
@@ -72,14 +87,31 @@ body {
   text-align: center;
   color: black;
 }
-#app {
-  flex: 1;
-}
 #app-container.darkmode {
   background-color: #121212;
 }
+#app {
+  display: flex;
+  flex: 1;
+}
+#sidebar-nav {
+  flex: 1;
+  padding: 20px 0px;
+  background-color: #343a40;
+  color: white;
+}
 #current-view {
+  display: block;
   margin: 30px;
+  flex: 4;
+}
+#logout-btn {
+  position: relative;
+  bottom: 10px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
 }
 /*#nav {
   padding: 30px;

@@ -1,14 +1,21 @@
 <template>
 	<div>
 		<div id="all-pokes-container">
-			<div class="poke-container" v-for="p in poke_data" v-bind:key="p.id">
-				<p class="poke-lvl">Lvl.{{p.lvl}}</p>
-				<div class="poke-info-container">
-					<img class="poke-img" :src="p.img_url">
-					<h3 class="poke-real-name">{{p.real_name}}: "{{p.nickname}}"</h3>
-					<p>Caught: {{p.location}}</p>
-				</div>
-			</div>
+			<b-card class="poke-container" 
+				v-for="p in poke_data" 
+				v-bind:key="p.id"
+				border-variant="primary"
+				header-bg-variant="primary"
+				header-text-variant="white"
+				:header="getCardTitle(p)">
+				<b-row md="4" no-gutters>
+						<img class="poke-img" :src="p.img_url">
+					<b-col class="poke-info-container" no-gutters>
+						<b-card-text>Caught: {{p.location}}</b-card-text>
+						<b-card-text v-for="s in p.stats" :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</b-card-text>
+					</b-col>
+				</b-row>
+			</b-card>
 		</div>
 	</div>
 </template>
@@ -56,10 +63,19 @@ export default {
 				nickname: pokemon.nickname,
 				lvl: pokemon.lvl,
 				location: pokemon.location,
-				img_url: result.sprites.front_default
+				img_url: result.sprites.other["official-artwork"].front_default,
+				stats: result.stats.map(s => {
+					return {
+						name: s.stat.name,
+						val: s.base_stat
+					};
+				})
 			};
 			this.poke_data.push(pokeStruct);
 			console.log(result);
+		},
+		getCardTitle(p) {
+			return `${p.real_name}: "${p.nickname}" - Lvl.${p.lvl}`;
 		}
 	}
 }
@@ -72,24 +88,30 @@ export default {
 }
 .poke-container {
 	text-align: left;
+	overflow: hidden;
 	border: 1px solid;
-	padding: 10px;
-	margin: 10px 0px;
 	border-radius: 6px;
 	background-color: #fff;
 }
 .poke-info-container {
+	text-align: left;
 	margin-left: 10px;
-	text-align: center;
+	padding: 10px;
 }
 .poke-lvl {
 	margin: 0;
 }
 .poke-real-name{
-	margin-top: 5px;
+	margin-top: 10px;
 }
 .poke-img {
-	width: 96px;
-	height: 96px;
+	width: 125px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+.card-body {
+	padding: 5px;
 }
 </style>

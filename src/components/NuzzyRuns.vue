@@ -4,7 +4,10 @@
         v-bind:key="run.run_id" 
         class="run-container text-left"  
         @click="openRun(run.run_id)"
-        :header="run.name">
+        :header="run.name"
+        border-variant="primary"
+        header-bg-variant="primary"
+        header-text-variant="white">
         <b-card-text>Version: {{run.version}}</b-card-text>
         <b-card-text>Badges: {{run.badges}}</b-card-text>
       </b-card>

@@ -105,6 +105,7 @@ export default {
 	margin-top: 10px;
 }
 .poke-img {
+	height: 125px;
 	width: 125px;
 	padding: 10px;
 	margin-left: auto;

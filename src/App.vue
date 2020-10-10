@@ -13,7 +13,7 @@
         bg-variant="dark"
         text-variant="light"
         shadow>
-        <h2>Welcome {{userSettings.username}}!</h2>
+        <h2 id="user-txt">Welcome {{userSettings.username}}!</h2>
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/about">About</router-link>
       </b-sidebar>
@@ -96,7 +96,6 @@ body {
 }
 #sidebar-nav {
   flex: 1;
-  padding: 20px 0px;
   background-color: #343a40;
   color: white;
 }
@@ -113,14 +112,18 @@ body {
   margin-right: auto;
   margin-top: 30px;
 }
-/*#nav {
-  padding: 30px;
-}
-#nav a {
+#sidebar-nav a {
   font-weight: bold;
-  color: #80ED99;
+  color: var(--white);
 }
-#nav a.router-link-exact-active {
-  color: #80ED99;
+#sidebar-nav a:hover{
+  background-color: rgba(255, 255, 255, 0.08);
+}
+#user-txt {
+  background-color: var(--primary);
+  padding: 5px;
+}
+/*#sidebar-nav a.router-link-exact-active {
+  color: var(--white)
 }*/
 </style>

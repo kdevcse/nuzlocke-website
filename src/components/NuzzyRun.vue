@@ -11,6 +11,7 @@
 				<b-row md="4" no-gutters>
 						<img class="poke-img" :src="p.img_url">
 					<b-col class="poke-info-container" no-gutters>
+						<b-card-text>Type: {{getPokeTypes(p.types)}}</b-card-text>
 						<b-card-text>Caught: {{p.location}}</b-card-text>
 						<b-card-text v-for="s in p.stats" :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</b-card-text>
 					</b-col>
@@ -69,6 +70,9 @@ export default {
 						name: s.stat.name,
 						val: s.base_stat
 					};
+				}),
+				types: result.types.map(t => {
+					return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)
 				})
 			};
 			this.poke_data.push(pokeStruct);
@@ -76,6 +80,19 @@ export default {
 		},
 		getCardTitle(p) {
 			return `${p.real_name}: "${p.nickname}" - Lvl.${p.lvl}`;
+		},
+		getPokeTypes(types){
+			if(!types || types.length === 0)
+				return;
+
+			let msg = types[0];
+			if(types.length > 1){
+				for(let i = 1; i < types.length; i++){
+					msg += `/${types[i]}`
+				}
+			}
+
+			return msg;
 		}
 	}
 }

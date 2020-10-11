@@ -32,6 +32,7 @@ export default {
 .run-container {
   text-align: left;
   border-radius: 6px;
+  margin: 15px 0px;
 }
 .run-container:hover {
   cursor: pointer;

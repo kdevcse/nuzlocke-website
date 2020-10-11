@@ -50,7 +50,7 @@ export default {
 			});
 		},
 		getAllPokemonData(run) {
-			const pokes = run.pokemon;
+			const pokes = run.party;
 			const p = new Pokedex.Pokedex();
 
 			for(var i = 0; i < pokes.length; i++){

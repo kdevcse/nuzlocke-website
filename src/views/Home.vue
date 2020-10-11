@@ -14,12 +14,23 @@ export default {
     NuzzyRuns
   },
   mounted(){
-    firebase.firestore().collection('runs')
+    firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`)
+    .collection('runs')
+    .get().then((result) => {
+      const runData = result.docs.map(doc => {
+        const data = doc.data();
+        data.run_id = doc.id;
+        return data;
+      });
+      console.log(runData);
+      this.$store.commit('set_runs', runData);
+    });
+    /*firebase.firestore().collection('runs')
     .where('guid', '==', firebase.auth().currentUser.uid)
     .get().then((result) => {
       const runData = result.docs.map(doc => doc.data());
       this.$store.commit('set_runs', runData);
-    });
+    });*/
   },
   computed: {
     userRuns() {

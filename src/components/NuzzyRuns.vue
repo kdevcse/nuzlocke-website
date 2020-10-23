@@ -29,6 +29,11 @@ export default {
 }
 </script>
 <style scoped>
+#runs-container{
+  margin: 0px auto;
+  max-width: 936px;
+  padding: 30px 0px;
+}
 .run-container {
   text-align: left;
   border-radius: 6px;

@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <div class="dashboard-title-bar">
+      <h2>Nuzlocke Runs</h2>
+    </div>
     <NuzzyRuns v-bind:runs="userRuns"></NuzzyRuns>
   </div>
 </template>
@@ -40,4 +43,13 @@ export default {
 }
 </script>
 <style scoped>
+.dashboard-title-bar {
+  text-align: left;
+  margin-bottom: 15px;
+}
+.dashboard-title-bar > h2 {
+  border-bottom: black 1px solid;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}
 </style>

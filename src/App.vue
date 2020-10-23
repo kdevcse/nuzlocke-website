@@ -18,7 +18,7 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-nav id="sidebar-nav" vertical class="w-25">
+      <b-nav id="sidebar-nav" vertical class="w-10">
         <h2>Welcome {{userSettings.username}}!</h2>
         <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
         <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>

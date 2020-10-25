@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="dashboard">
     <b-modal
     centered
     size="lg"
@@ -24,7 +24,7 @@ import NuzzyRuns from '@/components/NuzzyRuns.vue';
 import RunCreator from '@/components/RunCreator.vue';
 
 export default {
-  name: 'Home',
+  name: 'Dashboard',
   components: {
     NuzzyRuns,
     RunCreator

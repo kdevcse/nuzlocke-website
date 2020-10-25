@@ -35,7 +35,7 @@ export default {
 			this.getAllPokemonData(run);
 		} else {
 			console.error(`Run with id '${this.$route.params.id}' not found`);
-			this.$router.push({ name: 'Home' });
+			this.$router.push({ name: 'Dashboard' });
 		}
   },
   data: function(){

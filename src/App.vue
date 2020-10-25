@@ -36,7 +36,7 @@ import Login from '@/components/Login.vue';
 import firebase from 'firebase';
 
 export default {
-  name: 'Home',
+  name: 'App',
   components: {
     Login
   },

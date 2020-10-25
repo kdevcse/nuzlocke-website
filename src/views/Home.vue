@@ -1,7 +1,18 @@
 <template>
   <div class="home">
+    <b-modal
+    centered
+    size="lg"
+    id="create-run-window"
+    title="Add a run"
+    @ok="handleOk">
+      <RunCreator></RunCreator>
+    </b-modal>
     <div class="dashboard-title-bar">
       <h2>Nuzlocke Runs</h2>
+      <b-button v-b-modal.create-run-window pill variant="outline-success">
+        + Add a run
+      </b-button>
     </div>
     <NuzzyRuns v-bind:runs="userRuns"></NuzzyRuns>
   </div>
@@ -9,12 +20,14 @@
 
 <script>
 import firebase from 'firebase';
-import NuzzyRuns from '@/components/NuzzyRuns.vue'
+import NuzzyRuns from '@/components/NuzzyRuns.vue';
+import RunCreator from '@/components/RunCreator.vue';
 
 export default {
   name: 'Home',
   components: {
-    NuzzyRuns
+    NuzzyRuns,
+    RunCreator
   },
   mounted(){
     firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`)
@@ -38,6 +51,11 @@ export default {
   computed: {
     userRuns() {
       return this.$store.state.runs;
+    }
+  },
+  methods: {
+    handleOk(){
+      console.log('Handle OK');
     }
   }
 }

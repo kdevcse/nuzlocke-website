@@ -1,11 +1,17 @@
 <template>
 	<div>
 		<b-form @submit="handleSubmit">
-			<label for="create-run-name-input">Name:</label>
-			<b-input id="create-run-name-input" required></b-input>
-			<label for="create-run-version-select">Version:</label>
-			<b-select id="create-run-version-select" required v-model="selectedVersion" :options="versions">
-			</b-select>
+			<div class="form-option-container">
+				<label for="create-run-name-input">Name:</label>
+				<b-input id="create-run-name-input" required></b-input>
+			</div>
+			<div class="form-option-container">
+				<label for="create-run-version-select">Version:</label>
+				<b-select id="create-run-version-select" 
+				required v-model="selectedVersion" 
+				:options="versions">
+				</b-select>
+			</div>
 		</b-form>
 	</div>
 </template>
@@ -62,5 +68,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.form-option-container {
+	margin: 10px 0px;
+}
 </style>

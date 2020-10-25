@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import firebase from 'firebase';
 import App from './App.vue';
 import router from './router';
+import { ToastPlugin } from 'bootstrap-vue'
 
 Vue.config.productionTip = false;
 
@@ -26,6 +27,7 @@ firebase.analytics();
 
 /*Vuex state management*/
 Vue.use(Vuex);
+Vue.use(ToastPlugin);
 
 const store = new Vuex.Store({
   state: {

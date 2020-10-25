@@ -1,6 +1,6 @@
 <template>
   <div id="login-container">
-    <h1>Login</h1>
+    <h1>{{loginMsg}}</h1>
     <div id="login-form-container">
       <b-form v-if="loginReady" @submit="login">
         <b-form-group>
@@ -10,7 +10,8 @@
             v-model="form.email"
             required
             placeholder="Email"
-            autocomplete="username">
+            autocomplete="username"
+            :disabled="loading">
           </b-form-input>
         </b-form-group>
         <b-form-group>
@@ -20,10 +21,13 @@
             v-model="form.password"
             required
             placeholder="Password"
-            autocomplete="current-password"/>
+            autocomplete="current-password"
+            :disabled="loading"/>
         </b-form-group>
-        <b-button block id="loginBtn" variant="primary" type="submit">Login</b-button>
-        <p id="error-txt" :class="{error: showError}">{{errorMessage}}</p>
+        <b-button :disabled="loading" block id="loginBtn" variant="primary" type="submit">
+          <b-spinner v-if="loading" small type="grow"></b-spinner>
+          {{loginBtnTxt}}
+        </b-button>
       </b-form>
     </div>
   </div>
@@ -44,40 +48,61 @@ export default {
         email: '',
         password: '',
       },
-      errorMessage: 'Login unsuccessful',
-      showError: false
+      loading: false,
+      loginMsg: 'Login'
+    }
+  },
+  computed: {
+    loginBtnTxt(){
+      return this.loading ? 'Loading...' : 'Login';
     }
   },
   methods: {
-    async login(e) {
-      const email = this.form.email;
-      const pwd = this.form.password;
-      console.log(e);
-      const loginResult = await firebase.auth().signInWithEmailAndPassword(email, pwd).then(function() {
-        console.log('Success!');
-        return true;
-      }).catch(function(error) {
+    failedLogin(error, msg){
         var errorCode = error.code;
         var errorMessage = error.message;
         console.error(`Error Code: ${errorCode}`);
         console.error(`Error Msg: ${errorMessage}`);
-        return false;
-      });
 
-      if (loginResult) {
+        this.$store.commit('set_login_status', false);
+        this.$store.commit('set_user_settings', {});
+
+        this.loading = false;
+        this.$bvToast.toast(msg ,{
+          title: 'Login Status',
+          toaster: 'b-toaster-top-center',
+          variant: 'danger',
+          solid: true,
+          appendToast: true
+        });
+    },
+    login() {
+      this.loading = true;
+      const email = this.form.email;
+      const pwd = this.form.password;
+      firebase.auth().signInWithEmailAndPassword(email, pwd).then(() => {
         firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`).get().then((doc) => {
           this.$store.commit('set_login_status', true);
           this.$store.commit('set_user_settings', doc.data());
           this.$store.commit('set_alert_msg', 'Login successful!');
+          this.loginMsg = `Welcome ${this.$store.state.userSettings.username}!`;
+
+          this.$bvToast.toast("Login Successful",{
+            title: 'Login Status',
+            toaster: 'b-toaster-top-center',
+            variant: 'success',
+            solid: true,
+            appendToast: true
+          });
+
+          this.loading = false;
+          this.loginReady = false;
+        }).catch((error) => {
+          this.failedLogin(error, 'There was an error while logging in');
         });
-        this.showError = false;
-        this.errorMessage = 'Login successful';
-      } else {
-        this.showError = true;
-        this.errorMessage = 'Login unsuccessful';
-        this.$store.commit('set_login_status', false);
-        this.$store.commit('set_user_settings', {});
-      }
+      }).catch((error) => {
+        this.failedLogin(error, 'Login failed');
+      });
     }
   }
 }

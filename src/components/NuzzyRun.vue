@@ -2,20 +2,37 @@
 	<div>
 		<div id="all-pokes-container">
 			<b-card class="poke-container" 
-				v-for="p in poke_data" 
-				v-bind:key="p.id"
-				border-variant="primary"
-				header-bg-variant="primary"
-				header-text-variant="white"
-				:header="getCardTitle(p)">
-				<b-row md="4" no-gutters>
-						<img class="poke-img" :src="p.img_url">
-					<b-col class="poke-info-container" no-gutters>
-						<b-card-text>Type: {{getPokeTypes(p.types)}}</b-card-text>
-						<b-card-text>Caught: {{p.location}}</b-card-text>
-						<b-card-text v-for="s in p.stats" :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</b-card-text>
-					</b-col>
-				</b-row>
+			v-for="p in poke_data" 
+			v-bind:key="p.id"
+			border-variant="primary"
+			header-bg-variant="primary"
+			header-text-variant="white"
+			:header="getCardTitle(p)">
+				<b-skeleton-wrapper :loading="p.loading">
+					<template #loading>
+					<b-row md="4" no-gutters>
+							<b-skeleton-img class="poke-img" width="125px"></b-skeleton-img>
+						<b-col class="poke-info-container" no-gutters>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+							<b-skeleton></b-skeleton>
+						</b-col>
+					</b-row>
+					</template>
+					<b-row md="4" no-gutters>
+							<img class="poke-img" :src="p.img_url">
+						<b-col class="poke-info-container" no-gutters>
+							<b-card-text>Type: {{getPokeTypes(p.types)}}</b-card-text>
+							<b-card-text>Caught: {{p.location}}</b-card-text>
+							<b-card-text v-for="s in p.stats" :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</b-card-text>
+						</b-col>
+					</b-row>
+				</b-skeleton-wrapper>
 			</b-card>
 		</div>
 	</div>
@@ -55,10 +72,12 @@ export default {
 			const p = new Pokedex.Pokedex();
 
 			for(var i = 0; i < pokes.length; i++){
-				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(this.constructData.bind(null, pokes[i]));
+				this.poke_data.push(pokes[i]);
+				this.poke_data[i].loading = true;
+				p.resource(`/api/v2/pokemon/${pokes[i].pokemon_id}`).then(this.constructData.bind(null, pokes[i], i));
 			}
 		},
-		constructData(pokemon, result) {
+		constructData(pokemon, index, result) {
 			const pokeStruct = {
 				real_name: result.name.charAt(0).toUpperCase() + result.name.slice(1),
 				nickname: pokemon.nickname,
@@ -73,13 +92,14 @@ export default {
 				}),
 				types: result.types.map(t => {
 					return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)
-				})
+				}),
+				loading: false
 			};
-			this.poke_data.push(pokeStruct);
-			console.log(result);
+			this.$set(this.poke_data, index, pokeStruct);
 		},
 		getCardTitle(p) {
-			return `${p.real_name}: "${p.nickname}" - Lvl.${p.lvl}`;
+			const titleDataExists = p.real_name && p.nickname && p.lvl;
+			return titleDataExists ? `${p.real_name}: "${p.nickname}" - Lvl.${p.lvl}` : 'Loading...';
 		},
 		getPokeTypes(types){
 			if(!types || types.length === 0)

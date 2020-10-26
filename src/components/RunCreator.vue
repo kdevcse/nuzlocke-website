@@ -34,6 +34,7 @@
     </b-modal>
 </template>
 <script>
+import firebase from 'firebase';
 
 export default {
 	name: 'RunCreator',
@@ -106,6 +107,13 @@ export default {
 			if(!this.checkFormValidity()){
 				return;
 			}
+
+			firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`).add({
+				badges: 0,
+				version: this.form.version,
+				name: this.form.name,
+				party: []
+			});
 			
 			this.$nextTick(() => {
 				this.$bvModal.hide('create-run-window');

@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import firebase from 'firebase';
 import NuzzyRuns from '@/components/NuzzyRuns.vue';
 import RunCreator from '@/components/RunCreator.vue';
 
@@ -23,23 +22,6 @@ export default {
     RunCreator
   },
   mounted(){
-    firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)
-    .onSnapshot((querySnapshot) => {
-      let runData = [];
-      querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        data.run_id = doc.id;
-        runData.push(data);
-      });
-      console.log(runData);
-      this.$store.commit('set_runs', runData);
-    });
-    /*firebase.firestore().collection('runs')
-    .where('guid', '==', firebase.auth().currentUser.uid)
-    .get().then((result) => {
-      const runData = result.docs.map(doc => doc.data());
-      this.$store.commit('set_runs', runData);
-    });*/
   },
   computed: {
     userRuns() {

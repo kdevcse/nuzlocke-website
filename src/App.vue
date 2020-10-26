@@ -26,7 +26,7 @@
       </b-nav>
       <router-view id="current-view"/>
     </div>
-    <Login v-else></Login>
+    <Login v-on:logged-in="initFireStore" v-else></Login>
   </div>
 </template>
 
@@ -63,6 +63,18 @@ export default {
         this.$store.commit('set_login_status', false);
         this.$store.commit('set_user_settings', {});
         this.$store.commit('set_runs', []);
+      });
+    },
+    initFireStore(){
+      firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)
+      .onSnapshot((querySnapshot) => {
+        let runData = [];
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          data.run_id = doc.id;
+          runData.push(data);
+        });
+        this.$store.commit('set_runs', runData);
       });
     }
   }

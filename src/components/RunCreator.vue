@@ -1,19 +1,37 @@
 <template>
-	<div>
-		<b-form @submit="handleSubmit">
-			<div class="form-option-container">
-				<label for="create-run-name-input">Name:</label>
-				<b-input id="create-run-name-input" required></b-input>
-			</div>
-			<div class="form-option-container">
-				<label for="create-run-version-select">Version:</label>
-				<b-select id="create-run-version-select" 
-				required v-model="selectedVersion" 
-				:options="versions">
-				</b-select>
-			</div>
-		</b-form>
-	</div>
+    <b-modal
+    centered
+    size="lg"
+    id="create-run-window"
+    title="Add a run"
+		:ok-disabled="!form.valid"
+		ok-title="Create"
+		ok-variant="success"
+    @ok="handleOk"
+		@show="handleShow">
+			<b-form ref="form" @submit.stop.prevent="handleSubmit">
+				<div class="form-option-container">
+					<label for="create-run-name-input">Name:</label>
+					<b-input id="create-run-name-input" 
+					v-model="form.name" 
+					@input="checkFormValidity" 
+					:state="nameValidation" 
+					required>
+					</b-input>
+					<b-form-invalid-feedback :state="nameValidation">
+						{{nameInputError}}
+					</b-form-invalid-feedback>
+				</div>
+				<div class="form-option-container">
+					<label for="create-run-version-select">Version:</label>
+					<b-select id="create-run-version-select" 
+					required 
+					v-model="form.version" 
+					:options="versions">
+					</b-select>
+				</div>
+			</b-form>
+    </b-modal>
 </template>
 <script>
 
@@ -21,7 +39,13 @@ export default {
 	name: 'RunCreator',
 	data: function() {
 		return {
-			selectedVersion: 'red',
+			form: {
+				name: '',
+				version: 'red',
+				valid: false
+			},
+			nameInputError: 'Required',
+			nameValidation: false,
 			versions: [
 				{ value: 'red', text: 'Red'},
 				{ value: 'blue', text: 'Blue'},
@@ -61,8 +85,42 @@ export default {
 		}
 	},
 	methods: {
+		checkFormValidity() {
+			if(this.form.name === '' || undefined){
+				this.nameValidation = false;
+				this.nameInputError = 'Required';
+			}
+			else {
+				this.nameValidation = true;
+				this.nameInputError = 'Required';
+			}
+			//const valid = this.$refs.form.checkValidity();
+			this.form.valid = this.nameValidation;
+			return this.form.valid;
+		},
+		handleOk(modalWin) {
+			modalWin.preventDefault();
+			this.handleSubmit();
+		},
 		handleSubmit() {
+			if(!this.checkFormValidity()){
+				return;
+			}
 			
+			this.$nextTick(() => {
+				this.$bvModal.hide('create-run-window');
+			});
+		},
+		handleShow() {
+			this.resetForm();
+		},
+		resetForm() {
+			this.form = {
+				name: '',
+				version: 'red'
+			};
+			this.nameValidation = false;
+			this.nameInputError = 'Required';
 		}
 	}
 }

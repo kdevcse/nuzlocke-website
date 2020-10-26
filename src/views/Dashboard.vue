@@ -1,13 +1,6 @@
 <template>
   <div class="dashboard">
-    <b-modal
-    centered
-    size="lg"
-    id="create-run-window"
-    title="Add a run"
-    @ok="handleOk">
-      <RunCreator></RunCreator>
-    </b-modal>
+    <RunCreator></RunCreator>
     <div class="dashboard-title-bar">
       <h2>Nuzlocke Runs</h2>
       <b-button v-b-modal.create-run-window pill variant="outline-success">

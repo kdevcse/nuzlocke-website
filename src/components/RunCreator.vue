@@ -113,6 +113,23 @@ export default {
 				version: this.form.version,
 				name: this.form.name,
 				party: []
+			}).then(() => {
+				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
+					title: 'Run Added',
+					toaster: 'b-toaster-top-center',
+					variant: 'success',
+					solid: true,
+					appendToast: true
+				});
+			}).catch((error) => {
+				this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
+					title: 'Error Adding Run',
+					toaster: 'b-toaster-top-center',
+					variant: 'success',
+					solid: true,
+					appendToast: true
+				});
+				console.error(error);
 			});
 			
 			this.$nextTick(() => {

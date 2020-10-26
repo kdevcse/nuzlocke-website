@@ -76,7 +76,9 @@ html {
 body {
   height: 100%;
   margin: 0;
+  padding: 0 !important;
   background-color: #f5f5f5;
+  overflow: hidden;
 }
 #app-container {
   display: flex;
@@ -101,7 +103,8 @@ body {
 }
 #current-view {
   display: block;
-  margin: 30px;
+  overflow: auto;
+  padding: 30px;
   flex: 4;
 }
 #logout-btn {

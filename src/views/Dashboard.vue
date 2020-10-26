@@ -23,13 +23,13 @@ export default {
     RunCreator
   },
   mounted(){
-    firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`)
-    .collection('runs')
-    .get().then((result) => {
-      const runData = result.docs.map(doc => {
-        const data = doc.data();
+    firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)
+    .onSnapshot((querySnapshot) => {
+      let runData = [];
+      querySnapshot.forEach((doc) => {
+        let data = doc.data();
         data.run_id = doc.id;
-        return data;
+        runData.push(data);
       });
       console.log(runData);
       this.$store.commit('set_runs', runData);

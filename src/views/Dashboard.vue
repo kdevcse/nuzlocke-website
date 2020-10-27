@@ -21,16 +21,9 @@ export default {
     NuzzyRuns,
     RunCreator
   },
-  mounted(){
-  },
   computed: {
     userRuns() {
       return this.$store.state.runs;
-    }
-  },
-  methods: {
-    handleOk(){
-      console.log('Handle OK');
     }
   }
 }

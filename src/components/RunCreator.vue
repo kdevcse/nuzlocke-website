@@ -125,7 +125,7 @@ export default {
 				this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
 					title: 'Error Adding Run',
 					toaster: 'b-toaster-top-center',
-					variant: 'success',
+					variant: 'danger',
 					solid: true,
 					appendToast: true
 				});

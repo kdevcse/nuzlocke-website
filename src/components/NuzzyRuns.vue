@@ -1,5 +1,6 @@
 <template>
     <div id="runs-container">
+      <RunDeleter :runId="runToDelete.id" :runName="runToDelete.name"></RunDeleter>
       <b-card v-for="run in runs" 
         v-bind:key="run.run_id" 
         class="run-container text-left"
@@ -9,7 +10,7 @@
         <template #header>
           <div class="align-middle header-container">
             <span class="">{{run.name}}</span>
-            <div @mouseenter="fillTrash(run, true)" @mouseleave="fillTrash(run, false)" @click="deleteRun(run.run_id)" class="delete-run-button">
+            <div @mouseenter="fillTrash(run, true)" @mouseleave="fillTrash(run, false)" @click="deleteRun(run.run_id, run.name)" class="delete-run-button">
               <b-icon v-if="getFillStatus(run)" title="Delete run" icon="trash-fill" class="run-trash-icon"></b-icon>
               <b-icon v-else icon="trash" class="run-trash-icon"></b-icon>
             </div>
@@ -24,16 +25,21 @@
 </template>
 
 <script>
+import RunDeleter from '@/components/RunDeleter.vue';
 
 export default {
   name: 'NuzzyRuns',
+  components: {
+    RunDeleter
+  },
   data: function() {
     return {
       trashIsHovered: false,
       nuzzyRuns: this.runs.map(r => {
         r.trashIsHovered = false;
         return r;
-      })
+      }),
+      runToDelete: { name: '', id: ''}
     }
   },
   props: ['runs'],
@@ -41,8 +47,12 @@ export default {
 		openRun(runId) {
 			this.$router.push({ name: 'Run', params: { id: `${runId}` } });
     },
-    deleteRun(runId){
-      console.log(`Delete run: ${runId}`);
+    deleteRun(runId, runName){
+      this.runToDelete = {
+        name: runName,
+        id: runId
+      };
+      this.$bvModal.show('delete-run-window');
     },
     fillTrash(run, needsToFill){
       for(let i = 0; i < this.nuzzyRuns.length; i++) {

@@ -9,7 +9,7 @@
         header-text-variant="white">
         <template #header>
           <div class="align-middle header-container">
-            <span class="">{{run.name}}</span>
+            <span>{{run.name}}</span>
             <div @mouseenter="fillTrash(run, true)" @mouseleave="fillTrash(run, false)" @click="deleteRun(run.run_id, run.name)" class="delete-run-button">
               <b-icon v-if="getFillStatus(run)" title="Delete run" icon="trash-fill" class="run-trash-icon"></b-icon>
               <b-icon v-else icon="trash" class="run-trash-icon"></b-icon>

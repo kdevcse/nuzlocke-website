@@ -7,7 +7,7 @@
 	ok-title="Delete"
 	ok-variant="danger"
 	@ok="handleOk">
-		Are you sure you want to delete {{runName}}?
+		Are you sure you want to delete "{{runName}}"?
 	</b-modal>
 </template>
 <script>

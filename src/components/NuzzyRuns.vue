@@ -9,16 +9,19 @@
         header-text-variant="white">
         <template #header>
           <div class="align-middle header-container">
-            <span>{{run.name}}</span>
-            <div @mouseenter="fillTrash(run, true)" @mouseleave="fillTrash(run, false)" @click="deleteRun(run.run_id, run.name)" class="delete-run-button">
+            <span class="header-title" @click="openRun(run.run_id)">{{run.name}}</span>
+            <div class="delete-run-button"
+            @mouseenter="fillTrash(run, true)"
+            @mouseleave="fillTrash(run, false)"
+            @click="deleteRun(run.run_id, run.name)">
               <b-icon v-if="getFillStatus(run)" title="Delete run" icon="trash-fill" class="run-trash-icon"></b-icon>
               <b-icon v-else icon="trash" class="run-trash-icon"></b-icon>
             </div>
           </div>
         </template>
-        <div class="run-body" @click="openRun(run.run_id)">
-          <b-card-text>Version: {{run.version}}</b-card-text>
-          <b-card-text>Badges: {{run.badges}}</b-card-text>
+        <div class="run-body">
+          <b-card-text><strong>Version:</strong> {{run.version}}</b-card-text>
+          <b-card-text><strong>Badges:</strong> {{run.badges}}</b-card-text>
         </div>
       </b-card>
     </div>
@@ -84,8 +87,9 @@ export default {
   border-radius: 6px;
   margin: 15px 0px;
 }
-.run-body:hover {
+.header-title:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 .delete-run-button {
   float: right;

@@ -10,9 +10,7 @@
         <template #header>
           <div class="align-middle header-container">
             <span class="header-title" @click="openRun(run.run_id)">{{run.name}}</span>
-            <div class="delete-run-button"
-            @mouseenter="fillTrash(run, true)"
-            @mouseleave="fillTrash(run, false)"
+            <div class="delete-run-button" @mouseenter="fillTrash(run, true)" @mouseleave="fillTrash(run, false)"
             @click="deleteRun(run.run_id, run.name)">
               <b-icon v-if="getFillStatus(run)" title="Delete run" icon="trash-fill" class="run-trash-icon"></b-icon>
               <b-icon v-else icon="trash" class="run-trash-icon"></b-icon>

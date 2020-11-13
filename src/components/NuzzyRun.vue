@@ -61,8 +61,15 @@ export default {
 			this.getAllRunInfo(run);
 			this.getAllPokemonData(run);
 		} else {
-			console.error(`Run with id '${this.$route.params.id}' not found`);
 			this.$router.push({ name: 'Dashboard' });
+			this.$bvToast.toast(`Run with id '${this.$route.params.id}' not found`,{
+				title: 'Run Not Found',
+				toaster: 'b-toaster-top-center',
+				variant: 'danger',
+				solid: true,
+				appendToast: true
+			});
+			console.error(`Attempted to retrieve run with ID: '${this.$route.params.id}' and returned NULL`);
 		}
   },
   data: function(){

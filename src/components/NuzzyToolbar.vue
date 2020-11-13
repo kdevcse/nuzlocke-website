@@ -1,5 +1,5 @@
 <template>
-    <b-navbar sticky='true' variant="dark">
+    <b-navbar sticky variant='dark'>
         <b-button-toolbar>
             <b-button>+</b-button>
         </b-button-toolbar>

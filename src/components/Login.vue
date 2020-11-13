@@ -84,7 +84,6 @@ export default {
         firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`).get().then((doc) => {
           this.$store.commit('set_login_status', true);
           this.$store.commit('set_user_settings', doc.data());
-          this.$store.commit('set_alert_msg', 'Login successful!');
           this.$emit('logged-in');
 
           this.loginMsg = `Welcome ${this.$store.state.userSettings.username}!`;

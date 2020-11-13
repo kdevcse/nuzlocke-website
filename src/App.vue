@@ -1,12 +1,5 @@
 <template>
   <div id="app-container" :class="{darkmode: userSettings.dark}">
-    <b-alert 
-      dismissible
-      variant="info"
-      @dismissed="dismissAlert"
-      v-show="showAlert">
-        {{alertMsg}}
-    </b-alert>
     <div id="app" v-if="isLoggedIn">
       <!--Save for mobile -->
       <b-sidebar id="sidebar-nav"
@@ -47,17 +40,8 @@ export default {
     userSettings() {
       return this.$store.state.userSettings;
     },
-    alertMsg() {
-      return this.$store.state.alertMsg;
-    },
-    showAlert() {
-      return this.$store.state.alertMsg != null;
-    }
   },
   methods: {
-    dismissAlert(){
-      this.$store.state.alertMsg = null;
-    },
     logout() {
       firebase.auth().signOut().then(() => {
         this.$store.commit('set_login_status', false);

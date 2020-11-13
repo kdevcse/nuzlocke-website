@@ -19,7 +19,7 @@
       </b-nav>
       <router-view id="current-view"/>
     </div>
-    <Login v-on:logged-in="initFireStore" v-else></Login>
+    <Login v-on:logged-in="login" v-else></Login>
   </div>
 </template>
 
@@ -48,6 +48,20 @@ export default {
         this.$store.commit('set_user_settings', {});
         this.$store.commit('set_runs', []);
       });
+    },
+    login(data) {
+      this.$store.commit('set_login_status', true);
+      this.$store.commit('set_user_settings', data);
+
+      this.$bvToast.toast("Login Successful",{
+        title: 'Login Status',
+        toaster: 'b-toaster-top-center',
+        variant: 'success',
+        solid: true,
+        appendToast: true
+      });
+
+      this.initFireStore();
     },
     initFireStore(){
       firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)

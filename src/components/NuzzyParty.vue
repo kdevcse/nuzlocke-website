@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="run-party-title-bar">
-        <h3>Party</h3>
+            <h3>Party</h3>
         </div>
         <div id="all-pokes-container">
             <b-card class="poke-container" 
@@ -23,7 +23,7 @@
                 <b-skeleton-wrapper :loading="p.loading">
                     <template #loading>
                     <b-row md="4" no-gutters>
-                            <b-skeleton-img class="poke-img" width="125px"></b-skeleton-img>
+                        <b-skeleton-img class="poke-img" width="125px"></b-skeleton-img>
                         <b-col class="poke-info-container" no-gutters>
                             <b-skeleton></b-skeleton>
                             <b-skeleton></b-skeleton>
@@ -32,7 +32,7 @@
                     </b-row>
                     </template>
                     <b-row md="4" no-gutters>
-                            <img class="poke-img" :src="p.img_url">
+                        <img class="poke-img" :src="p.img_url">
                         <b-col class="poke-info-container" no-gutters>
                             <b-card-text v-if="p.nickname"><strong>Nickname:</strong> {{p.nickname}}</b-card-text>
                             <b-card-text><strong>Type:</strong> {{getPokeTypes(p.types)}}</b-card-text>
@@ -82,9 +82,9 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 15px;
-  margin: 0px auto;
-  max-width: 1200px;
-  padding: 30px 0px;
+    margin: 0px auto;
+    max-width: 1200px;
+    padding: 30px 0px;
 }
 .poke-container {
 	text-align: left;
@@ -119,12 +119,12 @@ export default {
 	cursor: pointer;
 }
 .run-party-title-bar {
-  text-align: left;
-  margin-bottom: 15px;
+    text-align: left;
+    margin-bottom: 15px;
 }
 .run-party-title-bar > h3 {
-  border-bottom: black 1px solid;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
+    border-bottom: black 1px solid;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<NuzzyToolbar></NuzzyToolbar>
-    <NuzzyParty :data="poke_data"></NuzzyParty>
+		<NuzzyParty :data="poke_data"></NuzzyParty>
 	</div>
 </template>
 

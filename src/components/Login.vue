@@ -82,23 +82,11 @@ export default {
       const pwd = this.form.password;
       firebase.auth().signInWithEmailAndPassword(email, pwd).then(() => {
         firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`).get().then((doc) => {
-          this.$store.commit('set_login_status', true);
-          this.$store.commit('set_user_settings', doc.data());
-          this.$store.commit('set_alert_msg', 'Login successful!');
-          this.$emit('logged-in');
-
           this.loginMsg = `Welcome ${this.$store.state.userSettings.username}!`;
-
-          this.$bvToast.toast("Login Successful",{
-            title: 'Login Status',
-            toaster: 'b-toaster-top-center',
-            variant: 'success',
-            solid: true,
-            appendToast: true
-          });
-
           this.loading = false;
           this.loginReady = false;
+          
+          this.$emit('logged-in', doc.data());
         }).catch((error) => {
           this.failedLogin(error, 'There was an error while logging in');
         });

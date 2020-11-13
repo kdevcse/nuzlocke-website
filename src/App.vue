@@ -1,12 +1,5 @@
 <template>
   <div id="app-container" :class="{darkmode: userSettings.dark}">
-    <b-alert 
-      dismissible
-      variant="info"
-      @dismissed="dismissAlert"
-      v-show="showAlert">
-        {{alertMsg}}
-    </b-alert>
     <div id="app" v-if="isLoggedIn">
       <!--Save for mobile -->
       <b-sidebar id="sidebar-nav"
@@ -18,15 +11,22 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-nav id="sidebar-nav" vertical class="w-10">
-        <h2>Welcome {{userSettings.username}}!</h2>
-        <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
-        <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
-        <b-button id="logout-btn" pill variant="light" @click="logout">Logout</b-button>
-      </b-nav>
+      <b-navbar id="sidebar-nav" class="px-4 py-2">
+        <b-navbar-nav>
+          <b-navbar-brand>
+            <b-img id="slug-brand" fluid center src="@/assets/slug_icon.png"></b-img>
+          </b-navbar-brand>
+          <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
+          <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav title="Logout" class="ml-auto logout-container" @click="logout">
+          <b-icon icon="door-open" class="mr-2 logout-default"></b-icon>
+          <b-icon icon="door-closed-fill" class="mr-2 logout-hover"></b-icon>
+        </b-navbar-nav>
+      </b-navbar>
       <router-view id="current-view"/>
     </div>
-    <Login v-on:logged-in="initFireStore" v-else></Login>
+    <Login v-on:logged-in="login" v-else></Login>
   </div>
 </template>
 
@@ -47,23 +47,28 @@ export default {
     userSettings() {
       return this.$store.state.userSettings;
     },
-    alertMsg() {
-      return this.$store.state.alertMsg;
-    },
-    showAlert() {
-      return this.$store.state.alertMsg != null;
-    }
   },
   methods: {
-    dismissAlert(){
-      this.$store.state.alertMsg = null;
-    },
     logout() {
       firebase.auth().signOut().then(() => {
         this.$store.commit('set_login_status', false);
         this.$store.commit('set_user_settings', {});
         this.$store.commit('set_runs', []);
       });
+    },
+    login(data) {
+      this.$store.commit('set_login_status', true);
+      this.$store.commit('set_user_settings', data);
+
+      this.$bvToast.toast("Login Successful",{
+        title: 'Login Status',
+        toaster: 'b-toaster-top-center',
+        variant: 'success',
+        solid: true,
+        appendToast: true
+      });
+
+      this.initFireStore();
     },
     initFireStore(){
       firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)
@@ -105,11 +110,9 @@ body {
   background-color: #121212;
 }
 #app {
-  display: flex;
   flex: 1;
 }
 #sidebar-nav {
-  flex: 1;
   background-color: #343a40;
   color: white;
 }
@@ -117,15 +120,7 @@ body {
   display: block;
   overflow: auto;
   padding: 30px;
-  flex: 4;
-}
-#logout-btn {
-  position: relative;
-  bottom: 10px;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
+  height: 100%;
 }
 #sidebar-nav a {
   font-weight: bold;
@@ -137,6 +132,20 @@ body {
 #user-txt {
   background-color: var(--primary);
   padding: 5px;
+}
+.logout-container {
+  cursor: pointer;
+}
+.logout-default, .logout-container:hover > .logout-hover {
+  display: block !important;
+}
+.logout-hover, .logout-container:hover > .logout-default {
+  display: none !important;
+}
+#slug-brand {
+  height: 35px;
+  width: 35px;
+  transform: rotateY(-180deg);
 }
 /*#sidebar-nav a.router-link-exact-active {
   color: var(--white)

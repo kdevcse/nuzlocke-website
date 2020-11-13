@@ -11,8 +11,11 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-navbar id="sidebar-nav">
+      <b-navbar id="sidebar-nav" class="px-4 py-2">
         <b-navbar-nav>
+          <b-navbar-brand>
+            <b-img id="slug-brand" fluid center src="@/assets/slug_icon.png"></b-img>
+          </b-navbar-brand>
           <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
           <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
         </b-navbar-nav>
@@ -110,7 +113,6 @@ body {
   flex: 1;
 }
 #sidebar-nav {
-  flex: 1;
   background-color: #343a40;
   color: white;
 }
@@ -139,6 +141,11 @@ body {
 }
 .logout-hover, .logout-container:hover > .logout-default {
   display: none !important;
+}
+#slug-brand {
+  height: 35px;
+  width: 35px;
+  transform: rotateY(-180deg);
 }
 /*#sidebar-nav a.router-link-exact-active {
   color: var(--white)

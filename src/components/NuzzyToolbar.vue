@@ -1,9 +1,9 @@
 <template>
-    <b-navbar sticky variant='dark'>
+    <div sticky variant='dark'>
         <b-button-toolbar>
             <b-button>+</b-button>
         </b-button-toolbar>
-    </b-navbar>
+    </div>
 </template>
 <script>
 export default {

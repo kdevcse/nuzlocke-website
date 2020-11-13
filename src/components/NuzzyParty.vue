@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="party-container">
         <div class="run-party-title-bar">
             <h3>Party</h3>
         </div>
@@ -78,6 +78,9 @@ export default {
 }
 </script>
 <style scoped>
+#party-container {
+    padding: 20px 0px;
+}
 #all-pokes-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;

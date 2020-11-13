@@ -11,12 +11,16 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-nav id="sidebar-nav" vertical class="w-10">
-        <h2>Welcome {{userSettings.username}}!</h2>
-        <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
-        <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
-        <b-button id="logout-btn" pill variant="light" @click="logout">Logout</b-button>
-      </b-nav>
+      <b-navbar id="sidebar-nav">
+        <b-navbar-nav>
+          <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
+          <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav title="Logout" class="ml-auto logout-container" @click="logout">
+          <b-icon icon="door-open" class="mr-2 logout-default"></b-icon>
+          <b-icon icon="door-closed-fill" class="mr-2 logout-hover"></b-icon>
+        </b-navbar-nav>
+      </b-navbar>
       <router-view id="current-view"/>
     </div>
     <Login v-on:logged-in="login" v-else></Login>
@@ -103,7 +107,6 @@ body {
   background-color: #121212;
 }
 #app {
-  display: flex;
   flex: 1;
 }
 #sidebar-nav {
@@ -115,15 +118,7 @@ body {
   display: block;
   overflow: auto;
   padding: 30px;
-  flex: 4;
-}
-#logout-btn {
-  position: relative;
-  bottom: 10px;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
+  height: 100%;
 }
 #sidebar-nav a {
   font-weight: bold;
@@ -135,6 +130,15 @@ body {
 #user-txt {
   background-color: var(--primary);
   padding: 5px;
+}
+.logout-container {
+  cursor: pointer;
+}
+.logout-default, .logout-container:hover > .logout-hover {
+  display: block !important;
+}
+.logout-hover, .logout-container:hover > .logout-default {
+  display: none !important;
 }
 /*#sidebar-nav a.router-link-exact-active {
   color: var(--white)

@@ -11,18 +11,29 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-navbar id="sidebar-nav" class="px-4 py-2">
+      <b-navbar id="sidebar-nav" variant="dark" type="dark" class="px-4 py-2">
         <b-navbar-nav>
           <b-navbar-brand>
             <b-img id="slug-brand" fluid center src="@/assets/slug_icon.png"></b-img>
           </b-navbar-brand>
-          <b-nav-item to="/" exact exact-active-class="active">Dashoard</b-nav-item>
+          <b-nav-item to="/" exact exact-active-class="active" variant="light">Dashoard</b-nav-item>
           <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
+          <b-nav-item>
+            <b-nav-form>
+              <b-input-group prepend="@">
+                <b-form-input placeholder="Username"></b-form-input>
+              </b-input-group>
+            </b-nav-form>
+          </b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav title="Logout" class="ml-auto logout-container" @click="logout">
-          <b-icon icon="door-open" class="mr-2 logout-default"></b-icon>
-          <b-icon icon="door-closed-fill" class="mr-2 logout-hover"></b-icon>
-        </b-navbar-nav>
+        <b-dropdown title="Profile" variant="link" toggle-class="text-decoration-none" right class="ml-auto" no-caret>
+          <template #button-content>
+            <b-icon variant="light" icon="person-circle"></b-icon>
+          </template>
+          <b-dropdown-item href="#">Settings</b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item-button @click="logout">Logout</b-dropdown-item-button>
+        </b-dropdown>
       </b-navbar>
       <router-view id="current-view"/>
     </div>
@@ -112,35 +123,18 @@ body {
 #app {
   flex: 1;
 }
-#sidebar-nav {
-  background-color: #343a40;
-  color: white;
-}
 #current-view {
   display: block;
   overflow: auto;
   padding: 30px;
   height: 100%;
 }
-#sidebar-nav a {
+.nav-item > a {
   font-weight: bold;
-  color: var(--white);
-}
-#sidebar-nav a:hover{
-  background-color: rgba(255, 255, 255, 0.08);
 }
 #user-txt {
   background-color: var(--primary);
   padding: 5px;
-}
-.logout-container {
-  cursor: pointer;
-}
-.logout-default, .logout-container:hover > .logout-hover {
-  display: block !important;
-}
-.logout-hover, .logout-container:hover > .logout-default {
-  display: none !important;
 }
 #slug-brand {
   height: 35px;

@@ -11,10 +11,10 @@
         <router-link to="/about">About</router-link>
       </b-sidebar>
       <!--End-->
-      <b-navbar id="sidebar-nav" variant="dark" type="dark" class="px-4 py-2">
-        <b-navbar-nav>
+      <b-navbar variant="dark" type="dark">
+        <b-navbar-nav id="sidebar-nav">
           <b-navbar-brand>
-            <b-img id="slug-brand" fluid center src="@/assets/slug_icon.png"></b-img>
+            <b-img id="slug-brand" fluid src="@/assets/slug_icon.png"></b-img>
           </b-navbar-brand>
           <b-nav-item to="/" exact exact-active-class="active" variant="light">Dashoard</b-nav-item>
           <b-nav-item to="/about" exact exact-active-class="active">About</b-nav-item>
@@ -26,14 +26,16 @@
             </b-nav-form>
           </b-nav-item>
         </b-navbar-nav>
-        <b-dropdown title="Profile" variant="link" toggle-class="text-decoration-none" right class="ml-auto" no-caret>
-          <template #button-content>
-            <b-icon variant="light" icon="person-circle"></b-icon>
-          </template>
-          <b-dropdown-item href="#">Settings</b-dropdown-item>
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item-button @click="logout">Logout</b-dropdown-item-button>
-        </b-dropdown>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown title="Profile" variant="link" toggle-class="text-decoration-none" right no-caret>
+            <template #button-content>
+              <b-icon variant="light" icon="person-circle"></b-icon>
+            </template>
+            <b-dropdown-item href="#">Settings</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item-button @click="logout">Logout</b-dropdown-item-button>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
       </b-navbar>
       <router-view id="current-view"/>
     </div>
@@ -140,6 +142,9 @@ body {
   height: 35px;
   width: 35px;
   transform: rotateY(-180deg);
+}
+#sidebar-nav {
+  align-items: center;
 }
 /*#sidebar-nav a.router-link-exact-active {
   color: var(--white)

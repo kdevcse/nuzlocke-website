@@ -116,7 +116,7 @@ export default {
 			}).then(() => {
 				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
 					title: 'Run Added',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'success',
 					solid: true,
 					appendToast: true
@@ -124,7 +124,7 @@ export default {
 			}).catch((error) => {
 				this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
 					title: 'Error Adding Run',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'danger',
 					solid: true,
 					appendToast: true

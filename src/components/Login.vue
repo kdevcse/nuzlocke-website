@@ -70,7 +70,7 @@ export default {
         this.loading = false;
         this.$bvToast.toast(msg ,{
           title: 'Login Status',
-          toaster: 'b-toaster-top-center',
+          toaster: 'b-toaster-top-right',
           variant: 'danger',
           solid: true,
           appendToast: true

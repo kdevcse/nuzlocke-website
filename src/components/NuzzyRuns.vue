@@ -55,8 +55,7 @@ export default {
 <style scoped>
 #runs-container{
   margin: 0px auto;
-  max-width: 936px;
-  padding: 30px 0px;
+  margin-bottom: 30px;
 }
 .run-container {
   text-align: left;

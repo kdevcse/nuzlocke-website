@@ -12,7 +12,7 @@
       </b-sidebar>
       <!--End-->
       <b-navbar variant="dark" type="dark">
-        <b-navbar-nav id="sidebar-nav">
+        <b-navbar-nav id="navbar-nav">
           <b-navbar-brand>
             <b-img id="slug-brand" fluid src="@/assets/slug_icon.png"></b-img>
           </b-navbar-brand>
@@ -75,7 +75,7 @@ export default {
 
       this.$bvToast.toast("Login Successful",{
         title: 'Login Status',
-        toaster: 'b-toaster-top-center',
+        toaster: 'b-toaster-top-right',
         variant: 'success',
         solid: true,
         appendToast: true
@@ -143,10 +143,7 @@ body {
   width: 35px;
   transform: rotateY(-180deg);
 }
-#sidebar-nav {
+#navbar-nav {
   align-items: center;
 }
-/*#sidebar-nav a.router-link-exact-active {
-  color: var(--white)
-}*/
 </style>

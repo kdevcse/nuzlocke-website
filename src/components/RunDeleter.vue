@@ -24,7 +24,7 @@ export default {
 			firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.runId}`).delete().then(() => {
 				this.$bvToast.toast(`Run "${this.runName}" was successfully deleted`,{
 					title: 'Run Deleted',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'success',
 					solid: true,
 					appendToast: true
@@ -32,7 +32,7 @@ export default {
 			}).catch((error) => {
 				this.$bvToast.toast(`There was an error while attempting to delete run "${this.runName}"`,{
 					title: 'Error Deleting Run',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'danger',
 					solid: true,
 					appendToast: true

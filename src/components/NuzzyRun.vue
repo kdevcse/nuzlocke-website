@@ -25,7 +25,7 @@ export default {
 			this.$router.push({ name: 'Dashboard' });
 			this.$bvToast.toast(`Run with id '${this.$route.params.id}' not found`,{
 				title: 'Run Not Found',
-				toaster: 'b-toaster-top-center',
+				toaster: 'b-toaster-top-right',
 				variant: 'danger',
 				solid: true,
 				appendToast: true

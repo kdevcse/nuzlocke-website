@@ -1,19 +1,16 @@
 <template>
 	<div>
-		<NuzzyToolbar></NuzzyToolbar>
 		<NuzzyParty :data="poke_data"></NuzzyParty>
 	</div>
 </template>
 
 <script>
-import NuzzyToolbar from '@/components/NuzzyToolbar.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
   name: 'NuzzyRun',
   components: {
-		NuzzyToolbar,
 		NuzzyParty
   },
   mounted() {

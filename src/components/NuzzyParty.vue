@@ -2,6 +2,12 @@
     <div id="party-container">
         <div class="run-party-title-bar">
             <h3>Party</h3>
+            <b-button-toolbar class="party-toolbar">
+                <b-button-group size="sm">
+                    <b-button>+</b-button>
+                    <b-button>Edit</b-button>
+                </b-button-group>
+            </b-button-toolbar>
         </div>
         <div id="all-pokes-container">
             <b-card class="poke-container" 
@@ -79,14 +85,14 @@ export default {
 </script>
 <style scoped>
 #party-container {
+    margin: 0px auto;
     padding: 20px 0px;
+    max-width: 1200px;
 }
 #all-pokes-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 15px;
-    margin: 0px auto;
-    max-width: 1200px;
     padding: 30px 0px;
 }
 .poke-container {
@@ -122,12 +128,16 @@ export default {
 	cursor: pointer;
 }
 .run-party-title-bar {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
     text-align: left;
     margin-bottom: 15px;
-}
-.run-party-title-bar > h3 {
     border-bottom: black 1px solid;
     margin-bottom: 15px;
     padding-bottom: 15px;
+}
+.party-toolbar{
+    margin: 0 10px;
 }
 </style>

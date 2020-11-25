@@ -1,44 +1,42 @@
 <template>
   <b-modal
   centered
-  size="lg"
+  size="sm"
   id="login-window"
-  title="Login"
-	ok-title="Login"
-	ok-variant="primary"
+  ok-title="Login"
+  ok-variant="primary"
   @ok="handleOk"
-	@show="handleShow">
-    <div id="login-container">
-      <div id="login-form-container">
-        <b-form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group>
-            <b-form-input 
-              id="loginEmail"
-              type="email"
-              v-model="form.email"
-              required
-              placeholder="Email"
-              autocomplete="username"
-              :disabled="loading">
-            </b-form-input>
-          </b-form-group>
-          <b-form-group>
-            <b-form-input
-              id="loginPwd"
-              type="password"
-              v-model="form.password"
-              required
-              placeholder="Password"
-              autocomplete="current-password"
-              :disabled="loading"/>
-          </b-form-group>
-          <!--<b-button :disabled="loading" block id="loginBtn" variant="primary" type="submit">
-            <b-spinner v-if="loading" small type="grow"></b-spinner>
-            {{loginBtnTxt}}
-          </b-button>-->
-        </b-form>
+  @show="handleShow">
+    <template #modal-title>
+      <div class="modal-title">
+        <h5>Login</h5>
+        <b-spinner v-if="loading" variant="primary" small type="grow"></b-spinner>
       </div>
-    </div>
+    </template>
+    <b-form ref="form" @submit.stop.prevent="login">
+			<div class="form-option-container">
+				<label for="login-email-input">Email:</label>
+				<b-input 
+        id="login-email-input" 
+        v-model="form.email"
+        required
+        type="email"
+        autocomplete="username"
+        :disabled="loading">
+				</b-input>
+			</div>
+			<div class="form-option-container">
+				<label for="login-password-input">Password:</label>
+				<b-input
+        id="login-password-input" 
+        v-model="form.password"
+        required
+        type="password"
+        autocomplete="current-password"
+        :disabled="loading">
+				</b-input>
+			</div>
+    </b-form>
   </b-modal>
 </template>
 
@@ -65,10 +63,7 @@ export default {
   methods: {
 		handleOk(modalWin) {
 			modalWin.preventDefault();
-			this.handleSubmit();
-    },
-    handleSubmit(){
-      this.login();
+			this.login();
     },
 		handleShow() {
 			this.resetForm();
@@ -148,16 +143,8 @@ export default {
 </script>
 
 <style scoped>
-#login-container {
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  align-items: center;
-}
-#loginBtn {
-  margin-top: 20px;
+.form-option-container {
+	margin: 10px 0px;
 }
 #error-txt.error {
   visibility: visible;
@@ -165,5 +152,12 @@ export default {
 #error-txt {
   color: red;
   visibility: hidden;
+}
+.modal-title {
+  display: flex;
+  align-items: center;
+}
+.modal-title > h5 {
+  margin-right: 5px;
 }
 </style>

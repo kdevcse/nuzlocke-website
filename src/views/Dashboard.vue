@@ -3,9 +3,10 @@
     <RunCreator></RunCreator>
     <div class="nuzzy-runs-container">
       <h2>Nuzlocke Runs</h2>
-      <b-button v-b-modal.create-run-window variant="outline-success">
+      <b-button v-if="isLoggedIn" v-b-modal.create-run-window variant="outline-success">
         + Add a run
       </b-button>
+      <p v-else>Please login or sign up to view the dashboard</p>
       <NuzzyRuns v-bind:runs="userRuns"></NuzzyRuns>
     </div>
   </div>
@@ -24,6 +25,9 @@ export default {
   computed: {
     userRuns() {
       return this.$store.state.runs;
+    },
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
     }
   }
 }

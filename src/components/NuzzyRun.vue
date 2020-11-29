@@ -1,18 +1,24 @@
 <template>
 	<div>
-		<NuzzyParty :data="poke_data"></NuzzyParty>
+		<div id='run-container'>
+			<NuzzyParty :data='poke_data'></NuzzyParty>
+			<NuzzyBox :data='poke_data'></NuzzyBox>
+		</div>
 	</div>
 </template>
 
 <script>
 import NuzzyParty from '@/components/NuzzyParty.vue';
+import NuzzyBox from '@/components/NuzzyBox.vue';
+
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
-  name: 'NuzzyRun',
-  components: {
-		NuzzyParty
-  },
+	name: 'NuzzyRun',
+	components: {
+		NuzzyParty,
+		NuzzyBox
+	},
   mounted() {
 		const run = this.$store.state.runs.find(r => r.run_id == this.$route.params.id);
 		if(run){
@@ -76,4 +82,9 @@ export default {
 }
 </script>
 <style scoped>
+#run-container {
+	margin: 0px auto;
+	padding: 20px 0px;
+	max-width: 1200px;
+}
 </style>

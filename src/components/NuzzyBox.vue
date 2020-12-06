@@ -1,6 +1,6 @@
 <template>
 	<div id='box-container'>
-    <PokeAdder></PokeAdder>
+		<PokeAdder :version='version'></PokeAdder>
 		<div class="run-box-title-bar">
 			<h3>Pokemon Box</h3>
 			<b-button-toolbar class="party-toolbar">
@@ -30,7 +30,8 @@ export default {
     PokeAdder
 	},
 	props: {
-		data: Array
+		data: Array,
+		version: String
 	}
 }
 </script>

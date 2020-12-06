@@ -2,7 +2,7 @@
 	<div>
 		<div id='run-container'>
 			<NuzzyParty :data='poke_data'></NuzzyParty>
-			<NuzzyBox :data='poke_data'></NuzzyBox>
+			<NuzzyBox :data='poke_data' :version='version'></NuzzyBox>
 		</div>
 	</div>
 </template>
@@ -38,15 +38,13 @@ export default {
   },
   data: function(){
 		return {
-			poke_data: []
+			poke_data: [],
+			version: null
 		}
 	},
 	methods: {
 		getAllRunInfo(run) {
-			const p = new Pokedex.Pokedex();
-			p.getVersionByName(run.version).then(result => {
-				console.log(result);
-			});
+			this.version = run.version;
 		},
 		getAllPokemonData(run) {
 			const pokes = run.party;

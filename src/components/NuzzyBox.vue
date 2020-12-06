@@ -1,7 +1,13 @@
 <template>
 	<div id='box-container'>
+    <PokeAdder></PokeAdder>
 		<div class="run-box-title-bar">
 			<h3>Pokemon Box</h3>
+			<b-button-toolbar class="party-toolbar">
+				<b-button-group size="sm">
+					<b-button v-b-modal.add-poke-window>+</b-button>
+				</b-button-group>
+			</b-button-toolbar>
 		</div>
 		<div id='box'>
 			<PokeCard class="pokebox-card"
@@ -15,11 +21,13 @@
 </template>
 <script>
 import PokeCard from '@/components/PokeCard.vue';
+import PokeAdder from '@/components/PokeAdder.vue';
 
 export default {
 	name: 'NuzzyBox',
 	components: {
-		PokeCard
+		PokeCard,
+    PokeAdder
 	},
 	props: {
 		data: Array
@@ -36,5 +44,8 @@ export default {
 	border-bottom: black 1px solid;
 	margin-bottom: 15px;
 	padding-bottom: 15px;
+}
+.party-toolbar{
+	margin: 0 10px;
 }
 </style>

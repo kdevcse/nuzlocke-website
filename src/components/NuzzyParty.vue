@@ -2,12 +2,6 @@
 	<div id="party-container">
 		<div class="run-party-title-bar">
 			<h3>Party</h3>
-			<b-button-toolbar class="party-toolbar">
-				<b-button-group size="sm">
-					<b-button>+</b-button>
-					<b-button>Edit</b-button>
-				</b-button-group>
-			</b-button-toolbar>
 		</div>
 		<div id="all-pokes-container">
 			<PokeCard class="poke-container" 
@@ -69,8 +63,5 @@ export default {
 	border-bottom: black 1px solid;
 	margin-bottom: 15px;
 	padding-bottom: 15px;
-}
-.party-toolbar{
-	margin: 0 10px;
 }
 </style>

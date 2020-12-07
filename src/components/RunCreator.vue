@@ -4,33 +4,33 @@
     size="lg"
     id="create-run-window"
     title="Add a run"
-		:ok-disabled="!form.valid"
-		ok-title="Create"
-		ok-variant="success"
+	:ok-disabled="!form.valid"
+	ok-title="Create"
+	ok-variant="success"
     @ok="handleOk"
-		@show="handleShow">
-			<b-form ref="form" @submit.stop.prevent="handleSubmit">
-				<div class="form-option-container">
-					<label for="create-run-name-input">Name:</label>
-					<b-input id="create-run-name-input" 
-					v-model="form.name" 
-					@input="checkFormValidity" 
-					:state="nameValidation" 
-					required>
-					</b-input>
-					<b-form-invalid-feedback :state="nameValidation">
-						{{nameInputError}}
-					</b-form-invalid-feedback>
-				</div>
-				<div class="form-option-container">
-					<label for="create-run-version-select">Version:</label>
-					<b-select id="create-run-version-select" 
-					required 
-					v-model="form.version" 
-					:options="versions">
-					</b-select>
-				</div>
-			</b-form>
+	@show="handleShow">
+		<b-form ref="form" @submit.stop.prevent="handleSubmit">
+			<div class="form-option-container">
+				<label for="create-run-name-input">Name:</label>
+				<b-input id="create-run-name-input" 
+				v-model="form.name" 
+				@input="checkFormValidity" 
+				:state="nameValidation" 
+				required>
+				</b-input>
+				<b-form-invalid-feedback :state="nameValidation">
+					{{nameInputError}}
+				</b-form-invalid-feedback>
+			</div>
+			<div class="form-option-container">
+				<label for="create-run-version-select">Version:</label>
+				<b-select id="create-run-version-select" 
+				required 
+				v-model="form.version" 
+				:options="versions">
+				</b-select>
+			</div>
+		</b-form>
     </b-modal>
 </template>
 <script>
@@ -112,11 +112,12 @@ export default {
 				badges: 0,
 				version: this.form.version,
 				name: this.form.name,
-				party: []
+				pokemon: [],
+				created: Date.now()
 			}).then(() => {
 				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
 					title: 'Run Added',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'success',
 					solid: true,
 					appendToast: true
@@ -124,7 +125,7 @@ export default {
 			}).catch((error) => {
 				this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
 					title: 'Error Adding Run',
-					toaster: 'b-toaster-top-center',
+					toaster: 'b-toaster-top-right',
 					variant: 'danger',
 					solid: true,
 					appendToast: true
@@ -142,7 +143,8 @@ export default {
 		resetForm() {
 			this.form = {
 				name: '',
-				version: 'red'
+				version: 'red',
+				valid: false
 			};
 			this.nameValidation = false;
 			this.nameInputError = 'Required';

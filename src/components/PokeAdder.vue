@@ -19,7 +19,7 @@
 					v-model='pokename'
 					:state='nameIsValid'
 					:disabled='waiting'
-					debounce="500"
+					debounce="1000"
 					required>
 					</b-form-input>
 					<b-form-invalid-feedback :state="nameIsValid">
@@ -85,6 +85,7 @@
 </template>
 <script>
 import PokeCard from '@/components/PokeCard.vue';
+import firebase from 'firebase';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -93,13 +94,13 @@ export default {
 		PokeCard
 	},
 	props:  {
-		version: String
+		version: String,
+		runId: String
 	},
 	data: function() {
 		return {
 			waiting: true,
 			includeInParty: false,
-			imgUrl: null,
 			searching: false,
 			isValidPokemon: null,
 			invalidMsg: '',
@@ -108,6 +109,7 @@ export default {
 				img_url: null,
 				real_name: '',
 				nickname: '',
+				pokemon_id: null,
 				lvl: 1,
 				location: '',
 				types: null,
@@ -155,6 +157,7 @@ export default {
 				this.searching = false;
 				this.form.valid = true;
 				this.form.img_url = result.sprites.front_default;
+				this.form.pokemon_id = result.id;
 				this.form.stats = result.stats.map(s => {
 					return {
 						name: s.stat.name,
@@ -173,8 +176,8 @@ export default {
 	},
 	methods: {
 		resetForm() {
-			this.imgUrl = null;
 			this.searching = false;
+			this.includeInParty = false,
 			this.isValidPokemon = null;
 			this.pokename = '';
 			this.invalidMsg = '';
@@ -182,6 +185,7 @@ export default {
 				img_url: null,
 				real_name: '',
 				nickname: '',
+				pokemon_id: null,
 				lvl: 1,
 				location: '',
 				types: null,
@@ -207,26 +211,40 @@ export default {
 			});
 			
 		},
+		constructData(){
+			return {
+				real_name: this.form.real_name,
+				nickname: this.form.nickname,
+				pokemon_id: this.form.pokemon_id,
+				img_url: this.form.img_url,
+				lvl: this.form.lvl,
+				types: this.form.types,
+				location: this.form.location,
+				stats: this.form.stats,
+				party: this.includeInParty ? (this.form.party - 1) : -1,
+				caught: Date.now()
+			}
+		},
 		handleOk(){
-			console.log(this.form);
+			firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.runId}`).update({
+				pokemon: firebase.firestore.FieldValue.arrayUnion(this.constructData())
+			});
 		},
 		setInvalidForm(msg){
 			this.invalidMsg = msg;
-			this.imgUrl = null;
 			this.searching = false;
 			this.isValidPokemon = false;
 			this.form.valid = false;
+			this.form.img_url = null;
 			this.pokemonInfo = null;
 		},
 		isFoundInGame(allGames) {
 			for(let i = 0; i < allGames.length; i++) {
-					console.log(allGames[i].version.name);
 				if (allGames[i].version.name === this.version) {
-					console.log(allGames[i].version.name);
 					return true;
 				}
 			}
-			console.log(allGames.length);
+
 			return false;
 		}
 	}

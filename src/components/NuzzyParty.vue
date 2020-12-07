@@ -52,6 +52,7 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 15px;
+	grid-row-gap: 15px;
 	padding: 30px 0px;
 }
 .run-party-title-bar {

@@ -112,7 +112,7 @@ export default {
 				badges: 0,
 				version: this.form.version,
 				name: this.form.name,
-				party: [],
+				pokemon: [],
 				created: Date.now()
 			}).then(() => {
 				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{

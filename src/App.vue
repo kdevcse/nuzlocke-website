@@ -19,7 +19,7 @@ export default {
   computed: {
     userSettings() {
       return this.$store.state.userSettings;
-    },
+    }
   }
 }
 </script>

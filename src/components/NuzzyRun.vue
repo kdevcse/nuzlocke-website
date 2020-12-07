@@ -20,24 +20,8 @@ export default {
 	},
   mounted() {
 		this.run_id = this.$route.params.id;
-		firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.run_id}`).onSnapshot((doc) => {
-			const run = doc.data();
-			if(run) {
-				this.version = run.version;
-				this.poke_data = run.pokemon;
-			} 
-			else {
-				this.$router.push({ name: 'Dashboard' });
-				this.$bvToast.toast(`Run with id '${this.run_id}' not found`,{
-					title: 'Run Not Found',
-					toaster: 'b-toaster-top-right',
-					variant: 'danger',
-					solid: true,
-					appendToast: true
-				});
-				console.error(`Attempted to retrieve run with ID: '${this.run_id}' and returned NULL`);
-			}
-		});
+		this.initSnapshotForRun();
+		this.initSnapshotForPokemon();
   },
   data: function(){
 		return {
@@ -49,6 +33,47 @@ export default {
 	computed: {
 		party_data() {
 			return this.poke_data.filter(d => d.party > -1);
+		}
+	},
+	methods: {
+		initSnapshotForRun() {
+			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}`;
+			firebase.firestore().doc(query).onSnapshot((doc) => {
+				const run = doc.data();
+				if(run) {
+					this.version = run.version;
+				} 
+				else {
+					this.$router.push({ name: 'Dashboard' });
+					this.errorHandler(
+						'Run Not Found', 
+						`Run with id '${this.run_id}' not found`,
+						`Attempted to retrieve run with ID: '${this.run_id}' and returned NULL`
+					);
+				}
+			});
+		},
+		initSnapshotForPokemon() {
+			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}/pokemon`;
+			firebase.firestore().collection(query).onSnapshot((querySnapshot) => {
+				const allPokemon = [];
+
+				querySnapshot.forEach((doc) => {
+					allPokemon.push(doc.data());
+				});
+				
+				this.poke_data = allPokemon;
+			});
+		},
+		errorHandler(titleTxt, toastTxt, consoleTxt){
+			this.$bvToast.toast(toastTxt, {
+				title: titleTxt,
+				toaster: 'b-toaster-top-right',
+				variant: 'danger',
+				solid: true,
+				appendToast: true
+			});
+			console.error(consoleTxt);
 		}
 	}
 }

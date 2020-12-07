@@ -226,9 +226,8 @@ export default {
 			}
 		},
 		handleOk(){
-			firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.runId}`).update({
-				pokemon: firebase.firestore.FieldValue.arrayUnion(this.constructData())
-			});
+			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.runId}/pokemon`;
+			firebase.firestore().collection(query).add(this.constructData());
 		},
 		setInvalidForm(msg){
 			this.invalidMsg = msg;

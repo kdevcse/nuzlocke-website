@@ -4,12 +4,42 @@
 			<h3>Party</h3>
 		</div>
 		<div id="all-pokes-container">
-			<PokeCard class="poke-container" 
-			v-for="(p, index) in data" 
-			v-bind:key="p.id"
-			v-bind:index="index"
-			:pokedata='p'>
-			</PokeCard>
+			<div class="poke-container">
+				<PokeCard v-if='party.first' :pokedata='party.first'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
+			<div class="poke-container">
+				<PokeCard v-if='party.second' :pokedata='party.second'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
+			<div class="poke-container">
+				<PokeCard v-if='party.third' :pokedata='party.third'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
+			<div class="poke-container">
+				<PokeCard v-if='party.fourth' :pokedata='party.fourth'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
+			<div class="poke-container">
+				<PokeCard v-if='party.fifth' :pokedata='party.fifth'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
+			<div class="poke-container">
+				<PokeCard v-if='party.sixth' :pokedata='party.sixth'></PokeCard>
+				<div v-else class='empty-slot'>
+					<h4>Empty</h4>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -21,7 +51,7 @@ export default {
 		PokeCard
 	},
 	props: {
-		data: Array
+		party: Object
 	},
 	methods: {
 		getCardTitle(p) {
@@ -51,9 +81,18 @@ export default {
 #all-pokes-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
 	grid-column-gap: 15px;
 	grid-row-gap: 15px;
 	padding: 30px 0px;
+}
+.empty-slot{
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	border: dotted black 2px;
+	border-radius: 6px;
+	justify-content: center;
 }
 .run-party-title-bar {
 	display: flex;

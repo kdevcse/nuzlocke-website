@@ -112,6 +112,7 @@ export default {
       this.$store.commit('set_login_status', true);
       this.$store.commit('set_user_settings', data);
 
+      this.initOnAuthChange();
       this.initFireStore();
 
       this.$bvToast.toast("Login Successful",{
@@ -136,6 +137,15 @@ export default {
           runData.push(data);
         });
         this.$store.commit('set_runs', runData);
+      });
+    },
+    initOnAuthChange(){
+      firebase.auth().onAuthStateChanged((user) => {
+        if(!user) {
+          this.$store.commit('set_login_status', false);
+          this.$store.commit('set_user_settings', {});
+          this.$store.commit('set_runs', []);
+        }
       });
     }
   }

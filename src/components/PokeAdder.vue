@@ -59,25 +59,16 @@
 					</b-form-select>
 				</div>
 				<div class='form-option-container'>
-					<label for='add-pokemon-party-cb'>Assign to Party?</label>
-					<b-form-checkbox
-					id='add-pokemon-party-cb'
-					v-model='includeInParty'
-					:disabled='waiting'
-					required>
-					</b-form-checkbox>
-				</div>
-				<div class='form-option-container'>
-					<label for='add-pokemon-party-slot-input'>Party Slot:</label>
-					<b-input
-					id='add-pokemon-party-slot-input'
-					v-model='form.party'
-					:disabled='waiting || !includeInParty'
-					min='1'
-					max='6'
-					required
-					type='number'>
-					</b-input>
+					<b-form-group label='Party Slot:'>
+						<b-form-radio-group
+						v-model='form.party'
+						:disabled='waiting'
+						:options='partySlots'
+						required
+						buttons
+						button-variant='outline-primary'>
+						</b-form-radio-group>
+					</b-form-group>
 				</div>
 			</b-input-group>
 		</b-form>
@@ -100,7 +91,6 @@ export default {
 	data: function() {
 		return {
 			waiting: true,
-			includeInParty: false,
 			searching: false,
 			isValidPokemon: null,
 			invalidMsg: '',
@@ -114,11 +104,20 @@ export default {
 				location: '',
 				types: null,
 				stats: null,
-				party: 1,
+				party: -1,
 				valid: false
 			},
 			pokemonInfo: null,
-			locationsList: []
+			locationsList: [],
+			partySlots: [
+				{ text: 'Box', value: -1 },
+				{ text: 'First', value: 0 },
+				{ text: 'Second', value: 1 },
+				{ text: 'Third', value: 2 },
+				{ text: 'Fourth', value: 3 },
+				{ text: 'Fifth', value: 4 },
+				{ text: 'Sixth', value: 5 }
+			]
 		}
 	},
 	computed: {
@@ -128,11 +127,6 @@ export default {
 			}
 			
 			return this.isValidPokemon;
-		},
-		pokeData() {
-			return {
-
-			}
 		}
 	},
 	watch: {
@@ -177,7 +171,6 @@ export default {
 	methods: {
 		resetForm() {
 			this.searching = false;
-			this.includeInParty = false,
 			this.isValidPokemon = null;
 			this.pokename = '';
 			this.invalidMsg = '';
@@ -190,7 +183,7 @@ export default {
 				location: '',
 				types: null,
 				stats: null,
-				party: 1,
+				party: -1,
 				valid: false
 			};
 			this.pokemonInfo = null;
@@ -200,7 +193,9 @@ export default {
 				p.resource(result.version_group.url).then((res) => {
 					if(res.regions[0]){
 						p.resource(res.regions[0].url).then((region) => {
-							const list = region.locations.map(r => r.name);
+							const list = region.locations.map(r => {
+								return { text: this.getLocationTxt(r.name), value: r.name };
+							});
 							this.locationsList = list;
 							this.waiting = false;
 						});
@@ -210,6 +205,15 @@ export default {
 				this.waiting = false;
 			});
 			
+		},
+		getLocationTxt(location){
+			const dashSplit = location.split('-');
+			let str = '';
+			dashSplit.forEach(split => {
+				str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+			});
+
+			return str;
 		},
 		constructData(){
 			return {
@@ -221,13 +225,21 @@ export default {
 				types: this.form.types,
 				location: this.form.location,
 				stats: this.form.stats,
-				party: this.includeInParty ? (this.form.party - 1) : -1,
+				death: null,
 				caught: Date.now()
 			}
 		},
-		handleOk(){
-			firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.runId}`).update({
-				pokemon: firebase.firestore.FieldValue.arrayUnion(this.constructData())
+		handleOk() {
+			const runQuery = `users/${firebase.auth().currentUser.uid}/runs/${this.runId}`;
+			const pokemonQuery = `${runQuery}/pokemon`;
+			firebase.firestore().collection(pokemonQuery).add(this.constructData()).then(() => {
+				const partyVal = this.partySlots.find(s => s.value === this.form.party);
+
+				if(partyVal && partyVal.value !== -1) {
+					let partyObj = new Object();
+					partyObj[`party.${partyVal.text.toLowerCase()}`] = this.constructData();
+					firebase.firestore().doc(runQuery).update(partyObj);
+				}
 			});
 		},
 		setInvalidForm(msg){

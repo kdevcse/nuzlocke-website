@@ -28,7 +28,8 @@
 				<b-col class="poke-info-container" no-gutters>
 					<b-card-text v-if="pokedata.nickname"><strong>Nickname:</strong> {{pokedata.nickname}}</b-card-text>
 					<b-card-text><strong>Type:</strong> {{getPokeTypes}}</b-card-text>
-					<b-card-text><strong>Caught:</strong> {{pokedata.location}}</b-card-text>
+					<b-card-text><strong>Location:</strong> {{getLocationTxt}}</b-card-text>
+					<b-card-text><strong>Caught:</strong> {{getCaughtTxt}}</b-card-text>
 				</b-col>
 			</b-row>
 		</b-skeleton-wrapper>
@@ -65,6 +66,20 @@ export default {
 		},
 		getPartyCardId() {
 			return `party-card-${this.index}`;
+		},
+		getLocationTxt(){
+			const dashSplit = this.pokedata.location.split('-');
+			let str = '';
+			dashSplit.forEach(split => {
+				str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+			});
+
+			return str;
+		},
+		getCaughtTxt() {
+			var dte = new Date(this.pokedata.caught);
+			const options = { dateStyle: 'short', timeStyle: 'short' };
+			return dte.toLocaleString('en-US', options);
 		}
 	}
 }

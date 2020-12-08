@@ -4,14 +4,14 @@
     size="lg"
     id="create-run-window"
     title="Add a run"
-	:ok-disabled="!form.valid"
-	ok-title="Create"
-	ok-variant="success"
+		:ok-disabled="!form.valid"
+		ok-title="Create"
+		ok-variant="success"
     @ok="handleOk"
-	@show="handleShow">
+		@show="handleShow">
 		<b-form ref="form" @submit.stop.prevent="handleSubmit">
 			<div class="form-option-container">
-				<label for="create-run-name-input">Name:</label>
+				<label for="create-run-name-input">Run name:</label>
 				<b-input id="create-run-name-input" 
 				v-model="form.name" 
 				@input="checkFormValidity" 
@@ -20,6 +20,18 @@
 				</b-input>
 				<b-form-invalid-feedback :state="nameValidation">
 					{{nameInputError}}
+				</b-form-invalid-feedback>
+			</div>
+			<div class="form-option-container">
+				<label for="create-run-trainer-input">Trainer name:</label>
+				<b-input id="create-run-trainer-input" 
+				v-model="form.trainerName"
+				@input="checkFormValidity" 
+				:state="trainerValidation" 
+				required>
+				</b-input>
+				<b-form-invalid-feedback :state="trainerValidation">
+					{{trainerInputError}}
 				</b-form-invalid-feedback>
 			</div>
 			<div class="form-option-container">
@@ -42,11 +54,14 @@ export default {
 		return {
 			form: {
 				name: '',
+				trainerName: '',
 				version: 'red',
 				valid: false
 			},
 			nameInputError: 'Required',
 			nameValidation: false,
+			trainerInputError: 'Required',
+			trainerValidation: false,
 			versions: [
 				{ value: 'red', text: 'Red'},
 				{ value: 'blue', text: 'Blue'},
@@ -95,8 +110,17 @@ export default {
 				this.nameValidation = true;
 				this.nameInputError = 'Required';
 			}
+
+			if(this.form.trainerName === '' || undefined){
+				this.trainerValidation = false;
+				this.trainerInputError = 'Required';
+			}
+			else {
+				this.trainerValidation = true;
+				this.trainerInputError = 'Required';
+			}
 			//const valid = this.$refs.form.checkValidity();
-			this.form.valid = this.nameValidation;
+			this.form.valid = this.nameValidation || this.trainerValidation;
 			return this.form.valid;
 		},
 		handleOk(modalWin) {
@@ -112,7 +136,15 @@ export default {
 				badges: 0,
 				version: this.form.version,
 				name: this.form.name,
-				pokemon: [],
+				trainerName: this.form.trainerName,
+				party: {
+					first: null,
+					second: null,
+					third: null,
+					fourth: null,
+					fifth: null,
+					sixth: null
+				},
 				created: Date.now()
 			}).then(() => {
 				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{

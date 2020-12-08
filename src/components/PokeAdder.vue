@@ -267,7 +267,7 @@ export default {
 </script>
 <style scoped>
 #example-pokecard {
-	width: 50%;
+	max-width: 380px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 15px;

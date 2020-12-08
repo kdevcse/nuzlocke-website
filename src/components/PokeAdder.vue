@@ -193,7 +193,9 @@ export default {
 				p.resource(result.version_group.url).then((res) => {
 					if(res.regions[0]){
 						p.resource(res.regions[0].url).then((region) => {
-							const list = region.locations.map(r => r.name);
+							const list = region.locations.map(r => {
+								return { text: this.getLocationTxt(r.name), value: r.name };
+							});
 							this.locationsList = list;
 							this.waiting = false;
 						});
@@ -203,6 +205,15 @@ export default {
 				this.waiting = false;
 			});
 			
+		},
+		getLocationTxt(location){
+			const dashSplit = location.split('-');
+			let str = '';
+			dashSplit.forEach(split => {
+				str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+			});
+
+			return str;
 		},
 		constructData(){
 			return {

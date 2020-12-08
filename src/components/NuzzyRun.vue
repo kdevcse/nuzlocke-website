@@ -1,9 +1,10 @@
 <template>
-	<div>
-		<div id='run-container'>
+	<div id='run-container'>
+		<div v-if='isLoggedIn'>
 			<NuzzyParty :party='party_data'></NuzzyParty>
 			<NuzzyBox :data='box_data' :version='version' :runId='run_id'></NuzzyBox>
 		</div>
+		<p v-else> Please login to view this run</p>
 	</div>
 </template>
 
@@ -20,11 +21,30 @@ export default {
 	},
   mounted() {
 		this.run_id = this.$route.params.id;
-		this.initSnapshotForRun();
-		this.initSnapshotForPokemon();
-  },
+
+		if(this.$store.state.isLoggedIn) {
+			this.initSnapshotForRun();
+			this.initSnapshotForPokemon();
+		}
+	},
+	beforeDestroy(){
+		if(this.pokemonSnapshot) {
+			this.pokemonSnapshot();
+		}
+
+		if(this.runSnapshot) {
+			this.runSnapshot();
+		}
+	},
+	computed: {
+		isLoggedIn() {
+			return this.$store.state.isLoggedIn;
+		}
+	},
   data: function(){
 		return {
+			pokemonSnapshot: null,
+			runSnapshot: null,
 			run_id: null,
 			box_data: [],
 			party_data: {},
@@ -34,7 +54,7 @@ export default {
 	methods: {
 		initSnapshotForRun() {
 			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}`;
-			firebase.firestore().doc(query).onSnapshot((doc) => {
+			this.runSnapshot = firebase.firestore().doc(query).onSnapshot((doc) => {
 				const run = doc.data();
 				if(run) {
 					this.version = run.version;
@@ -52,7 +72,7 @@ export default {
 		},
 		initSnapshotForPokemon() {
 			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}/pokemon`;
-			firebase.firestore().collection(query).onSnapshot((querySnapshot) => {
+			this.pokemonSnapshot = firebase.firestore().collection(query).onSnapshot((querySnapshot) => {
 				const allPokemon = [];
 
 				querySnapshot.forEach((doc) => {
@@ -76,7 +96,7 @@ export default {
 }
 </script>
 <style scoped>
-#run-container {
+#run-container > div {
 	margin: 0px auto;
 	padding: 20px 0px;
 	max-width: 1200px;

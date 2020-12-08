@@ -51,7 +51,7 @@ export default {
 		PokeCard
 	},
 	props: {
-		party: Array
+		party: Object
 	},
 	methods: {
 		getCardTitle(p) {

@@ -214,6 +214,7 @@ export default {
 				types: this.form.types,
 				location: this.form.location,
 				stats: this.form.stats,
+				death: null,
 				caught: Date.now()
 			}
 		},

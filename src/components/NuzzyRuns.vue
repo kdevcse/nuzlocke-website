@@ -61,7 +61,7 @@ export default {
     },
     getCreatedTimestamp(milliseconds) {
       var d = new Date(milliseconds);
-      return `${d.toString()}`;
+      return `${d.toLocaleString('en-US')}`;
     }
 	}
 }

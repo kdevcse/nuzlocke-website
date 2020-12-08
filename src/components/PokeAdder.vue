@@ -105,6 +105,7 @@ export default {
 				types: null,
 				stats: null,
 				party: -1,
+				caught: Date.now(),
 				valid: false
 			},
 			pokemonInfo: null,
@@ -184,6 +185,7 @@ export default {
 				types: null,
 				stats: null,
 				party: -1,
+				caught: Date.now(),
 				valid: false
 			};
 			this.pokemonInfo = null;
@@ -193,8 +195,9 @@ export default {
 				p.resource(result.version_group.url).then((res) => {
 					if(res.regions[0]){
 						p.resource(res.regions[0].url).then((region) => {
-							const list = region.locations.map(r => {
-								return { text: this.getLocationTxt(r.name), value: r.name };
+							const sortedList = region.locations.map(l => l.name).sort();
+							const list = sortedList.map(l => {
+								return { text: this.getLocationTxt(l), value: l };
 							});
 							this.locationsList = list;
 							this.waiting = false;
@@ -226,7 +229,7 @@ export default {
 				location: this.form.location,
 				stats: this.form.stats,
 				death: null,
-				caught: Date.now()
+				caught: this.form.caught
 			}
 		},
 		handleOk() {

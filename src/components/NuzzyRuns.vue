@@ -17,8 +17,9 @@
         </div>
       </template>
       <div class="run-body">
+        <b-card-text><strong>Trainer:</strong> {{run.trainerName}}</b-card-text>
         <b-card-text><strong>Created:</strong> {{getCreatedTimestamp(run.created)}}</b-card-text>
-        <b-card-text><strong>Version:</strong> {{run.version}}</b-card-text>
+        <b-card-text><strong>Version:</strong> {{getVersionRunTxt(run.version)}}</b-card-text>
         <b-card-text><strong>Badges:</strong> {{run.badges}}</b-card-text>
       </div>
     </b-card>
@@ -62,6 +63,15 @@ export default {
     getCreatedTimestamp(milliseconds) {
       var d = new Date(milliseconds);
       return `${d.toLocaleString('en-US')}`;
+    },
+    getVersionRunTxt(version) {
+			const dashSplit = version.split('-');
+			let str = '';
+			dashSplit.forEach(split => {
+				str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+			});
+
+			return str;
     }
 	}
 }

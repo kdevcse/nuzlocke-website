@@ -1,6 +1,6 @@
 <template>
-	<div id='run-container'>
-		<div v-if='isLoggedIn'>
+	<div>
+		<div v-if='isLoggedIn' id='run-container'>
 			<NuzzyParty :party='party_data'></NuzzyParty>
 			<NuzzyBox :data='box_data' :version='version' :runId='run_id'></NuzzyBox>
 		</div>
@@ -96,7 +96,7 @@ export default {
 }
 </script>
 <style scoped>
-#run-container > div {
+#run-container {
 	margin: 0px auto;
 	padding: 20px 0px;
 	max-width: 1200px;

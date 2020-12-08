@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div id='run-container'>
-			<NuzzyParty :data='party_data'></NuzzyParty>
-			<NuzzyBox :data='poke_data' :version='version' :runId='run_id'></NuzzyBox>
+			<NuzzyParty :party='party_data'></NuzzyParty>
+			<NuzzyBox :data='box_data' :version='version' :runId='run_id'></NuzzyBox>
 		</div>
 	</div>
 </template>
@@ -26,13 +26,9 @@ export default {
   data: function(){
 		return {
 			run_id: null,
-			poke_data: [],
+			box_data: [],
+			party_data: {},
 			version: null
-		}
-	},
-	computed: {
-		party_data() {
-			return this.poke_data.filter(d => d.party > -1);
 		}
 	},
 	methods: {
@@ -42,6 +38,7 @@ export default {
 				const run = doc.data();
 				if(run) {
 					this.version = run.version;
+					this.party_data = run.party;
 				} 
 				else {
 					this.$router.push({ name: 'Dashboard' });
@@ -62,7 +59,7 @@ export default {
 					allPokemon.push(doc.data());
 				});
 				
-				this.poke_data = allPokemon;
+				this.box_data = allPokemon;
 			});
 		},
 		errorHandler(titleTxt, toastTxt, consoleTxt){

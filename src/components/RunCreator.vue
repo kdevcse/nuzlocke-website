@@ -4,11 +4,11 @@
     size="lg"
     id="create-run-window"
     title="Add a run"
-	:ok-disabled="!form.valid"
-	ok-title="Create"
-	ok-variant="success"
+		:ok-disabled="!form.valid"
+		ok-title="Create"
+		ok-variant="success"
     @ok="handleOk"
-	@show="handleShow">
+		@show="handleShow">
 		<b-form ref="form" @submit.stop.prevent="handleSubmit">
 			<div class="form-option-container">
 				<label for="create-run-name-input">Name:</label>
@@ -112,7 +112,14 @@ export default {
 				badges: 0,
 				version: this.form.version,
 				name: this.form.name,
-				pokemon: [],
+				party: {
+					first: null,
+					second: null,
+					third: null,
+					fourth: null,
+					fifth: null,
+					sixth: null
+				},
 				created: Date.now()
 			}).then(() => {
 				this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{

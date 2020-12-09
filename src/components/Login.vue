@@ -36,6 +36,7 @@
         :disabled="loading">
 				</b-input>
 			</div>
+      <b-button class="d-none" type="submit"></b-button>
     </b-form>
   </b-modal>
 </template>

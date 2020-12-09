@@ -15,7 +15,9 @@
 		<b-skeleton-wrapper :loading="pokedata.loading">
 			<template #loading>
 				<b-row md="4" no-gutters>
-					<b-skeleton-img class="poke-img" width="125px"></b-skeleton-img>
+					<div class="poke-img-container">
+						<b-skeleton-img class="poke-img" width="96px"></b-skeleton-img>
+					</div>
 					<b-col class="poke-info-container" no-gutters>
 						<b-skeleton></b-skeleton>
 						<b-skeleton></b-skeleton>
@@ -23,9 +25,11 @@
 					</b-col>
 				</b-row>
 			</template>
-			<b-row md="4" no-gutters>
-				<img class="poke-img" :src="pokedata.img_url">
-				<b-col class="poke-info-container" no-gutters>
+			<b-row class="poke-card-row" no-gutters>
+				<b-col md="4" class="poke-img-container">
+					<img class="poke-img" :src="pokedata.img_url">
+				</b-col>
+				<b-col class="poke-info-container">
 					<b-card-text v-if="pokedata.nickname"><strong>Nickname:</strong> {{pokedata.nickname}}</b-card-text>
 					<b-card-text><strong>Type:</strong> {{getPokeTypes}}</b-card-text>
 					<b-card-text><strong>Location:</strong> {{getLocationTxt}}</b-card-text>
@@ -94,8 +98,10 @@ export default {
 }
 .poke-info-container {
 	text-align: left;
-	margin-left: 10px;
-	padding: 10px;
+    margin: 10px;
+}
+.poke-info-container > p {
+	margin-bottom: 0.75rem;
 }
 .poke-lvl {
 	margin: 0;
@@ -103,15 +109,17 @@ export default {
 .poke-real-name{
 	margin-top: 10px;
 }
+.poke-img-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
 .poke-img {
-	height: 125px;
-	width: 125px;
-	padding: 10px;
 	margin-left: auto;
 	margin-right: auto;
 }
 .card-body {
-	padding: 5px;
+	padding: 0;
 }
 .stats-info-icon-container {
 	cursor: pointer;

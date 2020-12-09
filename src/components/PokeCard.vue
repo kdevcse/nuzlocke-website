@@ -96,6 +96,9 @@ export default {
 	border-radius: 6px;
 	background-color: #fff;
 }
+.poke-card-row {
+	height: 100%;
+}
 .poke-info-container {
 	text-align: left;
     margin: 10px;

@@ -3,11 +3,16 @@
     <RunCreator></RunCreator>
     <div class="nuzzy-runs-container">
       <h2>Nuzlocke Runs</h2>
-      <b-button v-if="isLoggedIn" v-b-modal.create-run-window variant="outline-success">
+      <b-button
+        v-if="isLoggedIn"
+        v-b-modal.create-run-window
+        variant="outline-success">
         + Add a run
       </b-button>
-      <p v-else>Please login or sign up to view the dashboard</p>
-      <NuzzyRuns v-bind:runs="userRuns"></NuzzyRuns>
+      <p v-else>
+        Please login or sign up to view the dashboard
+      </p>
+      <NuzzyRuns :runs="userRuns"></NuzzyRuns>
     </div>
   </div>
 </template>

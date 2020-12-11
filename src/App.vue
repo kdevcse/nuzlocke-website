@@ -1,8 +1,10 @@
 <template>
-  <div id="app-container" :class="{darkmode: userSettings.dark}">
+  <div
+    id="app-container"
+    :class="{darkmode: userSettings.dark}">
     <div id="app">
       <Navbar></Navbar>
-      <router-view id="current-view"/>
+      <router-view id="current-view" />
     </div>
   </div>
 </template>
@@ -35,9 +37,10 @@ export default {
           firestore().doc(`users/${user.uid}`).get().then((doc) => {
             this.$store.commit('set_user_settings', doc.data());
           }).catch((error) => {
-            this.errorToast(error,
-            'Failed to retieve user data',
-            'The data for this user could not be properly retrieved'
+            this.errorToast(
+              error,
+              'Failed to retieve user data',
+              'The data for this user could not be properly retrieved'
             );
           });
         }

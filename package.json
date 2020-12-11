@@ -49,7 +49,6 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
     "overrides": [
       {
         "files": [
@@ -60,7 +59,26 @@
           "jest": true
         }
       }
-    ]
+    ],
+    "rules": {
+      "vue/html-indent": "error",
+      "vue/script-indent": "error",
+      "vue/html-quotes": "error",
+      "vue/html-closing-bracket-newline": ["error", {
+				"singleline": "never",
+				"multiline": "never"
+			}],
+      "vue/html-closing-bracket-spacing": "error",
+      "vue/html-end-tags": "error",
+      "vue/max-attributes-per-line": "warn",
+      "vue/no-spaces-around-equal-signs-in-attribute": "error",
+      "vue/name-property-casing": "warn",
+      "vue/prop-name-casing": "warn",
+      "vue/require-prop-types": "error",
+      "vue/singleline-html-element-content-newline": "error",
+      "vue/v-bind-style": "warn",
+      "vue/v-on-style": "warn"
+    }
   },
   "browserslist": [
     "> 1%",

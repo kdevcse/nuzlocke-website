@@ -1,18 +1,31 @@
 <template>
   <div id="runs-container">
-    <RunDeleter :runId="runToDelete.id" :runName="runToDelete.name"></RunDeleter>
-    <b-card v-for="run in sortedRuns" 
-      v-bind:key="run.run_id" 
+    <RunDeleter
+      :runId="runToDelete.id"
+      :runName="runToDelete.name"></RunDeleter>
+    <b-card
+      v-for="run in sortedRuns" 
+      :key="run.run_id" 
       class="run-container text-left"
       border-variant="primary"
       header-bg-variant="primary"
       header-text-variant="white">
       <template #header>
         <div class="align-middle header-container">
-          <span class="header-title" @click="openRun(run.run_id)">{{run.name}}</span>
-          <div class="delete-run-button" @click="deleteRun(run.run_id, run.name)">
-            <b-icon title="Delete run" icon="trash-fill" class="run-trash-icon-fill"></b-icon>
-            <b-icon title="Delete run" icon="trash" class="run-trash-icon"></b-icon>
+          <span
+            class="header-title"
+            @click="openRun(run.run_id)">{{run.name}}</span>
+          <div
+            class="delete-run-button"
+            @click="deleteRun(run.run_id, run.name)">
+            <b-icon
+              title="Delete run"
+              icon="trash-fill"
+              class="run-trash-icon-fill"></b-icon>
+            <b-icon
+              title="Delete run"
+              icon="trash"
+              class="run-trash-icon"></b-icon>
           </div>
         </div>
       </template>
@@ -49,9 +62,9 @@ export default {
       });
     }
   },
-	methods: {
-		openRun(runId) {
-			this.$router.push({ name: 'Run', params: { id: `${runId}` } });
+  methods: {
+    openRun(runId) {
+      this.$router.push({ name: 'Run', params: { id: `${runId}` } });
     },
     deleteRun(runId, runName){
       this.runToDelete = {
@@ -65,15 +78,15 @@ export default {
       return `${d.toLocaleString('en-US')}`;
     },
     getVersionRunTxt(version) {
-			const dashSplit = version.split('-');
-			let str = '';
-			dashSplit.forEach(split => {
-				str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
-			});
+      const dashSplit = version.split('-');
+      let str = '';
+      dashSplit.forEach(split => {
+        str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+      });
 
-			return str;
+      return str;
     }
-	}
+  }
 }
 </script>
 <style scoped>

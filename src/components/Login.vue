@@ -1,50 +1,58 @@
 <template>
   <b-modal
-  centered
-  size="sm"
-  id="login-window"
-  ok-title="Login"
-  ok-variant="primary"
-  @ok="handleOk"
-  @show="handleShow">
+    centered
+    size="sm"
+    id="login-window"
+    ok-title="Login"
+    ok-variant="primary"
+    @ok="handleOk"
+    @show="handleShow">
     <template #modal-title>
       <div class="modal-title">
         <h5>Login</h5>
-        <b-spinner v-if="loading" variant="primary" small type="grow"></b-spinner>
+        <b-spinner
+          v-if="loading"
+          variant="primary"
+          small
+          type="grow"></b-spinner>
       </div>
     </template>
-    <b-form ref="form" @submit.stop.prevent="login">
-			<div class="form-option-container">
-				<label for="login-email-input">Email:</label>
-				<b-input 
-        id="login-email-input" 
-        v-model="form.email"
-        required
-        type="email"
-        autocomplete="username"
-        :disabled="loading">
-				</b-input>
-			</div>
-			<div class="form-option-container">
-				<label for="login-password-input">Password:</label>
-				<b-input
-        id="login-password-input" 
-        v-model="form.password"
-        required
-        type="password"
-        autocomplete="current-password"
-        :disabled="loading">
-				</b-input>
-			</div>
-			<div class="form-option-container">
+    <b-form
+      ref="form"
+      @submit.stop.prevent="login">
+      <div class="form-option-container">
+        <label for="login-email-input">Email:</label>
+        <b-input 
+          id="login-email-input" 
+          v-model="form.email"
+          required
+          type="email"
+          autocomplete="username"
+          :disabled="loading">
+        </b-input>
+      </div>
+      <div class="form-option-container">
+        <label for="login-password-input">Password:</label>
+        <b-input
+          id="login-password-input" 
+          v-model="form.password"
+          required
+          type="password"
+          autocomplete="current-password"
+          :disabled="loading">
+        </b-input>
+      </div>
+      <div class="form-option-container">
         <b-form-group label="Stay logged in?">
           <b-checkbox
-          v-model="form.stayLoggedIn"
-          :disabled="loading">
+            v-model="form.stayLoggedIn"
+            :disabled="loading">
           </b-checkbox>
         </b-form-group>
-			</div>
-      <b-button class="d-none" type="submit"></b-button>
+      </div>
+      <b-button
+        class="d-none"
+        type="submit"></b-button>
     </b-form>
   </b-modal>
 </template>
@@ -71,13 +79,13 @@ export default {
     }
   },
   methods: {
-		handleOk(modalWin) {
-			modalWin.preventDefault();
-			this.login();
+    handleOk(modalWin) {
+      modalWin.preventDefault();
+      this.login();
     },
-		handleShow() {
-			this.resetForm();
-		},
+    handleShow() {
+      this.resetForm();
+    },
     resetForm() {
       this.form = {
         email: '',

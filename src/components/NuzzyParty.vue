@@ -112,9 +112,6 @@ export default {
 	flex-direction: row;
 	width: 100%;
 	text-align: left;
-	margin-bottom: 15px;
 	border-bottom: black 1px solid;
-	margin-bottom: 15px;
-	padding-bottom: 15px;
 }
 </style>

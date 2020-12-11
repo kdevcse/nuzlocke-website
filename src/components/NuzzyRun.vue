@@ -1,21 +1,29 @@
 <template>
   <div>
     <div
-      v-if="isLoggedIn"
+      v-if="run"
       id="run-container">
-      <NuzzyParty :party="party_data"></NuzzyParty>
+      <NuzzyInfo 
+        :runName="run.name"
+        :trainerName="run.trainerName"
+        :version="run.version"
+        :badges="run.badges"
+        :createdTime="run.created"
+        :runId="run_id"></NuzzyInfo>
+      <NuzzyParty :party="run.party"></NuzzyParty>
       <NuzzyBox
         :data="box_data"
-        :version="version"
+        :version="run.version"
         :runId="run_id"></NuzzyBox>
     </div>
     <p v-else>
-      Please login to view this run
+      Run not found
     </p>
   </div>
 </template>
 
 <script>
+import NuzzyInfo from '@/components/NuzzyInfo.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
 import NuzzyBox from '@/components/NuzzyBox.vue';
 import { auth, firestore } from 'firebase';
@@ -23,8 +31,9 @@ import { auth, firestore } from 'firebase';
 export default {
   name: 'NuzzyRun',
   components: {
+    NuzzyInfo,
     NuzzyParty,
-    NuzzyBox
+    NuzzyBox,
   },
   mounted() {
     this.run_id = this.$route.params.id;
@@ -43,29 +52,22 @@ export default {
       this.runSnapshot();
     }
   },
-  computed: {
-    isLoggedIn() {
-      return this.$store.state.isLoggedIn;
-    }
-  },
   data: function(){
     return {
       pokemonSnapshot: null,
       runSnapshot: null,
+      run: null,
       run_id: null,
-      box_data: [],
-      party_data: {},
-      version: null
+      box_data: []
     }
   },
   methods: {
     initSnapshotForRun() {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
       this.runSnapshot = firestore().doc(query).onSnapshot((doc) => {
-        const run = doc.data();
-        if(run) {
-          this.version = run.version;
-          this.party_data = run.party;
+        const runData = doc.data();
+        if(runData) {
+          this.run = runData;
         } 
         else {
           this.$router.push({ name: 'Dashboard' });
@@ -107,5 +109,8 @@ export default {
 	margin: 0px auto;
 	padding: 20px 0px;
 	max-width: 1200px;
+}
+.toolbar-container {
+  margin-bottom: 25px;
 }
 </style>

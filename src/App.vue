@@ -17,7 +17,7 @@ export default {
   components: {
     Navbar
   },
-  mounted() {
+  beforeMount() {
     this.initOnAuthChange();
   },
   computed: {

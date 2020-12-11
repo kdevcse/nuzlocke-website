@@ -29,12 +29,15 @@ export default {
     initOnAuthChange() {
       auth().onAuthStateChanged((user) => {
         if (user) {
+          this.$store.commit('set_login_status', true);
+          this.initRunsSnapshot();
+
           firestore().doc(`users/${user.uid}`).get().then((doc) => {
-            this.initAppData(doc.data());
+            this.$store.commit('set_user_settings', doc.data());
           }).catch((error) => {
             this.errorToast(error,
-            'Failed to retrieve app data',
-            'The app data for this user could not be properly retrieved'
+            'Failed to retieve user data',
+            'The data for this user could not be properly retrieved'
             );
           });
         }
@@ -45,13 +48,7 @@ export default {
         }
       });
     },
-    initAppData(data) {
-      this.$store.commit('set_login_status', true);
-      this.$store.commit('set_user_settings', data);
-
-      this.initFireStore();
-    },
-    initFireStore() {
+    initRunsSnapshot() {
       const query = `users/${auth().currentUser.uid}/runs`;
       firestore().collection(query).onSnapshot((querySnapshot) => {
         let runData = [];

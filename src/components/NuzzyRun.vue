@@ -11,7 +11,7 @@
 <script>
 import NuzzyParty from '@/components/NuzzyParty.vue';
 import NuzzyBox from '@/components/NuzzyBox.vue';
-import firebase from 'firebase';
+import { auth, firestore } from 'firebase';
 
 export default {
 	name: 'NuzzyRun',
@@ -53,8 +53,8 @@ export default {
 	},
 	methods: {
 		initSnapshotForRun() {
-			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}`;
-			this.runSnapshot = firebase.firestore().doc(query).onSnapshot((doc) => {
+			const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
+			this.runSnapshot = firestore().doc(query).onSnapshot((doc) => {
 				const run = doc.data();
 				if(run) {
 					this.version = run.version;
@@ -71,8 +71,8 @@ export default {
 			});
 		},
 		initSnapshotForPokemon() {
-			const query = `users/${firebase.auth().currentUser.uid}/runs/${this.run_id}/pokemon`;
-			this.pokemonSnapshot = firebase.firestore().collection(query).onSnapshot((querySnapshot) => {
+			const query = `users/${auth().currentUser.uid}/runs/${this.run_id}/pokemon`;
+			this.pokemonSnapshot = firestore().collection(query).onSnapshot((querySnapshot) => {
 				const allPokemon = [];
 
 				querySnapshot.forEach((doc) => {

@@ -35,7 +35,7 @@
 </template>
 <script>
 import Login from '@/components/Login.vue';
-import firebase from 'firebase';
+import { auth } from 'firebase';
 
 export default {
     name: 'Navbar',
@@ -52,7 +52,7 @@ export default {
 			this.$router.push({ name: 'Login' });
         },
         logout() {
-            firebase.auth().signOut().then(() => {
+            auth().signOut().then(() => {
                 this.$store.commit('set_login_status', false);
                 this.$store.commit('set_user_settings', {});
                 this.$store.commit('set_runs', []);

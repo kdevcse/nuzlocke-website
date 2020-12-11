@@ -11,7 +11,7 @@
 	</b-modal>
 </template>
 <script>
-import firebase from 'firebase';
+import { auth, firestore } from 'firebase';
 
 export default {
 	name: 'RunDeleter',
@@ -21,7 +21,7 @@ export default {
 	},
 	methods:{
 		deleteRun(){
-			firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}/runs/${this.runId}`).delete().then(() => {
+			firestore().doc(`users/${auth().currentUser.uid}/runs/${this.runId}`).delete().then(() => {
 				this.$bvToast.toast(`Run "${this.runName}" was successfully deleted`,{
 					title: 'Run Deleted',
 					toaster: 'b-toaster-top-right',

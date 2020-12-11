@@ -76,7 +76,7 @@
 </template>
 <script>
 import PokeCard from '@/components/PokeCard.vue';
-import firebase from 'firebase';
+import { auth, firestore } from 'firebase';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -233,15 +233,15 @@ export default {
 			}
 		},
 		handleOk() {
-			const runQuery = `users/${firebase.auth().currentUser.uid}/runs/${this.runId}`;
+			const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
 			const pokemonQuery = `${runQuery}/pokemon`;
-			firebase.firestore().collection(pokemonQuery).add(this.constructData()).then(() => {
+			firestore().collection(pokemonQuery).add(this.constructData()).then(() => {
 				const partyVal = this.partySlots.find(s => s.value === this.form.party);
 
 				if(partyVal && partyVal.value !== -1) {
 					let partyObj = new Object();
 					partyObj[`party.${partyVal.text.toLowerCase()}`] = this.constructData();
-					firebase.firestore().doc(runQuery).update(partyObj);
+					firestore().doc(runQuery).update(partyObj);
 				}
 			});
 		},

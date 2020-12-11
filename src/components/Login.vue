@@ -36,12 +36,20 @@
         :disabled="loading">
 				</b-input>
 			</div>
+			<div class="form-option-container">
+        <b-form-group label="Stay logged in?">
+          <b-checkbox
+          v-model="form.stayLoggedIn"
+          :disabled="loading">
+          </b-checkbox>
+        </b-form-group>
+			</div>
     </b-form>
   </b-modal>
 </template>
 
 <script>
-import firebase from 'firebase';
+import { auth } from 'firebase';
 
 export default {
   name: 'Login',
@@ -50,13 +58,14 @@ export default {
       form: {
         email: '',
         password: '',
-        valid: false
+        valid: false,
+        stayLoggedIn: false,
       },
       loading: false
     }
   },
   computed: {
-    loginBtnTxt(){
+    loginBtnTxt() {
       return this.loading ? 'Loading...' : 'Login';
     }
   },
@@ -68,84 +77,57 @@ export default {
 		handleShow() {
 			this.resetForm();
 		},
-    resetForm(){
+    resetForm() {
       this.form = {
         email: '',
         password: '',
-        valid: false
+        valid: false,
+        stayLoggedIn: false,
       }
     },
     login() {
       this.loading = true;
-      const email = this.form.email;
-      const pwd = this.form.password;
-      firebase.auth().signInWithEmailAndPassword(email, pwd).then(() => {
-        firebase.firestore().doc(`users/${firebase.auth().currentUser.uid}`).get().then((doc) => {
-          this.loading = false;
-          this.successfulLogin(doc.data());
-        }).catch((error) => {
-          this.failedLogin(error, 'There was an error while logging in');
-        });
+      let persist = this.form.stayLoggedIn ? auth.Auth.Persistence.LOCAL : auth.Auth.Persistence.NONE;
+
+      auth().setPersistence(persist).then(() => {
+        this.signIn();
       }).catch((error) => {
-        this.failedLogin(error, 'Login failed');
+        this.errorToast(error, 'Login failed');
       });
     },
-    failedLogin(error, msg){
+    signIn() {
+      const email = this.form.email;
+      const pwd = this.form.password;
+      auth().signInWithEmailAndPassword(email, pwd).then(() => {
+        this.$nextTick(() => {
+          this.$bvModal.hide('login-window');
+        });
+
+        this.$bvToast.toast("Login Successful",{
+          title: 'Login Status',
+          toaster: 'b-toaster-top-right',
+          variant: 'success',
+          solid: true,
+          appendToast: true
+        });
+      }).catch((error) => {
+        this.errorToast(error, 'Login failed');
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    errorToast(error, msg) {
       var errorCode = error.code;
       var errorMessage = error.message;
       console.error(`Error Code: ${errorCode}`);
       console.error(`Error Msg: ${errorMessage}`);
 
-      this.$store.commit('set_login_status', false);
-      this.$store.commit('set_user_settings', {});
-
-      this.loading = false;
       this.$bvToast.toast(msg ,{
-        title: 'Login Status',
+        title: 'Login Error',
         toaster: 'b-toaster-top-right',
         variant: 'danger',
         solid: true,
         appendToast: true
-      });
-    },
-    successfulLogin(data) {
-      this.$store.commit('set_login_status', true);
-      this.$store.commit('set_user_settings', data);
-
-      this.initOnAuthChange();
-      this.initFireStore();
-
-      this.$bvToast.toast("Login Successful",{
-        title: 'Login Status',
-        toaster: 'b-toaster-top-right',
-        variant: 'success',
-        solid: true,
-        appendToast: true
-      });
-
-      this.$nextTick(() => {
-				this.$bvModal.hide('login-window');
-			});
-    },
-    initFireStore(){
-      firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`)
-      .onSnapshot((querySnapshot) => {
-        let runData = [];
-        querySnapshot.forEach((doc) => {
-          let data = doc.data();
-          data.run_id = doc.id;
-          runData.push(data);
-        });
-        this.$store.commit('set_runs', runData);
-      });
-    },
-    initOnAuthChange(){
-      firebase.auth().onAuthStateChanged((user) => {
-        if(!user) {
-          this.$store.commit('set_login_status', false);
-          this.$store.commit('set_user_settings', {});
-          this.$store.commit('set_runs', []);
-        }
       });
     }
   }

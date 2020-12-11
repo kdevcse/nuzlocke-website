@@ -10,15 +10,72 @@
 <script>
 // @ is an alias to /src
 import Navbar from '@/components/Navbar.vue';
+import { auth, firestore } from 'firebase';
 
 export default {
   name: 'App',
   components: {
     Navbar
   },
+  mounted() {
+    this.initOnAuthChange();
+  },
   computed: {
     userSettings() {
       return this.$store.state.userSettings;
+    }
+  },
+  methods: {
+    initOnAuthChange() {
+      auth().onAuthStateChanged((user) => {
+        if (user) {
+          firestore().doc(`users/${user.uid}`).get().then((doc) => {
+            this.initAppData(doc.data());
+          }).catch((error) => {
+            this.errorToast(error,
+            'Failed to retrieve app data',
+            'The app data for this user could not be properly retrieved'
+            );
+          });
+        }
+        else {
+          this.$store.commit('set_login_status', false);
+          this.$store.commit('set_user_settings', {});
+          this.$store.commit('set_runs', []);
+        }
+      });
+    },
+    initAppData(data) {
+      this.$store.commit('set_login_status', true);
+      this.$store.commit('set_user_settings', data);
+
+      this.initFireStore();
+    },
+    initFireStore() {
+      const query = `users/${auth().currentUser.uid}/runs`;
+      firestore().collection(query).onSnapshot((querySnapshot) => {
+        let runData = [];
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          data.run_id = doc.id;
+          runData.push(data);
+        });
+        this.$store.commit('set_runs', runData);
+      });
+    },
+    errorToast(error, title, msg) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.error(`Error Code: ${errorCode}`);
+      console.error(`Error Msg: ${errorMessage}`);
+
+      this.$bvToast.toast(msg ,{
+        title: title,
+        toaster: 'b-toaster-top-right',
+        variant: 'danger',
+        solid: true,
+        appendToast: true
+      });
     }
   }
 }

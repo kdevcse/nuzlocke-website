@@ -46,7 +46,7 @@
     </b-modal>
 </template>
 <script>
-import firebase from 'firebase';
+import { auth, firestore } from 'firebase';
 
 export default {
 	name: 'RunCreator',
@@ -132,7 +132,7 @@ export default {
 				return;
 			}
 
-			firebase.firestore().collection(`users/${firebase.auth().currentUser.uid}/runs`).add({
+			firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
 				badges: 0,
 				version: this.form.version,
 				name: this.form.name,

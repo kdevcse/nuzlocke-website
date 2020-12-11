@@ -45,6 +45,7 @@
 </template>
 <script>
 import PokeCard from '@/components/PokeCard.vue';
+
 export default {
 	name: 'NuzzyParty',
 	components: {

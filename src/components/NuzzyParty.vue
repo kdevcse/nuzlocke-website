@@ -4,41 +4,29 @@
 			<h3>Party</h3>
 		</div>
 		<div id="all-pokes-container">
-			<div class="poke-container">
-				<PokeCard v-if='party.first' :pokedata='party.first'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.first' :pokedata='party.first'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
-			<div class="poke-container">
-				<PokeCard v-if='party.second' :pokedata='party.second'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.second' :pokedata='party.second'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
-			<div class="poke-container">
-				<PokeCard v-if='party.third' :pokedata='party.third'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.third' :pokedata='party.third'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
-			<div class="poke-container">
-				<PokeCard v-if='party.fourth' :pokedata='party.fourth'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.fourth' :pokedata='party.fourth'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
-			<div class="poke-container">
-				<PokeCard v-if='party.fifth' :pokedata='party.fifth'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.fifth' :pokedata='party.fifth'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
-			<div class="poke-container">
-				<PokeCard v-if='party.sixth' :pokedata='party.sixth'></PokeCard>
-				<div v-else class='empty-slot'>
-					<h4>Empty</h4>
-				</div>
+			<PokeCard v-if='party.sixth' :pokedata='party.sixth'></PokeCard>
+			<div v-else class='empty-slot'>
+				<h4>Empty</h4>
 			</div>
 		</div>
 	</div>

@@ -13,10 +13,9 @@
 			<div class="form-option-container">
 				<label for="create-run-name-input">Run name:</label>
 				<b-input id="create-run-name-input" 
-				v-model="form.name" 
-				@input="checkFormValidity" 
-				:state="nameValidation" 
-				required>
+				v-model="form.name"
+				:state="nameValidation"
+				@input="checkFormValidity">
 				</b-input>
 				<b-form-invalid-feedback :state="nameValidation">
 					{{nameInputError}}
@@ -26,9 +25,8 @@
 				<label for="create-run-trainer-input">Trainer name:</label>
 				<b-input id="create-run-trainer-input" 
 				v-model="form.trainerName"
-				@input="checkFormValidity" 
-				:state="trainerValidation" 
-				required>
+				:state="trainerValidation"
+				@input="checkFormValidity">
 				</b-input>
 				<b-form-invalid-feedback :state="trainerValidation">
 					{{trainerInputError}}
@@ -42,6 +40,7 @@
 				:options="versions">
 				</b-select>
 			</div>
+			<b-button class="d-none" type="submit"></b-button>
 		</b-form>
     </b-modal>
 </template>

@@ -110,7 +110,8 @@ export default {
         stats: null,
         party: -1,
         caught: Date.now(),
-        valid: false
+        valid: false,
+        loading: true
       },
       pokemonInfo: null,
       locationsList: [],
@@ -142,6 +143,7 @@ export default {
         this.isValidPokemon = null;
         this.searching = false;
         this.form.valid = false;
+        this.form.loading = true;
         return;
       }
 
@@ -152,6 +154,7 @@ export default {
           this.setInvalidForm('The desired pokemon does not appear in this game');
           return;
         }
+        this.form.loading = false;
         this.isValidPokemon = true;
         this.searching = false;
         this.form.valid = true;
@@ -190,7 +193,8 @@ export default {
         stats: null,
         party: -1,
         caught: Date.now(),
-        valid: false
+        valid: false,
+        loading: true
       };
       this.pokemonInfo = null;
 
@@ -256,6 +260,7 @@ export default {
       this.form.valid = false;
       this.form.img_url = null;
       this.pokemonInfo = null;
+      this.form.loading = true;
     },
     isFoundInGame(allGames) {
       for(let i = 0; i < allGames.length; i++) {

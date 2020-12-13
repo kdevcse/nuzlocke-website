@@ -82,7 +82,7 @@
         :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
     </b-popover>
     <template #footer>
-      <PokeCardToolbar></PokeCardToolbar>
+      <PokeCardToolbar :pokedata="pokedata"></PokeCardToolbar>
     </template>
   </b-card>
 </template>

@@ -17,7 +17,9 @@
           title="Death">
           <b-icon icon="emoji-dizzy-fill"></b-icon>
         </b-button>
-        <b-button title="Edit">
+        <b-button 
+          title="Edit"
+          v-b-modal.add-poke-window>
           <b-icon icon="pencil-square"></b-icon>
         </b-button>
       </b-button-group>
@@ -27,7 +29,10 @@
 
 <script>
 export default {
-  name: 'PokeCardToolbar'
+  name: 'PokeCardToolbar',
+  props: {
+    pokedata: Object
+  }
 }
 </script>
 

@@ -81,11 +81,19 @@
         v-for="s in pokedata.stats"
         :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
     </b-popover>
+    <template #footer>
+      <PokeCardToolbar></PokeCardToolbar>
+    </template>
   </b-card>
 </template>
 <script>
+import PokeCardToolbar from '@/components/PokeCardToolbar.vue';
+
 export default {
   name: 'PokeCard',
+  components: {
+    PokeCardToolbar
+  },
   props: {
     pokedata: Object,
     index: Number

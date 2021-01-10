@@ -95,7 +95,8 @@ export default {
   data: function() {
     return {
       waiting: true,
-      searching: false,
+      searchingEvolutions: false,
+      searchingForName: false,
       isValidPokemon: null,
       invalidMsg: '',
       pokename: '',
@@ -108,12 +109,12 @@ export default {
         location: '',
         types: null,
         stats: null,
+        evolutions: [],
         party: -1,
         caught: Date.now(),
         valid: false,
         loading: true
       },
-      pokemonInfo: null,
       locationsList: [],
       partySlots: [
         { text: 'Box', value: -1 },
@@ -133,6 +134,9 @@ export default {
       }
 			
       return this.isValidPokemon;
+    },
+    searching() {
+      return this.searchingEvolutions && this.searchingForName;
     }
   },
   watch: {
@@ -141,14 +145,16 @@ export default {
 
       if (!this.form.real_name) {
         this.isValidPokemon = null;
-        this.searching = false;
+        this.searchingEvolutions = false,
+        this.searchingForName = false,
         this.form.valid = false;
         this.form.loading = true;
         return;
       }
 
       const p = new Pokedex.Pokedex();
-      this.searching = true;
+      this.searchingEvolutions = true,
+      this.searchingForName = true,
       p.getPokemonByName(this.form.real_name.toLowerCase()).then((result) => {
         if(!this.isFoundInGame(result.game_indices)) {
           this.setInvalidForm('The desired pokemon does not appear in this game');
@@ -156,7 +162,6 @@ export default {
         }
         this.form.loading = false;
         this.isValidPokemon = true;
-        this.searching = false;
         this.form.valid = true;
         this.form.img_url = result.sprites.front_default;
         this.form.pokemon_id = result.id;
@@ -169,16 +174,34 @@ export default {
         this.form.types = result.types.map(t => {
           return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)
         });
-        this.invalidMsg = '';
         console.log(result);
+        return this.getEvolutions(result.species.url, this.form.real_name.toLowerCase());
+      }).then(() => {
+        this.invalidMsg = '';
       }).catch(() => {
         this.setInvalidForm('Pokemon not found');
+      }).finally(() => {
+        this.searchingForName = false;
       });
     }
   },
   methods: {
+    constructData() {
+      return {
+        real_name: this.form.real_name.toLowerCase(),
+        nickname: this.form.nickname,
+        pokemon_id: this.form.pokemon_id,
+        img_url: this.form.img_url,
+        lvl: this.form.lvl,
+        types: this.form.types,
+        location: this.form.location,
+        stats: this.form.stats,
+        death: null,
+        caught: this.form.caught,
+        evolutions: this.form.evolutions
+      }
+    },
     resetForm() {
-      this.searching = false;
       this.isValidPokemon = null;
       this.pokename = '';
       this.invalidMsg = '';
@@ -191,33 +214,32 @@ export default {
         location: '',
         types: null,
         stats: null,
+        evolutions: [],
         party: -1,
         caught: Date.now(),
         valid: false,
         loading: true
       };
-      this.pokemonInfo = null;
 
       const p = new Pokedex.Pokedex();
       p.getVersionByName(this.version).then((result) => {
-        p.resource(result.version_group.url).then((res) => {
-          if(res.regions[0]){
-            p.resource(res.regions[0].url).then((region) => {
-              const sortedList = region.locations.map(l => l.name).sort();
-              const list = sortedList.map(l => {
-                return { text: this.getLocationTxt(l), value: l };
-              });
-              this.locationsList = list;
-              this.waiting = false;
-            });
-          }
+        return p.resource(result.version_group.url);
+      }).then((res) => {
+        if (res.regions[0]) {
+          return p.resource(res.regions[0].url);
+        }
+      }).then((region) => {
+        const sortedList = region.locations.map(l => l.name).sort();
+        const list = sortedList.map(l => {
+          return { text: this.getLocationTxt(l), value: l };
         });
-      }).catch(() => {
+        this.locationsList = list;
+      }).finally(() => {
         this.waiting = false;
       });
 			
     },
-    getLocationTxt(location){
+    getLocationTxt(location) {
       const dashSplit = location.split('-');
       let str = '';
       dashSplit.forEach(split => {
@@ -225,20 +247,6 @@ export default {
       });
 
       return str;
-    },
-    constructData(){
-      return {
-        real_name: this.form.real_name,
-        nickname: this.form.nickname,
-        pokemon_id: this.form.pokemon_id,
-        img_url: this.form.img_url,
-        lvl: this.form.lvl,
-        types: this.form.types,
-        location: this.form.location,
-        stats: this.form.stats,
-        death: null,
-        caught: this.form.caught
-      }
     },
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
@@ -253,13 +261,11 @@ export default {
         }
       });
     },
-    setInvalidForm(msg){
+    setInvalidForm(msg) {
       this.invalidMsg = msg;
-      this.searching = false;
       this.isValidPokemon = false;
       this.form.valid = false;
       this.form.img_url = null;
-      this.pokemonInfo = null;
       this.form.loading = true;
     },
     isFoundInGame(allGames) {
@@ -270,6 +276,43 @@ export default {
       }
 
       return false;
+    },
+    async getEvolutions(speciesUrl, pokename) {
+      if (!speciesUrl) {
+        this.searchingEvolutions = false;
+        return Promise.resolve();
+      }
+
+      const p = new Pokedex.Pokedex();
+      return await p.resource(speciesUrl).then((speciesResult) => {
+        if (!speciesResult.evolution_chain){
+          return;
+        }
+
+        return p.resource(speciesResult.evolution_chain.url);
+      }).then((evolutionResult) => {
+        let chain = evolutionResult.chain.evolves_to;
+        let startCapturingEvos = false;
+        let evos = [];
+
+        while (chain && chain.length > 0) {
+          let poke = chain[0];
+
+          if (poke.species.name === pokename) {
+            startCapturingEvos = true;
+          }
+          
+          if (startCapturingEvos && poke.species.name != pokename) {
+            evos.push(poke.species.name);
+          }
+
+          chain = poke.evolves_to;
+        }
+
+        this.form.evolutions = evos;
+      }).finally(() => {
+        this.searchingEvolutions = false;
+      });
     }
   }
 }

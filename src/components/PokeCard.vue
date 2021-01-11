@@ -82,7 +82,10 @@
         :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
     </b-popover>
     <template #footer>
-      <PokeCardToolbar :pokedata="pokedata"></PokeCardToolbar>
+      <PokeCardToolbar 
+        :demo="demo"
+        :pokedata="pokedata">
+      </PokeCardToolbar>
     </template>
   </b-card>
 </template>
@@ -96,7 +99,8 @@ export default {
   },
   props: {
     pokedata: Object,
-    index: Number
+    index: Number,
+    demo: Boolean
   },
   computed: {
     getCardTitle() {

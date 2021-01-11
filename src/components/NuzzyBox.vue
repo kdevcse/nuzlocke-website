@@ -23,9 +23,7 @@ export default {
     PokeCard
   },
   props: {
-    data: Array,
-    version: String,
-    runId: String
+    data: Array
   }
 }
 </script>

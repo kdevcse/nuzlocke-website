@@ -3,7 +3,7 @@
     centered
     size="lg"
     id="add-poke-window"
-    title="Add a pokemon"
+    title="Add a Pokemon"
     :ok-disabled="!form.valid"
     ok-title="Add"
     ok-variant="success"
@@ -11,7 +11,9 @@
     @show="resetForm">
     <PokeCard
       id="example-pokecard"
-      :pokedata="form"></PokeCard>
+      :pokedata="form"
+      demo>
+    </PokeCard>
     <b-form
       ref="form"
       class="form-container">
@@ -251,12 +253,13 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).add(this.constructData()).then(() => {
+      firestore().collection(pokemonQuery).add(this.constructData()).then((doc) => {
         const partyVal = this.partySlots.find(s => s.value === this.form.party);
 
         if(partyVal && partyVal.value !== -1) {
           let partyObj = new Object();
           partyObj[`party.${partyVal.text.toLowerCase()}`] = this.constructData();
+          partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
           firestore().doc(runQuery).update(partyObj);
         }
       });

@@ -3,15 +3,18 @@
     centered
     size="lg"
     id="edit-poke-window"
-    title="edit a pokemon"
+    title="Edit a Pokemon"
     :ok-disabled="!form.valid"
-    ok-title="edit"
+    ok-title="Edit"
     ok-variant="success"
     @ok="handleOk"
+    @cancel="unsetPokemonInEdit"
     @show="resetForm">
     <PokeCard
       id="example-pokecard"
-      :pokedata="form"></PokeCard>
+      :pokedata="form"
+      demo>
+    </PokeCard>
     <b-form
       ref="form"
       class="form-container">
@@ -88,10 +91,14 @@ export default {
   components: {
     PokeCard
   },
+  beforeUnMount() {
+    this.unsetPokemonInEdit();
+  },
   props:  {
     version: String,
     runId: String,
-    pokedata: Object
+    pokedata: Object,
+    pokeId: String
   },
   data: function() {
     return {
@@ -179,27 +186,32 @@ export default {
   },
   methods: {
     resetForm() {
+      if (!this.pokedata || !this.pokeId) {
+        return;
+      }
+
       this.searching = false;
       this.isValidPokemon = null;
       this.pokename = '';
       this.invalidMsg = '';
       this.form = {
         img_url: null,
-        real_name: '',
-        nickname: '',
-        pokemon_id: null,
-        lvl: 1,
-        location: '',
-        types: null,
-        stats: null,
-        party: -1,
-        caught: Date.now(),
+        real_name: this.pokedata.real_name,
+        nickname: this.pokedata.nickname,
+        pokemon_id: this.pokedata.pokemon_id,
+        lvl: this.pokedata.lvl,
+        location: this.pokedata.location,
+        types: this.pokedata.types,
+        stats: this.pokedata.stats,
+        party: this.pokedata.party,
+        caught: this.pokedata.caught,
         valid: false,
         loading: true
       };
       this.pokemonInfo = null;
 
       const p = new Pokedex.Pokedex();
+      console.log(this.version);
       p.getVersionByName(this.version).then((result) => {
         p.resource(result.version_group.url).then((res) => {
           if(res.regions[0]){
@@ -253,6 +265,11 @@ export default {
           firestore().doc(runQuery).update(partyObj);
         }
       });*/
+      this.unsetPokemonInEdit();
+    },
+    unsetPokemonInEdit() {
+      console.log('Cancelling..');
+      this.$store('set_pokemonInEdit', '');
     },
     setInvalidForm(msg){
       this.invalidMsg = msg;

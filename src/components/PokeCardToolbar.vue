@@ -4,22 +4,26 @@
       <b-button-group size="sm">
         <b-button
           variant="success"
-          title="Add level">
+          title="Add level"
+          :disabled="demo">
           <b-icon icon="plus"></b-icon>
         </b-button>
         <b-button
           variant="warning"
-          title="Evolve">
+          title="Evolve"
+          :disabled="demo">
           <b-icon icon="chevron-double-up"></b-icon>
         </b-button>
         <b-button
           variant="danger"
-          title="Death">
+          title="Death"
+          :disabled="demo">
           <b-icon icon="emoji-dizzy-fill"></b-icon>
         </b-button>
         <b-button 
           title="Edit"
-          v-b-modal.add-poke-window>
+          @click="onPokeEdit"
+          :disabled="demo">
           <b-icon icon="pencil-square"></b-icon>
         </b-button>
       </b-button-group>
@@ -31,7 +35,19 @@
 export default {
   name: 'PokeCardToolbar',
   props: {
-    pokedata: Object
+    pokedata: Object,
+    demo: Boolean
+  },
+  methods: {
+    onPokeEdit() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
+      this.$store.commit('set_pokemonInEdit', this.pokedata.id);
+      this.$bvModal.show('edit-poke-window');
+    }
   }
 }
 </script>

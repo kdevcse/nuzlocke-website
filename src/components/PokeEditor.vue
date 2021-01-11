@@ -269,7 +269,7 @@ export default {
     },
     unsetPokemonInEdit() {
       console.log('Cancelling..');
-      this.$store('set_pokemonInEdit', '');
+      this.$store('set_pokemonInEdit', null);
     },
     setInvalidForm(msg){
       this.invalidMsg = msg;

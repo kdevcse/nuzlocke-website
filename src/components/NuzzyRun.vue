@@ -7,7 +7,9 @@
         :version="run.version"
         :runId="run_id">
       </PokeAdder>
-      <PokeEditor 
+      <PokeEditor
+        :v-if="pokemonInEdit"
+        :pokeId="pokemonInEdit"
         :version="run.version"
         :runId="run_id">
       </PokeEditor>
@@ -75,6 +77,11 @@ export default {
       run: null,
       run_id: null,
       box_data: []
+    }
+  },
+  computed:{
+    pokemonInEdit() {
+      return this.$store.state.pokemonInEdit;
     }
   },
   methods: {

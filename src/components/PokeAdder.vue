@@ -4,14 +4,14 @@
     size="lg"
     id="add-poke-window"
     title="Add a Pokemon"
-    :ok-disabled="!form.valid"
+    :ok-disabled="!validForm"
     ok-title="Add"
     ok-variant="success"
     @ok="handleOk"
     @show="resetForm">
     <PokeCard
       id="example-pokecard"
-      :pokedata="form"
+      :pokedata="pokemon"
       demo>
     </PokeCard>
     <b-form
@@ -36,7 +36,7 @@
           <label for="add-pokemon-nickname-input">Nickname:</label>
           <b-input
             id="add-pokemon-nickname-input"
-            v-model="form.nickname"
+            v-model="pokemon.nickname"
             :disabled="waiting"
             required>
           </b-input>
@@ -45,7 +45,7 @@
           <label for="add-pokemon-lvl-input">Level:</label>
           <b-input
             id="add-pokemon-lvl-input"
-            v-model="form.lvl"
+            v-model="pokemon.lvl"
             :disabled="waiting"
             min="1"
             max="100"
@@ -57,7 +57,7 @@
           <label for="add-pokemon-location-input">Location:</label>
           <b-form-select
             id="add-pokemon-location-input"
-            v-model="form.location"
+            v-model="pokemon.location"
             :disabled="waiting"
             :options="locationsList"
             selected="Please select a value"
@@ -67,7 +67,7 @@
         <div class="form-option-container">
           <b-form-group label="Party Slot:">
             <b-form-radio-group
-              v-model="form.party"
+              v-model="pokemon.party"
               :disabled="waiting"
               :options="partySlots"
               required
@@ -83,6 +83,7 @@
 <script>
 import PokeCard from '@/components/PokeCard.vue';
 import { auth, firestore } from 'firebase';
+import Pokemon from '@/models/pokemon.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -96,27 +97,15 @@ export default {
   },
   data: function() {
     return {
+      validForm: false,
+      loading: true,
       waiting: true,
       searchingEvolutions: false,
       searchingForName: false,
       isValidPokemon: null,
       invalidMsg: '',
       pokename: '',
-      form: {
-        img_url: null,
-        real_name: '',
-        nickname: '',
-        pokemon_id: null,
-        lvl: 1,
-        location: '',
-        types: null,
-        stats: null,
-        evolutions: [],
-        party: -1,
-        caught: Date.now(),
-        valid: false,
-        loading: true
-      },
+      pokemon: new Pokemon(),
       locationsList: [],
       partySlots: [
         { text: 'Box', value: -1 },
@@ -143,41 +132,40 @@ export default {
   },
   watch: {
     pokename: function(newName) {
-      this.form.real_name = newName;
+      this.pokemon.real_name = newName;
 
-      if (!this.form.real_name) {
+      if (!this.pokemon.real_name) {
         this.isValidPokemon = null;
         this.searchingEvolutions = false,
         this.searchingForName = false,
-        this.form.valid = false;
-        this.form.loading = true;
+        this.pokemon.valid = false;
+        this.pokemon.loading = true;
         return;
       }
 
       const p = new Pokedex.Pokedex();
       this.searchingEvolutions = true,
       this.searchingForName = true,
-      p.getPokemonByName(this.form.real_name.toLowerCase()).then((result) => {
+      p.getPokemonByName(this.pokemon.real_name.toLowerCase()).then((result) => {
         if(!this.isFoundInGame(result.game_indices)) {
           this.setInvalidForm('The desired pokemon does not appear in this game');
           return;
         }
-        this.form.loading = false;
+        this.loading = false;
         this.isValidPokemon = true;
-        this.form.valid = true;
-        this.form.img_url = result.sprites.front_default;
-        this.form.pokemon_id = result.id;
-        this.form.stats = result.stats.map(s => {
+        this.validForm = true;
+        this.pokemon.img_url = result.sprites.front_default;
+        this.pokemon.pokemon_id = result.id;
+        this.pokemon.stats = result.stats.map(s => {
           return {
             name: s.stat.name,
             val: s.base_stat
           };
         });
-        this.form.types = result.types.map(t => {
+        this.pokemon.types = result.types.map(t => {
           return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)
         });
-        console.log(result);
-        return this.getEvolutions(result.species.url, this.form.real_name.toLowerCase());
+        return this.getEvolutions(result.species.url, this.pokemon.real_name.toLowerCase());
       }).then(() => {
         this.invalidMsg = '';
       }).catch(() => {
@@ -189,39 +177,24 @@ export default {
   },
   methods: {
     constructData() {
-      return {
-        real_name: this.form.real_name.toLowerCase(),
-        nickname: this.form.nickname,
-        pokemon_id: this.form.pokemon_id,
-        img_url: this.form.img_url,
-        lvl: this.form.lvl,
-        types: this.form.types,
-        location: this.form.location,
-        stats: this.form.stats,
-        death: null,
-        caught: this.form.caught,
-        evolutions: this.form.evolutions
-      }
+      let p = new Pokemon();
+      p.real_name = this.pokemon.real_name.toLowerCase();
+      p.nickname = this.pokemon.nickname;
+      p.pokemon_id = this.pokemon.pokemon_id;
+      p.img_url = this.pokemon.img_url;
+      p.lvl = this.pokemon.lvl;
+      p.types = this.pokemon.types;
+      p.location = this.pokemon.location;
+      p.stats = this.pokemon.stats;
+      p.caught = this.pokemon.caught;
+      p.evolutions = this.pokemon.evolutions;
+      return p.object;
     },
     resetForm() {
       this.isValidPokemon = null;
       this.pokename = '';
       this.invalidMsg = '';
-      this.form = {
-        img_url: null,
-        real_name: '',
-        nickname: '',
-        pokemon_id: null,
-        lvl: 1,
-        location: '',
-        types: null,
-        stats: null,
-        evolutions: [],
-        party: -1,
-        caught: Date.now(),
-        valid: false,
-        loading: true
-      };
+      this.pokemon = new Pokemon();
 
       const p = new Pokedex.Pokedex();
       p.getVersionByName(this.version).then((result) => {
@@ -254,7 +227,7 @@ export default {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
       firestore().collection(pokemonQuery).add(this.constructData()).then((doc) => {
-        const partyVal = this.partySlots.find(s => s.value === this.form.party);
+        const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
         if(partyVal && partyVal.value !== -1) {
           let partyObj = new Object();
@@ -267,9 +240,9 @@ export default {
     setInvalidForm(msg) {
       this.invalidMsg = msg;
       this.isValidPokemon = false;
-      this.form.valid = false;
-      this.form.img_url = null;
-      this.form.loading = true;
+      this.validForm = false;
+      this.pokemon.img_url = null;
+      this.pokemon.loading = true;
     },
     isFoundInGame(allGames) {
       for(let i = 0; i < allGames.length; i++) {
@@ -312,7 +285,7 @@ export default {
           chain = poke.evolves_to;
         }
 
-        this.form.evolutions = evos;
+        this.pokemon.evolutions = evos;
       }).finally(() => {
         this.searchingEvolutions = false;
       });

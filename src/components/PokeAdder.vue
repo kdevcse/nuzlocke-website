@@ -12,6 +12,7 @@
     <PokeCard
       id="example-pokecard"
       :pokedata="pokemon"
+      :loading="loading"
       demo>
     </PokeCard>
     <b-form
@@ -138,8 +139,8 @@ export default {
         this.isValidPokemon = null;
         this.searchingEvolutions = false,
         this.searchingForName = false,
-        this.pokemon.valid = false;
-        this.pokemon.loading = true;
+        this.validForm = false;
+        this.loading = true;
         return;
       }
 

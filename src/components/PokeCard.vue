@@ -10,7 +10,7 @@
         <span class="">{{getCardTitle}}</span>
         <div
           :id="getPartyCardId"
-          v-show="!pokedata.loading"
+          v-show="!loading"
           class="float-right stats-info-icon-container">
           <b-icon
             icon="info-circle"
@@ -18,7 +18,7 @@
         </div>
       </div>
     </template>
-    <b-skeleton-wrapper :loading="pokedata.loading">
+    <b-skeleton-wrapper :loading="loading">
       <template #loading>
         <b-row
           class="poke-card-row"
@@ -99,6 +99,7 @@ export default {
   },
   props: {
     pokedata: Object,
+    loading: Boolean,
     index: Number,
     demo: Boolean
   },

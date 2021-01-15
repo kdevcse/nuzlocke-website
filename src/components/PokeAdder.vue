@@ -178,18 +178,8 @@ export default {
   },
   methods: {
     constructData() {
-      let p = new Pokemon();
-      p.real_name = this.pokemon.real_name.toLowerCase();
-      p.nickname = this.pokemon.nickname;
-      p.pokemon_id = this.pokemon.pokemon_id;
-      p.img_url = this.pokemon.img_url;
-      p.lvl = this.pokemon.lvl;
-      p.types = this.pokemon.types;
-      p.location = this.pokemon.location;
-      p.stats = this.pokemon.stats;
-      p.caught = this.pokemon.caught;
-      p.evolutions = this.pokemon.evolutions;
-      return p.object;
+      this.pokemon.real_name = this.pokemon.real_name.toLowerCase();
+      return this.pokemon.object;
     },
     resetForm() {
       this.isValidPokemon = null;

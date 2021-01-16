@@ -1,34 +1,54 @@
 export default class Pokemon {
-    img_url = null;
-    real_name = '';
-    nickname = '';
-    pokemon_id = null;
-    lvl = 1;
-    location = '';
-    types = null;
-    stats = null;
-    evolutions = [];
-    party = -1;
-    caught = Date.now();
-    death = null;
-    id = null;
-    
-    get object() {
-        return Object.assign({}, this);
+  img_url = null;
+  real_name = '';
+  nickname = '';
+  pokemon_id = null;
+  lvl = 1;
+  location = '';
+  types = null;
+  stats = null;
+  evolutions = [];
+  party = -1;
+  caught = Date.now();
+  death = null;
+  id = null;
+  
+  get object() {
+    return Object.assign({}, this);
+  }
+
+  setValuesFromApiResultSet(realName, imgUrl, pokeId, stats, types) {
+    this.real_name = realName;
+    this.img_url = imgUrl;
+    this.pokemon_id = pokeId;
+    this.stats = stats.map(s => {
+      return {
+        name: s.stat.name,
+        val: s.base_stat
+      };
+    });
+    this.types = types.map(t => {
+        return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1);
+    });
+  }
+
+  setValuesFromPokeDataObj(pokeData) {
+    if (!pokeData) {
+      return;
     }
 
-    setValuesFromApiResultSet(realName, imgUrl, pokeId, stats, types) {
-        this.real_name = realName;
-        this.img_url = imgUrl;
-        this.pokemon_id = pokeId;
-        this.stats = stats.map(s => {
-          return {
-            name: s.stat.name,
-            val: s.base_stat
-          };
-        });
-        this.types = types.map(t => {
-            return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1);
-        });
-    }
+    this.img_url = pokeData.img_url;
+    this.real_name = pokeData.real_name;
+    this.nickname = pokeData.nickname;
+    this.pokemon_id = pokeData.pokemon_id;
+    this.lvl = pokeData.lvl;
+    this.location = pokeData.location;
+    this.types = pokeData.types;
+    this.stats = pokeData.stats;
+    this.evolutions = pokeData.evolutions;
+    this.party = pokeData.party;
+    this.caught = pokeData.caught;
+    this.death = pokeData.death;
+    this.id = pokeData.id;
+  }
 }

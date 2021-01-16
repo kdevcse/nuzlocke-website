@@ -12,7 +12,6 @@
     <PokeCard
       id="example-pokecard"
       :pokedata="pokemon"
-      :loading="loading"
       demo>
     </PokeCard>
     <b-form
@@ -24,6 +23,7 @@
           <b-form-select
             id="edit-pokemon-name-input"
             v-model="pokedata.real_name"
+            :options="pokemonNamesList"
             :disabled="true"
             required>
           </b-form-select>
@@ -32,7 +32,7 @@
           <label for="edit-pokemon-nickname-input">Nickname:</label>
           <b-input
             id="edit-pokemon-nickname-input"
-            v-model="pokedata.nickname"
+            v-model="pokemon.nickname"
             :disabled="waiting"
             required>
           </b-input>
@@ -41,7 +41,7 @@
           <label for="edit-pokemon-lvl-input">Level:</label>
           <b-input
             id="edit-pokemon-lvl-input"
-            v-model="pokedata.lvl"
+            v-model="pokemon.lvl"
             :disabled="waiting"
             min="1"
             max="100"
@@ -53,7 +53,7 @@
           <label for="edit-pokemon-location-input">Location:</label>
           <b-form-select
             id="edit-pokemon-location-input"
-            v-model="selectedLocation"
+            v-model="pokemon.location"
             :disabled="waiting"
             :options="locationsList"
             selected="Please select a value"
@@ -63,7 +63,7 @@
         <div class="form-option-container">
           <b-form-group label="Party Slot:">
             <b-form-radio-group
-              v-model="pokedata.party"
+              v-model="pokemon.party"
               :disabled="waiting"
               :options="partySlots"
               required
@@ -95,12 +95,11 @@ export default {
   data: function() {
     return {
       validForm: false,
-      loading: true,
       waiting: true,
       invalidMsg: '',
       pokemon: new Pokemon(),
-      selectedLocation: null,
       locationsList: [],
+      pokemonNamesList:[],
       partySlots: [
         { text: 'Box', value: -1 },
         { text: 'First', value: 0 },
@@ -114,8 +113,17 @@ export default {
   },
   methods: {
     resetForm() {
-      this.invalidMsg = '';
       this.pokemon = new Pokemon();
+      if (!this.pokedata || !this.pokedata.real_name || !this.pokedata.id) {
+        this.validForm = false;
+        return;
+      }
+
+      this.invalidMsg = '';
+      this.pokemon.setValuesFromPokeDataObj(this.pokedata);
+      console.log(this.pokemon.real_name);
+      console.log(this.pokedata.real_name);
+      this.pokemonNamesList = this.getPokedexNamesList(this.pokedata.real_name);
       this.waiting = true;
 
       const p = new Pokedex.Pokedex();
@@ -134,12 +142,15 @@ export default {
         this.waiting = false;
       });
     },
+    getPokedexNamesList(name){
+      return [{ 
+        text: name.charAt(0).toUpperCase() + name.slice(1),
+        value: name
+      }]
+    },
     getLocationsList(locations) {
       const sortedLocationsList = locations.map(l => l.name).sort();
       return sortedLocationsList.map(l => {
-        if (this.pokedata.location === l) {
-          this.selectedLocation = { text: this.getLocationTxt(l), value: l };
-        }
         return { text: this.getLocationTxt(l), value: l };
       });
     },
@@ -150,7 +161,7 @@ export default {
         str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
       });
 
-      return str;
+      return str.trimEnd();
     },
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;

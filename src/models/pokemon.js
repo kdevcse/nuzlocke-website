@@ -5,8 +5,8 @@ export default class Pokemon {
   pokemon_id = null;
   lvl = 1;
   location = '';
-  types = null;
-  stats = null;
+  types = [];
+  stats = [];
   evolutions = [];
   party = -1;
   caught = Date.now();
@@ -37,18 +37,18 @@ export default class Pokemon {
       return;
     }
 
-    this.img_url = pokeData.img_url;
-    this.real_name = pokeData.real_name;
-    this.nickname = pokeData.nickname;
-    this.pokemon_id = pokeData.pokemon_id;
-    this.lvl = pokeData.lvl;
-    this.location = pokeData.location;
-    this.types = pokeData.types;
-    this.stats = pokeData.stats;
-    this.evolutions = pokeData.evolutions;
-    this.party = pokeData.party;
-    this.caught = pokeData.caught;
-    this.death = pokeData.death;
-    this.id = pokeData.id;
+    this.img_url = pokeData.img_url ?? null;
+    this.real_name = pokeData.real_name ?? '';
+    this.nickname = pokeData.nickname ?? '';
+    this.pokemon_id = pokeData.pokemon_id ?? null;
+    this.lvl = pokeData.lvl ?? 1;
+    this.location = pokeData.location ?? '';
+    this.types = pokeData.types ?? [];
+    this.stats = pokeData.stats ?? []
+    this.evolutions = pokeData.evolutions ?? [];
+    this.party = pokeData.party ?? -1;
+    this.caught = pokeData.caught ?? Date.now();
+    this.death = pokeData.death ?? null;
+    this.id = pokeData.id ?? null;
   }
 }

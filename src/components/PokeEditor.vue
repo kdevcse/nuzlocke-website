@@ -8,7 +8,9 @@
     ok-title="Edit"
     ok-variant="success"
     @ok="handleOk"
-    @show="resetForm">
+    @show="resetForm"
+    @close="handleClose"
+    @cancel="handleClose">
     <PokeCard
       id="example-pokecard"
       :pokedata="pokemon"
@@ -22,7 +24,7 @@
           <label for="edit-pokemon-name-input">Pokemon Name:</label>
           <b-form-select
             id="edit-pokemon-name-input"
-            v-model="pokedata.real_name"
+            v-model="pokemon.real_name"
             :options="pokemonNamesList"
             :disabled="true"
             required>
@@ -111,19 +113,28 @@ export default {
       ]
     }
   },
+  watch : {
+    pokedata() {
+      const windowName = 'edit-poke-window';
+
+      if (this.pokedata !== null) {
+        this.$bvModal.show(windowName);
+      } else {
+        this.$bvModal.hide(windowName);
+      }
+    }
+  },
   methods: {
     resetForm() {
       this.pokemon = new Pokemon();
-      if (!this.pokedata || !this.pokedata.real_name || !this.pokedata.id) {
+      if (!this.pokedata) {
         this.validForm = false;
         return;
       }
 
       this.invalidMsg = '';
       this.pokemon.setValuesFromPokeDataObj(this.pokedata);
-      console.log(this.pokemon.real_name);
-      console.log(this.pokedata.real_name);
-      this.pokemonNamesList = this.getPokedexNamesList(this.pokedata.real_name);
+      this.pokemonNamesList = this.getPokedexNamesList(this.pokemon.real_name);
       this.waiting = true;
 
       const p = new Pokedex.Pokedex();
@@ -135,6 +146,7 @@ export default {
         }
       }).then((data) => {
         this.locationsList = this.getLocationsList(data.locations);
+        this.validForm = true;
       }).catch((error) => {
         console.error(error);
         this.validForm = false;
@@ -166,7 +178,8 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
+      console.log(this.pokemon.object);
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).then((doc) => {
         const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
         if(partyVal && partyVal.value !== -1) {
@@ -175,7 +188,14 @@ export default {
           partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
           firestore().doc(runQuery).update(partyObj);
         }
+      }).catch((error) => {
+        console.error(error);
+      }).finally(() => {
+        this.handleClose();
       });
+    },
+    handleClose() {
+      this.$store.commit('set_pokemonInEdit', null);
     },
     setInvalidForm(msg) {
       this.invalidMsg = msg;

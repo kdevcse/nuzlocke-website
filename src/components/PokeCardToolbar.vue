@@ -46,7 +46,6 @@ export default {
       }
 
       this.$store.commit('set_pokemonInEdit', this.pokedata);
-      this.$bvModal.show('edit-poke-window');
     }
   }
 }

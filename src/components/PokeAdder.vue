@@ -161,8 +161,8 @@ export default {
         this.locationsList = this.getLocationsList(data.region.locations);
         this.pokemonNamesList = this.getPokedexNamesList(data.pokedex);
         this.selectedPokemon = this.pokemonNamesList[0].value;
-      }).catch(() => {
-        this.$bvModal.hide('add-poke-window');
+      }).catch((error) => {
+        console.error(error);
         this.validForm = false;
       }).finally(() => {
         this.waiting = false;

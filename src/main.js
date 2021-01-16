@@ -37,7 +37,7 @@ const store = new Vuex.Store({
     userSettings: {},
     isLoggedIn: false,
     runs: [],
-    pokemonInEdit: ''
+    pokemonInEdit: {}
   },
   mutations: {
     set_user_settings(state, settings){
@@ -49,8 +49,8 @@ const store = new Vuex.Store({
     set_runs(state, userRuns){
       state.runs = userRuns;
     },
-    set_pokemonInEdit(state, pokemonId) {
-      state.pokemonInEdit = pokemonId
+    set_pokemonInEdit(state, pokemonObj) {
+      state.pokemonInEdit = pokemonObj
     }
   }
 });

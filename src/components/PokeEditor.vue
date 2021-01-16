@@ -4,15 +4,15 @@
     size="lg"
     id="edit-poke-window"
     title="Edit a Pokemon"
-    :ok-disabled="!form.valid"
+    :ok-disabled="!validForm"
     ok-title="Edit"
     ok-variant="success"
     @ok="handleOk"
-    @cancel="unsetPokemonInEdit"
     @show="resetForm">
     <PokeCard
       id="example-pokecard"
-      :pokedata="form"
+      :pokedata="pokemon"
+      :loading="loading"
       demo>
     </PokeCard>
     <b-form
@@ -21,23 +21,18 @@
       <b-input-group>
         <div class="form-option-container">
           <label for="edit-pokemon-name-input">Pokemon Name:</label>
-          <b-form-input
+          <b-form-select
             id="edit-pokemon-name-input"
-            v-model="pokename"
-            :state="nameIsValid"
-            :disabled="waiting"
-            debounce="1000"
+            v-model="pokedata.real_name"
+            :disabled="true"
             required>
-          </b-form-input>
-          <b-form-invalid-feedback :state="nameIsValid">
-            {{invalidMsg}}
-          </b-form-invalid-feedback>
+          </b-form-select>
         </div>
         <div class="form-option-container">
           <label for="edit-pokemon-nickname-input">Nickname:</label>
           <b-input
             id="edit-pokemon-nickname-input"
-            v-model="form.nickname"
+            v-model="pokedata.nickname"
             :disabled="waiting"
             required>
           </b-input>
@@ -46,7 +41,7 @@
           <label for="edit-pokemon-lvl-input">Level:</label>
           <b-input
             id="edit-pokemon-lvl-input"
-            v-model="form.lvl"
+            v-model="pokedata.lvl"
             :disabled="waiting"
             min="1"
             max="100"
@@ -58,7 +53,7 @@
           <label for="edit-pokemon-location-input">Location:</label>
           <b-form-select
             id="edit-pokemon-location-input"
-            v-model="form.location"
+            v-model="selectedLocation"
             :disabled="waiting"
             :options="locationsList"
             selected="Please select a value"
@@ -68,7 +63,7 @@
         <div class="form-option-container">
           <b-form-group label="Party Slot:">
             <b-form-radio-group
-              v-model="form.party"
+              v-model="pokedata.party"
               :disabled="waiting"
               :options="partySlots"
               required
@@ -83,7 +78,8 @@
 </template>
 <script>
 import PokeCard from '@/components/PokeCard.vue';
-//import { auth, firestore } from 'firebase';
+import { auth, firestore } from 'firebase';
+import Pokemon from '@/models/pokemon.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -91,37 +87,19 @@ export default {
   components: {
     PokeCard
   },
-  beforeUnMount() {
-    this.unsetPokemonInEdit();
-  },
   props:  {
     version: String,
     runId: String,
-    pokedata: Object,
-    pokeId: String
+    pokedata: Object
   },
   data: function() {
     return {
+      validForm: false,
+      loading: true,
       waiting: true,
-      searching: false,
-      isValidPokemon: null,
       invalidMsg: '',
-      pokename: '',
-      form: {
-        img_url: null,
-        real_name: '',
-        nickname: '',
-        pokemon_id: null,
-        lvl: 1,
-        location: '',
-        types: null,
-        stats: null,
-        party: -1,
-        caught: Date.now(),
-        valid: false,
-        loading: true
-      },
-      pokemonInfo: null,
+      pokemon: new Pokemon(),
+      selectedLocation: null,
       locationsList: [],
       partySlots: [
         { text: 'Box', value: -1 },
@@ -134,103 +112,38 @@ export default {
       ]
     }
   },
-  computed: {
-    nameIsValid() {
-      if (this.isValidPokemon === null || this.searching) {
-        return null;
-      }
-			
-      return this.isValidPokemon;
-    }
-  },
-  watch: {
-    pokename: function(newName) {
-      this.form.real_name = newName;
-
-      if (!this.form.real_name) {
-        this.isValidPokemon = null;
-        this.searching = false;
-        this.form.valid = false;
-        this.form.loading = true;
-        return;
-      }
-
-      const p = new Pokedex.Pokedex();
-      this.searching = true;
-      p.getPokemonByName(this.form.real_name.toLowerCase()).then((result) => {
-        if(!this.isFoundInGame(result.game_indices)) {
-          this.setInvalidForm('The desired pokemon does not appear in this game');
-          return;
-        }
-        this.form.loading = false;
-        this.isValidPokemon = true;
-        this.searching = false;
-        this.form.valid = true;
-        this.form.img_url = result.sprites.front_default;
-        this.form.pokemon_id = result.id;
-        this.form.stats = result.stats.map(s => {
-          return {
-            name: s.stat.name,
-            val: s.base_stat
-          };
-        });
-        this.form.types = result.types.map(t => {
-          return t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)
-        });
-        this.invalidMsg = '';
-        console.log(result);
-      }).catch(() => {
-        this.setInvalidForm('Pokemon not found');
-      });
-    }
-  },
   methods: {
     resetForm() {
-      if (!this.pokedata || !this.pokeId) {
-        return;
-      }
-
-      this.searching = false;
-      this.isValidPokemon = null;
-      this.pokename = '';
       this.invalidMsg = '';
-      this.form = {
-        img_url: null,
-        real_name: this.pokedata.real_name,
-        nickname: this.pokedata.nickname,
-        pokemon_id: this.pokedata.pokemon_id,
-        lvl: this.pokedata.lvl,
-        location: this.pokedata.location,
-        types: this.pokedata.types,
-        stats: this.pokedata.stats,
-        party: this.pokedata.party,
-        caught: this.pokedata.caught,
-        valid: false,
-        loading: true
-      };
-      this.pokemonInfo = null;
+      this.pokemon = new Pokemon();
+      this.waiting = true;
 
       const p = new Pokedex.Pokedex();
-      console.log(this.version);
       p.getVersionByName(this.version).then((result) => {
-        p.resource(result.version_group.url).then((res) => {
-          if(res.regions[0]){
-            p.resource(res.regions[0].url).then((region) => {
-              const sortedList = region.locations.map(l => l.name).sort();
-              const list = sortedList.map(l => {
-                return { text: this.getLocationTxt(l), value: l };
-              });
-              this.locationsList = list;
-              this.waiting = false;
-            });
-          }
-        });
-      }).catch(() => {
+        return p.resource(result.version_group.url);
+      }).then((res) => {
+        if (res.regions[0]) {
+          return p.resource(res.regions[0].url);
+        }
+      }).then((data) => {
+        this.locationsList = this.getLocationsList(data.locations);
+      }).catch((error) => {
+        console.error(error);
+        this.validForm = false;
+      }).finally(() => {
         this.waiting = false;
       });
-			
     },
-    getLocationTxt(location){
+    getLocationsList(locations) {
+      const sortedLocationsList = locations.map(l => l.name).sort();
+      return sortedLocationsList.map(l => {
+        if (this.pokedata.location === l) {
+          this.selectedLocation = { text: this.getLocationTxt(l), value: l };
+        }
+        return { text: this.getLocationTxt(l), value: l };
+      });
+    },
+    getLocationTxt(location) {
       const dashSplit = location.split('-');
       let str = '';
       dashSplit.forEach(split => {
@@ -239,55 +152,57 @@ export default {
 
       return str;
     },
-    constructData(){
-      return {
-        real_name: this.form.real_name,
-        nickname: this.form.nickname,
-        pokemon_id: this.form.pokemon_id,
-        img_url: this.form.img_url,
-        lvl: this.form.lvl,
-        types: this.form.types,
-        location: this.form.location,
-        stats: this.form.stats,
-        death: null,
-        caught: this.form.caught
-      }
-    },
     handleOk() {
-      /*const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).edit(this.constructData()).then(() => {
-        const partyVal = this.partySlots.find(s => s.value === this.form.party);
+      firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
+        const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
         if(partyVal && partyVal.value !== -1) {
           let partyObj = new Object();
-          partyObj[`party.${partyVal.text.toLowerCase()}`] = this.constructData();
+          partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
+          partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
           firestore().doc(runQuery).update(partyObj);
         }
-      });*/
-      this.unsetPokemonInEdit();
+      });
     },
-    unsetPokemonInEdit() {
-      console.log('Cancelling..');
-      this.$store('set_pokemonInEdit', null);
-    },
-    setInvalidForm(msg){
+    setInvalidForm(msg) {
       this.invalidMsg = msg;
-      this.searching = false;
-      this.isValidPokemon = false;
-      this.form.valid = false;
-      this.form.img_url = null;
-      this.pokemonInfo = null;
-      this.form.loading = true;
+      this.validForm = false;
     },
-    isFoundInGame(allGames) {
-      for(let i = 0; i < allGames.length; i++) {
-        if (allGames[i].version.name === this.version) {
-          return true;
-        }
+    async getEvolutions(speciesUrl, pokename) {
+      if (!speciesUrl) {
+        return Promise.resolve();
       }
 
-      return false;
+      const p = new Pokedex.Pokedex();
+      return await p.resource(speciesUrl).then((speciesResult) => {
+        if (!speciesResult.evolution_chain){
+          return;
+        }
+
+        return p.resource(speciesResult.evolution_chain.url);
+      }).then((evolutionResult) => {
+        let chain = evolutionResult.chain.evolves_to;
+        let startCapturingEvos = false;
+        let evos = [];
+
+        while (chain && chain.length > 0) {
+          let poke = chain[0];
+
+          if (poke.species.name === pokename) {
+            startCapturingEvos = true;
+          }
+          
+          if (startCapturingEvos && poke.species.name != pokename) {
+            evos.push(poke.species.name);
+          }
+
+          chain = poke.evolves_to;
+        }
+
+        this.pokemon.evolutions = evos;
+      });
     }
   }
 }

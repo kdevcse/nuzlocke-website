@@ -45,7 +45,7 @@ export default {
         return;
       }
 
-      this.$store.commit('set_pokemonInEdit', this.pokedata.id);
+      this.$store.commit('set_pokemonInEdit', this.pokedata);
       this.$bvModal.show('edit-poke-window');
     }
   }

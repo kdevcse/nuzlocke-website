@@ -9,7 +9,7 @@
       </PokeAdder>
       <PokeEditor
         :v-if="pokemonInEdit"
-        :pokeId="pokemonInEdit"
+        :pokedata="pokemonInEdit"
         :version="run.version"
         :runId="run_id">
       </PokeEditor>

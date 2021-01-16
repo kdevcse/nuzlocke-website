@@ -63,7 +63,9 @@
           <b-card-text class="pokecard-info-txt">
             <strong>Type:</strong> {{getPokeTypes}}
           </b-card-text>
-          <b-card-text class="pokecard-info-txt">
+          <b-card-text 
+            class="pokecard-info-txt"
+            v-if="pokedata.location">
             <strong>Location:</strong> {{getLocationTxt}}
           </b-card-text>
           <b-card-text class="pokecard-info-txt">
@@ -105,8 +107,11 @@ export default {
   },
   computed: {
     getCardTitle() {
-      const titleDataExists = this.pokedata.real_name && this.pokedata.lvl;
-      return titleDataExists ? `${this.pokedata.real_name} - Lvl.${this.pokedata.lvl}` : 'Loading...';
+      const titleDataExists = this.getPokeName && this.pokedata.lvl;
+      return titleDataExists ? `${this.getPokeName} - Lvl.${this.pokedata.lvl}` : 'Loading...';
+    },
+    getPokeName() {
+      return this.pokedata.real_name.charAt(0).toUpperCase() + this.pokedata.real_name.slice(1)
     },
     getPokeTypes() {
       const types = this.pokedata.types;

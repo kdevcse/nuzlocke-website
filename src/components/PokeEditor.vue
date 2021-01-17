@@ -7,10 +7,12 @@
     :ok-disabled="!validForm"
     ok-title="Edit"
     ok-variant="success"
+    cancel-title="Delete"
+    cancel-variant="danger"
     @ok="handleOk"
     @show="resetForm"
     @close="handleClose"
-    @cancel="handleClose">
+    @cancel="handleDelete">
     <PokeCard
       id="example-pokecard"
       :pokedata="pokemon"
@@ -191,6 +193,13 @@ export default {
       }).catch((error) => {
         console.error(error);
       }).finally(() => {
+        this.handleClose();
+      });
+    },
+    handleDelete() {
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const pokemonQuery = `${runQuery}/pokemon`;
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).delete().finally(() => {
         this.handleClose();
       });
     },

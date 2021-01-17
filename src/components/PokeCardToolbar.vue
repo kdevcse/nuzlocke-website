@@ -5,25 +5,26 @@
         <b-button
           variant="success"
           title="Add level"
-          :disabled="demo">
+          :disabled="!canPress">
           <b-icon icon="plus"></b-icon>
         </b-button>
         <b-button
           variant="warning"
           title="Evolve"
-          :disabled="demo">
+          :disabled="!canPress">
           <b-icon icon="chevron-double-up"></b-icon>
         </b-button>
         <b-button
           variant="danger"
           title="Death"
-          :disabled="demo">
+          @click="onPokeDeath"
+          :disabled="!canPress">
           <b-icon icon="emoji-dizzy-fill"></b-icon>
         </b-button>
         <b-button 
           title="Edit"
           @click="onPokeEdit"
-          :disabled="demo">
+          :disabled="!canPress">
           <b-icon icon="pencil-square"></b-icon>
         </b-button>
       </b-button-group>
@@ -32,11 +33,21 @@
 </template>
 
 <script>
+import { auth, firestore } from 'firebase';
+import Pokemon from '@/models/pokemon.js';
+import { getPartyText } from '@/helpers/partyHelper.js';
+
 export default {
   name: 'PokeCardToolbar',
   props: {
     pokedata: Object,
-    demo: Boolean
+    demo: Boolean,
+    runId: String
+  },
+  computed: {
+    canPress() {
+      return !this.demo && this.pokedata && this.pokedata.id;
+    }
   },
   methods: {
     onPokeEdit() {
@@ -46,6 +57,26 @@ export default {
       }
 
       this.$store.commit('set_pokemonInEdit', this.pokedata);
+    },
+    onPokeDeath() {
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const pokemonQuery = `${runQuery}/pokemon`;
+      const pokemon = new Pokemon();
+      pokemon.setValuesFromPokeDataObj(this.pokedata);
+      pokemon.death = Date.now();
+
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object).then(() => {
+        var txt = getPartyText(pokemon.party);
+        console.log(txt);
+        if (txt) {
+          let partyObj = new Object();
+          partyObj[`party.${txt}`] = pokemon.object;
+          partyObj[`party.${txt}`].id = pokemon.id;
+          firestore().doc(runQuery).update(partyObj);
+        }
+      }).catch((error) => {
+        console.error(error)
+      });
     }
   }
 }

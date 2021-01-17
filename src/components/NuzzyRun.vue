@@ -21,7 +21,8 @@
         :runId="run_id">
       </NuzzyInfo>
       <NuzzyParty
-        :party="run.party">
+        :party="run.party"
+        :runId="run_id">
       </NuzzyParty>
       <NuzzyBox
         :data="box_data"

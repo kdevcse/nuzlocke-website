@@ -9,7 +9,8 @@
         v-for="(pokemon, index) in data"
         :key="pokemon.id"
         :pokedata="pokemon"
-        :index="index">
+        :index="index"
+        :runId="runId">
       </PokeCard>
     </div>
   </div>
@@ -23,7 +24,8 @@ export default {
     PokeCard
   },
   props: {
-    data: Array
+    data: Array,
+    runId: String
   }
 }
 </script>

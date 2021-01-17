@@ -6,7 +6,8 @@
     <div id="all-pokes-container">
       <PokeCard
         v-if="party.first"
-        :pokedata="party.first"></PokeCard>
+        :pokedata="party.first"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -14,7 +15,8 @@
       </div>
       <PokeCard
         v-if="party.second"
-        :pokedata="party.second"></PokeCard>
+        :pokedata="party.second"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -22,7 +24,8 @@
       </div>
       <PokeCard
         v-if="party.third"
-        :pokedata="party.third"></PokeCard>
+        :pokedata="party.third"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -30,7 +33,8 @@
       </div>
       <PokeCard
         v-if="party.fourth"
-        :pokedata="party.fourth"></PokeCard>
+        :pokedata="party.fourth"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -38,7 +42,8 @@
       </div>
       <PokeCard
         v-if="party.fifth"
-        :pokedata="party.fifth"></PokeCard>
+        :pokedata="party.fifth"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -46,7 +51,8 @@
       </div>
       <PokeCard
         v-if="party.sixth"
-        :pokedata="party.sixth"></PokeCard>
+        :pokedata="party.sixth"
+        :runId="runId"></PokeCard>
       <div
         v-else
         class="empty-slot">
@@ -64,7 +70,8 @@ export default {
     PokeCard
   },
   props: {
-    party: Object
+    party: Object,
+    runId: String
   },
   methods: {
     getCardTitle(p) {

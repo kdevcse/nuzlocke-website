@@ -198,7 +198,7 @@ export default {
       firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
         const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
-        if(partyVal && partyVal.value !== -1) {
+        if (partyVal && partyVal.value !== -1) {
           let partyObj = new Object();
           partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
           partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;

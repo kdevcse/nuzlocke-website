@@ -86,7 +86,8 @@
     <template #footer>
       <PokeCardToolbar 
         :demo="demo"
-        :pokedata="pokedata">
+        :pokedata="pokedata"
+        :runId="runId">
       </PokeCardToolbar>
     </template>
   </b-card>
@@ -103,7 +104,8 @@ export default {
     pokedata: Object,
     loading: Boolean,
     index: Number,
-    demo: Boolean
+    demo: Boolean,
+    runId: String
   },
   computed: {
     getCardTitle() {

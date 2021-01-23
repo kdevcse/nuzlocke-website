@@ -198,6 +198,9 @@ export default {
 .card-body {
 	padding: 0;
 }
+.card-footer {
+  background-color: white;
+}
 .stats-info-icon-container {
 	cursor: pointer;
 }

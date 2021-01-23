@@ -1,20 +1,34 @@
 <template>
   <div>
-    <div
+    <div 
       v-if="run"
       id="run-container">
-      <NuzzyInfo 
+      <PokeAdder
+        :version="run.version"
+        :runId="run_id">
+      </PokeAdder>
+      <PokeEditor
+        :pokedata="getPokemonInEdit"
+        :version="run.version"
+        :runId="run_id">
+      </PokeEditor>
+      <NuzzyInfo
         :runName="run.name"
         :trainerName="run.trainerName"
         :version="run.version"
         :badges="run.badges"
         :createdTime="run.created"
-        :runId="run_id"></NuzzyInfo>
-      <NuzzyParty :party="run.party"></NuzzyParty>
+        :runId="run_id">
+      </NuzzyInfo>
+      <NuzzyParty
+        :party="run.party"
+        :runId="run_id">
+      </NuzzyParty>
       <NuzzyBox
         :data="box_data"
         :version="run.version"
-        :runId="run_id"></NuzzyBox>
+        :runId="run_id">
+      </NuzzyBox>
     </div>
     <p v-else>
       Run not found
@@ -26,6 +40,8 @@
 import NuzzyInfo from '@/components/NuzzyInfo.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
 import NuzzyBox from '@/components/NuzzyBox.vue';
+import PokeAdder from '@/components/PokeAdder.vue';
+import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore } from 'firebase';
 
 export default {
@@ -34,6 +50,8 @@ export default {
     NuzzyInfo,
     NuzzyParty,
     NuzzyBox,
+    PokeAdder,
+    PokeEditor
   },
   mounted() {
     this.run_id = this.$route.params.id;
@@ -61,6 +79,11 @@ export default {
       box_data: []
     }
   },
+  computed: {
+    getPokemonInEdit() {
+      return this.$store.state.pokemonInEdit;
+    }
+  },
   methods: {
     initSnapshotForRun() {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
@@ -85,7 +108,9 @@ export default {
         const allPokemon = [];
 
         querySnapshot.forEach((doc) => {
-          allPokemon.push(doc.data());
+          var pokeObj = doc.data();
+          pokeObj.id = doc.id;
+          allPokemon.push(pokeObj);
         });
 				
         this.box_data = allPokemon;
@@ -106,9 +131,9 @@ export default {
 </script>
 <style scoped>
 #run-container {
-	margin: 0px auto;
-	padding: 20px 0px;
-	max-width: 1200px;
+  margin: 0px auto;
+  padding: 20px 0px;
+  max-width: 1200px;
 }
 .toolbar-container {
   margin-bottom: 25px;

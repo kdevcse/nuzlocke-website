@@ -3,9 +3,6 @@
     <div class="nuzzy-info-title-bar">
       <div class="toolbar-container">
         <h1>{{runName}} - {{getVersionText}}</h1>
-        <PokeAdder
-          :version="version"
-          :runId="runId"></PokeAdder>
         <div class="run-toolbar">
           <b-button-toolbar class="party-toolbar">
             <b-button-group size="sm">
@@ -37,21 +34,16 @@
 </template>
 
 <script>
-import PokeAdder from '@/components/PokeAdder.vue';
 
 export default {
   name: 'NuzzyInfo',
-  components: {
-    PokeAdder
-  },
   props: {
     runName: String,
     trainerName: String,
     createdTime: Number,
     badges: Number,
     version: String,
-    eliteFourBeaten: Boolean,
-    runId: String
+    eliteFourBeaten: Boolean
   },
   computed: {
     getVersionText() {

@@ -2,17 +2,20 @@
   <b-modal
     centered
     size="lg"
-    id="add-poke-window"
-    title="Add a Pokemon"
+    id="edit-poke-window"
+    title="Edit a Pokemon"
     :ok-disabled="!validForm"
-    ok-title="Add"
+    ok-title="Edit"
     ok-variant="success"
+    cancel-title="Delete"
+    cancel-variant="danger"
     @ok="handleOk"
-    @show="resetForm">
+    @show="resetForm"
+    @close="handleClose"
+    @cancel="handleDelete">
     <PokeCard
       id="example-pokecard"
       :pokedata="pokemon"
-      :loading="loading"
       demo>
     </PokeCard>
     <b-form
@@ -20,29 +23,28 @@
       class="form-container">
       <b-input-group>
         <div class="form-option-container">
-          <label for="add-pokemon-name-input">Pokemon Name:</label>
+          <label for="edit-pokemon-name-input">Pokemon Name:</label>
           <b-form-select
-            id="add-pokemon-name-input"
-            v-model="selectedPokemon"
-            :disabled="waiting"
+            id="edit-pokemon-name-input"
+            v-model="pokemon.real_name"
             :options="pokemonNamesList"
-            selected="Please select a value"
+            :disabled="true"
             required>
           </b-form-select>
         </div>
         <div class="form-option-container">
-          <label for="add-pokemon-nickname-input">Nickname:</label>
+          <label for="edit-pokemon-nickname-input">Nickname:</label>
           <b-input
-            id="add-pokemon-nickname-input"
+            id="edit-pokemon-nickname-input"
             v-model="pokemon.nickname"
             :disabled="waiting"
             required>
           </b-input>
         </div>
         <div class="form-option-container">
-          <label for="add-pokemon-lvl-input">Level:</label>
+          <label for="edit-pokemon-lvl-input">Level:</label>
           <b-input
-            id="add-pokemon-lvl-input"
+            id="edit-pokemon-lvl-input"
             v-model="pokemon.lvl"
             :disabled="waiting"
             min="1"
@@ -52,9 +54,9 @@
           </b-input>
         </div>
         <div class="form-option-container">
-          <label for="add-pokemon-location-input">Location:</label>
+          <label for="edit-pokemon-location-input">Location:</label>
           <b-form-select
-            id="add-pokemon-location-input"
+            id="edit-pokemon-location-input"
             v-model="pokemon.location"
             :disabled="waiting"
             :options="locationsList"
@@ -85,24 +87,23 @@ import Pokemon from '@/models/pokemon.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
-  name: 'PokeAdder',
+  name: 'PokeEditor',
   components: {
     PokeCard
   },
   props:  {
     version: String,
-    runId: String
+    runId: String,
+    pokedata: Object
   },
   data: function() {
     return {
       validForm: false,
-      loading: true,
       waiting: true,
       invalidMsg: '',
-      selectedPokemon: null,
       pokemon: new Pokemon(),
       locationsList: [],
-      pokemonNamesList: [],
+      pokemonNamesList:[],
       partySlots: [
         { text: 'Box', value: -1 },
         { text: 'First', value: 0 },
@@ -114,53 +115,40 @@ export default {
       ]
     }
   },
-  watch: {
-    selectedPokemon: function(selected) {
-      if (!selected) {
-        this.validForm = false;
-        return;
-      }
+  watch : {
+    pokedata() {
+      const windowName = 'edit-poke-window';
 
-      const p = new Pokedex.Pokedex();
-      this.searchingEvolutions = true;
-      this.loading = true;
-      p.getPokemonByName(selected.name).then((result) => {
-        this.loading = false;
-        this.validForm = true;
-        this.pokemon.setValuesFromApiResultSet(
-          result.name,
-          result.sprites.front_default,
-          result.id,
-          result.stats,
-          result.types
-        );
-        return this.getEvolutions(result.species.url, this.pokemon.real_name.toLowerCase());
-      }).then(() => {
-        this.invalidMsg = '';
-      }).catch(() => {
-        this.setInvalidForm('Pokemon not found');
-      });
+      if (this.pokedata !== null) {
+        this.$bvModal.show(windowName);
+      } else {
+        this.$bvModal.hide(windowName);
+      }
     }
   },
   methods: {
     resetForm() {
-      this.invalidMsg = '';
       this.pokemon = new Pokemon();
+      if (!this.pokedata) {
+        this.validForm = false;
+        return;
+      }
+
+      this.invalidMsg = '';
+      this.pokemon.setValuesFromPokeDataObj(this.pokedata);
+      this.pokemonNamesList = this.getPokedexNamesList(this.pokemon.real_name);
       this.waiting = true;
 
       const p = new Pokedex.Pokedex();
       p.getVersionByName(this.version).then((result) => {
         return p.resource(result.version_group.url);
-      }).then(async (res) => {
+      }).then((res) => {
         if (res.regions[0]) {
-          const region = await p.resource(res.regions[0].url);
-          const pokedex = await p.resource(res.pokedexes[0].url);
-          return { region: region, pokedex: pokedex.pokemon_entries };
+          return p.resource(res.regions[0].url);
         }
       }).then((data) => {
-        this.locationsList = this.getLocationsList(data.region.locations);
-        this.pokemonNamesList = this.getPokedexNamesList(data.pokedex);
-        this.selectedPokemon = this.pokemonNamesList[0].value;
+        this.locationsList = this.getLocationsList(data.locations);
+        this.validForm = true;
       }).catch((error) => {
         console.error(error);
         this.validForm = false;
@@ -168,14 +156,11 @@ export default {
         this.waiting = false;
       });
     },
-    getPokedexNamesList(pokedex){
-      return pokedex.map(p => { 
-        var name = p.pokemon_species.name;
-        return { 
-          text: name.charAt(0).toUpperCase() + name.slice(1),
-          value: p.pokemon_species
-        }
-      });
+    getPokedexNamesList(name){
+      return [{ 
+        text: name.charAt(0).toUpperCase() + name.slice(1),
+        value: name
+      }]
     },
     getLocationsList(locations) {
       const sortedLocationsList = locations.map(l => l.name).sort();
@@ -190,21 +175,36 @@ export default {
         str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
       });
 
-      return str;
+      return str.trimEnd();
     },
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
+      console.log(this.pokemon.object);
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).then(() => {
         const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
-        if (partyVal && partyVal.value !== -1) {
+        if(partyVal && partyVal.value !== -1) {
           let partyObj = new Object();
           partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
-          partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
+          partyObj[`party.${partyVal.text.toLowerCase()}`].id = this.pokemon.id;
           firestore().doc(runQuery).update(partyObj);
         }
+      }).catch((error) => {
+        console.error(error);
+      }).finally(() => {
+        this.handleClose();
       });
+    },
+    handleDelete() {
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const pokemonQuery = `${runQuery}/pokemon`;
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).delete().finally(() => {
+        this.handleClose();
+      });
+    },
+    handleClose() {
+      this.$store.commit('set_pokemonInEdit', null);
     },
     setInvalidForm(msg) {
       this.invalidMsg = msg;

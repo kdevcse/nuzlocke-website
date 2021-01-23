@@ -1,19 +1,25 @@
 <template>
   <div class="dashboard">
     <RunCreator></RunCreator>
-    <div class="nuzzy-runs-container">
-      <h2>Nuzlocke Runs</h2>
-      <b-button
-        v-if="isLoggedIn"
-        v-b-modal.create-run-window
-        variant="outline-success">
-        + Add a run
-      </b-button>
-      <p v-else>
-        Please login or sign up to view the dashboard
-      </p>
-      <NuzzyRuns :runs="userRuns"></NuzzyRuns>
-    </div>
+    <b-container class="nuzzy-runs-container">
+      <b-row>
+        <b-col>
+          <h2 id="dashboard-title">
+            Nuzlocke Runs
+          </h2>
+          <b-button
+            v-if="isLoggedIn"
+            v-b-modal.create-run-window
+            variant="outline-success">
+            + Add a run
+          </b-button>
+          <p v-else>
+            Please login or sign up to view the dashboard
+          </p>
+          <NuzzyRuns :runs="userRuns"></NuzzyRuns>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -41,10 +47,8 @@ export default {
 .nuzzy-runs-container {
   text-align: left;
   margin-bottom: 15px;
-  margin: 0 auto;
-  max-width: 936px;
 }
-.nuzzy-runs-container > h2 {
+#dashboard-title {
   border-bottom: black 1px solid;
   margin-bottom: 15px;
   padding-bottom: 15px;

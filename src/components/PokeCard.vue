@@ -10,7 +10,7 @@
         <span class="">{{getCardTitle}}</span>
         <div
           :id="getPartyCardId"
-          v-show="!pokedata.loading"
+          v-show="!loading"
           class="float-right stats-info-icon-container">
           <b-icon
             icon="info-circle"
@@ -18,22 +18,29 @@
         </div>
       </div>
     </template>
-    <b-skeleton-wrapper :loading="pokedata.loading">
+    <b-skeleton-wrapper :loading="loading">
       <template #loading>
         <b-row
-          md="4"
+          class="poke-card-row"
           no-gutters>
-          <div class="poke-img-container">
-            <b-skeleton-img
-              class="poke-img"
-              width="96px"></b-skeleton-img>
-          </div>
-          <b-col
-            class="poke-info-container"
-            no-gutters>
-            <b-skeleton></b-skeleton>
-            <b-skeleton></b-skeleton>
-            <b-skeleton></b-skeleton>
+          <b-col 
+            md="4.5"
+            class="poke-img-container fake-img-container">
+            <b-skeleton-img class="poke-img"></b-skeleton-img>
+          </b-col>
+          <b-col class="poke-info-container">
+            <b-skeleton
+              height="1.1rem"
+              class="my-2"></b-skeleton>
+            <b-skeleton
+              height="1.1rem"
+              class="my-2"></b-skeleton>
+            <b-skeleton
+              height="1.1rem"
+              class="my-2"></b-skeleton>
+            <b-skeleton
+              height="1.1rem"
+              class="my-2"></b-skeleton>
           </b-col>
         </b-row>
       </template>
@@ -48,12 +55,22 @@
             :src="pokedata.img_url">
         </b-col>
         <b-col class="poke-info-container">
-          <b-card-text v-if="pokedata.nickname">
+          <b-card-text
+            class="pokecard-info-txt"
+            v-if="pokedata.nickname">
             <strong>Nickname:</strong> {{pokedata.nickname}}
           </b-card-text>
-          <b-card-text><strong>Type:</strong> {{getPokeTypes}}</b-card-text>
-          <b-card-text><strong>Location:</strong> {{getLocationTxt}}</b-card-text>
-          <b-card-text><strong>Caught:</strong> {{getCaughtTxt}}</b-card-text>
+          <b-card-text class="pokecard-info-txt">
+            <strong>Type:</strong> {{getPokeTypes}}
+          </b-card-text>
+          <b-card-text 
+            class="pokecard-info-txt"
+            v-if="pokedata.location">
+            <strong>Location:</strong> {{getLocationTxt}}
+          </b-card-text>
+          <b-card-text class="pokecard-info-txt">
+            <strong>Caught:</strong> {{getCaughtTxt}}
+          </b-card-text>
         </b-col>
       </b-row>
     </b-skeleton-wrapper>
@@ -66,19 +83,37 @@
         v-for="s in pokedata.stats"
         :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
     </b-popover>
+    <template #footer>
+      <PokeCardToolbar 
+        :demo="demo"
+        :pokedata="pokedata"
+        :runId="runId">
+      </PokeCardToolbar>
+    </template>
   </b-card>
 </template>
 <script>
+import PokeCardToolbar from '@/components/PokeCardToolbar.vue';
+
 export default {
   name: 'PokeCard',
+  components: {
+    PokeCardToolbar
+  },
   props: {
     pokedata: Object,
-    index: Number
+    loading: Boolean,
+    index: Number,
+    demo: Boolean,
+    runId: String
   },
   computed: {
     getCardTitle() {
-      const titleDataExists = this.pokedata.real_name && this.pokedata.lvl;
-      return titleDataExists ? `${this.pokedata.real_name} - Lvl.${this.pokedata.lvl}` : 'Loading...';
+      const titleDataExists = this.getPokeName && this.pokedata.lvl;
+      return titleDataExists ? `${this.getPokeName} - Lvl.${this.pokedata.lvl}` : 'Loading...';
+    },
+    getPokeName() {
+      return this.pokedata.real_name.charAt(0).toUpperCase() + this.pokedata.real_name.slice(1)
     },
     getPokeTypes() {
       const types = this.pokedata.types;
@@ -129,6 +164,10 @@ export default {
 	text-align: left;
     margin: 10px;
 }
+.pokecard-info-txt {
+  margin: 7px 0;
+  margin-bottom: 0 ;
+}
 .poke-info-container > p {
 	margin-bottom: 0.75rem;
 }
@@ -143,12 +182,24 @@ export default {
 	flex-direction: column;
 	justify-content: center;
 }
+.fake-img-container > div {
+  height: 96px;
+  width: 96px;
+  margin-left: 10px;
+  border-radius: 6px;
+}
 .poke-img {
 	margin-left: auto;
 	margin-right: auto;
 }
+.poke-img-container >  {
+  margin-left: 5px;
+}
 .card-body {
 	padding: 0;
+}
+.card-footer {
+  background-color: white;
 }
 .stats-info-icon-container {
 	cursor: pointer;

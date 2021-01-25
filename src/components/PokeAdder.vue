@@ -195,16 +195,7 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
-        const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
-
-        if (partyVal && partyVal.value !== -1) {
-          let partyObj = new Object();
-          partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
-          partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
-          firestore().doc(runQuery).update(partyObj);
-        }
-      });
+      firestore().collection(pokemonQuery).add(this.pokemon.object).catch(error => { console.log(error) });
     },
     setInvalidForm(msg) {
       this.invalidMsg = msg;

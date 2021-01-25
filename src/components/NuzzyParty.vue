@@ -36,7 +36,7 @@ export default {
   methods: {
     getPartyInfo(partyNum) {
       for (let i = 0; i < this.party.length; i++) {
-        if (this.party[i].party === partyNum) {
+        if (this.party[i] && this.party[i].party === partyNum) {
           return this.party[i];
         }
       }

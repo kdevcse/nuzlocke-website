@@ -143,14 +143,6 @@ export default {
         version: this.form.version,
         name: this.form.name,
         trainerName: this.form.trainerName,
-        party: {
-          first: null,
-          second: null,
-          third: null,
-          fourth: null,
-          fifth: null,
-          sixth: null
-        },
         created: Date.now()
       }).then(() => {
         this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{

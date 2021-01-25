@@ -21,7 +21,7 @@
         :runId="run_id">
       </NuzzyInfo>
       <NuzzyParty
-        :party="run.party"
+        :party="getPokemonParty"
         :runId="run_id">
       </NuzzyParty>
       <NuzzyBox
@@ -82,6 +82,13 @@ export default {
   computed: {
     getPokemonInEdit() {
       return this.$store.state.pokemonInEdit;
+    },
+    getPokemonParty() {
+      return this.box_data.map(x => {
+        if (x.party > -1) {
+          return x;
+        }
+      });
     }
   },
   methods: {

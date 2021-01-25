@@ -80,8 +80,11 @@
       triggers="hover"
       title="Base Stats">
       <p
+        class="stat-txt"
         v-for="s in pokedata.stats"
-        :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
+        :key="s.name">
+        {{s.name.toUpperCase()}}: {{s.val}}
+      </p>
     </b-popover>
     <template #footer>
       <PokeCardToolbar 
@@ -203,5 +206,9 @@ export default {
 }
 .stats-info-icon-container {
 	cursor: pointer;
+}
+.stat-txt {
+  margin: 5px 0px;
+  padding: 0px;
 }
 </style>

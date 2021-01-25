@@ -5,6 +5,7 @@
         <b-button
           variant="success"
           title="Add level"
+          @click="onPokeLevelUp"
           :disabled="!canPress">
           <b-icon icon="plus"></b-icon>
         </b-button>
@@ -35,7 +36,6 @@
 <script>
 import { auth, firestore } from 'firebase';
 import Pokemon from '@/models/pokemon.js';
-import { getPartyText } from '@/helpers/partyHelper.js';
 
 export default {
   name: 'PokeCardToolbar',
@@ -50,6 +50,15 @@ export default {
     }
   },
   methods: {
+    onPokeLevelUp() {
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const pokemonQuery = `${runQuery}/pokemon`;
+      const pokemon = new Pokemon();
+      pokemon.setValuesFromPokeDataObj(this.pokedata);
+      pokemon.lvl += 1;
+
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+    },
     onPokeEdit() {
       if (!this.pokedata.id) {
         console.warn('Edit window did not open because there was no associated ID');
@@ -65,18 +74,7 @@ export default {
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.death = Date.now();
 
-      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object).then(() => {
-        var txt = getPartyText(pokemon.party);
-        console.log(txt);
-        if (txt) {
-          let partyObj = new Object();
-          partyObj[`party.${txt}`] = pokemon.object;
-          partyObj[`party.${txt}`].id = pokemon.id;
-          firestore().doc(runQuery).update(partyObj);
-        }
-      }).catch((error) => {
-        console.error(error)
-      });
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
     }
   }
 }

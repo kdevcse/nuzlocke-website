@@ -180,7 +180,6 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      console.log(this.pokemon.object);
       firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).catch((error) => {
         console.error(error);
       }).finally(() => {
@@ -200,40 +199,6 @@ export default {
     setInvalidForm(msg) {
       this.invalidMsg = msg;
       this.validForm = false;
-    },
-    async getEvolutions(speciesUrl, pokename) {
-      if (!speciesUrl) {
-        return Promise.resolve();
-      }
-
-      const p = new Pokedex.Pokedex();
-      return await p.resource(speciesUrl).then((speciesResult) => {
-        if (!speciesResult.evolution_chain){
-          return;
-        }
-
-        return p.resource(speciesResult.evolution_chain.url);
-      }).then((evolutionResult) => {
-        let chain = evolutionResult.chain.evolves_to;
-        let startCapturingEvos = false;
-        let evos = [];
-
-        while (chain && chain.length > 0) {
-          let poke = chain[0];
-
-          if (poke.species.name === pokename) {
-            startCapturingEvos = true;
-          }
-          
-          if (startCapturingEvos && poke.species.name != pokename) {
-            evos.push(poke.species.name);
-          }
-
-          chain = poke.evolves_to;
-        }
-
-        this.pokemon.evolutions = evos;
-      });
     }
   }
 }

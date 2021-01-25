@@ -134,8 +134,6 @@ export default {
           result.stats,
           result.types
         );
-        return this.getEvolutions(result.species.url, this.pokemon.real_name.toLowerCase());
-      }).then(() => {
         this.invalidMsg = '';
       }).catch(() => {
         this.setInvalidForm('Pokemon not found');
@@ -200,40 +198,6 @@ export default {
     setInvalidForm(msg) {
       this.invalidMsg = msg;
       this.validForm = false;
-    },
-    async getEvolutions(speciesUrl, pokename) {
-      if (!speciesUrl) {
-        return Promise.resolve();
-      }
-
-      const p = new Pokedex.Pokedex();
-      return await p.resource(speciesUrl).then((speciesResult) => {
-        if (!speciesResult.evolution_chain){
-          return;
-        }
-
-        return p.resource(speciesResult.evolution_chain.url);
-      }).then((evolutionResult) => {
-        let chain = evolutionResult.chain.evolves_to;
-        let startCapturingEvos = false;
-        let evos = [];
-
-        while (chain && chain.length > 0) {
-          let poke = chain[0];
-
-          if (poke.species.name === pokename) {
-            startCapturingEvos = true;
-          }
-          
-          if (startCapturingEvos && poke.species.name != pokename) {
-            evos.push(poke.species.name);
-          }
-
-          chain = poke.evolves_to;
-        }
-
-        this.pokemon.evolutions = evos;
-      });
     }
   }
 }

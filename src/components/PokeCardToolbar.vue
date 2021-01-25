@@ -7,9 +7,11 @@
           title="Add level"
           @click="onPokeLevelUp"
           :disabled="!canPress">
-          <b-icon icon="plus"></b-icon>
+          +1
         </b-button>
         <b-button
+          v-if="getEvolvedPokemon"
+          @click="onPokeEvolve"
           variant="warning"
           title="Evolve"
           :disabled="!canPress">
@@ -45,6 +47,7 @@
 <script>
 import { auth, firestore } from 'firebase';
 import Pokemon from '@/models/pokemon.js';
+const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
   name: 'PokeCardToolbar',
@@ -66,18 +69,28 @@ export default {
   },
   methods: {
     onPokeLevelUp() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      const pokemon = new Pokemon();
+      let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.lvl += 1;
 
       firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
     },
     onPokeMoveToBox() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      const pokemon = new Pokemon();
+      let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.party = -1;
 
@@ -92,13 +105,86 @@ export default {
       this.$store.commit('set_pokemonInEdit', this.pokedata);
     },
     onPokeDeath() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      const pokemon = new Pokemon();
+      let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.death = Date.now();
 
       firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+    },
+    getEvolvedPokemon() {
+      const p = new Pokedex.Pokedex();
+      return p.getPokemonSpeciesByName(this.pokedata.real_name).then((speciesResult) => {
+        return p.resource(speciesResult.evolution_chain.url);
+      }).then((result) => {
+        let chain = result.chain;
+        let nextPokeIsEvo = false;
+        const maxDepthSearch = 5;
+        let searchIteration = 0;
+
+        while (chain && searchIteration < maxDepthSearch) {
+          if (chain.species.name === this.pokedata.real_name) {
+            nextPokeIsEvo = true;
+          }
+          
+          if (nextPokeIsEvo && chain.species.name !== this.pokedata.real_name) {
+            return chain.species.name;
+          }
+
+          chain = chain.evolves_to[0];
+          searchIteration++;
+        }
+
+        return null;
+      }).then((evolvedPokeName) => {
+        return evolvedPokeName ? p.getPokemonByName(evolvedPokeName): null;
+      }).then((result) => {
+        if (!result) {
+          return;
+        }
+
+        let evolvedPokemon = new Pokemon();
+        evolvedPokemon.setValuesFromApiResultSet(
+          result.name,
+          result.sprites.front_default,
+          result.id,
+          result.stats,
+          result.types
+        );
+        return evolvedPokemon.object;
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
+    onPokeEvolve() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
+      this.getEvolvedPokemon().then((evolvedPokemon) => {
+        if (!evolvedPokemon) {
+          return;
+        }
+
+        const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+        const pokemonQuery = `${runQuery}/pokemon`;
+        let pokemon = new Pokemon();
+        pokemon.setValuesFromPokeDataObj(this.pokedata);
+        pokemon.real_name = evolvedPokemon.real_name;
+        pokemon.pokemon_id = evolvedPokemon.pokemon_id;
+        pokemon.img_url = evolvedPokemon.img_url;
+
+        firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+      }).catch((error) => {
+        console.error(error);
+      });
     }
   }
 }

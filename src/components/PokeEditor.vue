@@ -180,8 +180,29 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).catch((error) => {
-        console.error(error);
+
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).then(() => {
+        return firestore()
+          .collection(pokemonQuery).where('party', '==', this.pokemon.party)
+          .get().then((querySnapshot) => {
+            var docsToRemove = [];
+            querySnapshot.forEach((doc => {
+              if (doc.id !== this.pokemon.id) {
+                docsToRemove.push(doc);
+              }
+            }));
+            return docsToRemove;
+          });
+      }).then((pokesToRemoveFromParty) => {
+        if (pokesToRemoveFromParty.length === 0) {
+          return;
+        }
+
+        pokesToRemoveFromParty.forEach((poke) => {
+          let pokeData = poke.data();
+          pokeData.party = -1;
+          firestore().collection(pokemonQuery).doc(poke.id).update(pokeData);
+        });
       }).finally(() => {
         this.handleClose();
       });

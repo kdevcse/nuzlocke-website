@@ -6,9 +6,6 @@
         <div class="run-toolbar">
           <b-button-toolbar class="party-toolbar">
             <b-button-group size="sm">
-              <b-button v-b-modal.add-poke-window>
-                +
-              </b-button>
               <b-button>
                 Settings
               </b-button>

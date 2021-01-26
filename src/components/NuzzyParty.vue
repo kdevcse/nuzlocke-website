@@ -1,8 +1,5 @@
 <template>
   <div id="party-container">
-    <div class="run-party-title-bar">
-      <h3>Party</h3>
-    </div>
     <div id="all-pokes-container">
       <div 
         v-for="n in 6"

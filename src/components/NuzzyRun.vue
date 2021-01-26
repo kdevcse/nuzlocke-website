@@ -20,15 +20,51 @@
         :createdTime="run.created"
         :runId="run_id">
       </NuzzyInfo>
-      <NuzzyParty
-        :party="getPokemonParty"
-        :runId="run_id">
-      </NuzzyParty>
-      <NuzzyBox
-        :data="box_data"
-        :version="run.version"
-        :runId="run_id">
-      </NuzzyBox>
+      <b-card 
+        header-tag="header"
+        no-body>
+        <template #header>
+          <b-container class="poke-toolbar-container">
+            <b-row>
+              <b-col>
+                <h3 class="ml-1">
+                  Pokemon
+                </h3>
+              </b-col>
+              <b-col>
+                <b-button-toolbar class="poke-toolbar mr-1">
+                  <b-button-group size="sm">
+                    <b-button
+                      variant="success"
+                      v-b-modal.add-poke-window>
+                      Add Pokemon
+                    </b-button>
+                  </b-button-group>
+                </b-button-toolbar>
+              </b-col>
+            </b-row>
+          </b-container>
+        </template>
+        <b-tabs card>
+          <b-tab title="Party">
+            <NuzzyParty
+              :party="getPokemonParty"
+              :runId="run_id">
+            </NuzzyParty>
+          </b-tab>
+          <b-tab title="Box">
+            <NuzzyBox
+              :data="getPokemonBox"
+              :version="run.version"
+              :runId="run_id">
+            </NuzzyBox>
+          </b-tab>
+          <b-tab title="Box Table">
+            <NuzzyBoxTable :data="box_data">
+            </NuzzyBoxTable>
+          </b-tab>
+        </b-tabs>
+      </b-card>
     </div>
     <p v-else>
       Run not found
@@ -40,6 +76,7 @@
 import NuzzyInfo from '@/components/NuzzyInfo.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
 import NuzzyBox from '@/components/NuzzyBox.vue';
+import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore } from 'firebase';
@@ -50,6 +87,7 @@ export default {
     NuzzyInfo,
     NuzzyParty,
     NuzzyBox,
+    NuzzyBoxTable,
     PokeAdder,
     PokeEditor
   },
@@ -84,11 +122,10 @@ export default {
       return this.$store.state.pokemonInEdit;
     },
     getPokemonParty() {
-      return this.box_data.map(x => {
-        if (x.party > -1) {
-          return x;
-        }
-      });
+      return this.box_data.filter(p => p.party > -1);
+    },
+    getPokemonBox() {
+      return this.box_data.filter(p => p.party === -1);
     }
   },
   methods: {
@@ -140,9 +177,15 @@ export default {
 #run-container {
   margin: 0px auto;
   padding: 20px 0px;
-  max-width: 1200px;
+  max-width: 1500px;
+  margin-bottom: 50px;
 }
-.toolbar-container {
-  margin-bottom: 25px;
+/* .poke-toolbar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+.poke-toolbar {
+  justify-content: flex-end;
+} */
 </style>

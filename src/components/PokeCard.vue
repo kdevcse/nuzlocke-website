@@ -159,6 +159,7 @@ export default {
 	border: 1px solid;
 	border-radius: 6px;
 	background-color: #fff;
+  height: 100%;
 }
 .poke-card-row {
 	height: 100%;

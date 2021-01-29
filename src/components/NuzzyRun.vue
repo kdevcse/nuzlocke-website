@@ -52,15 +52,17 @@
               :runId="run_id">
             </NuzzyParty>
           </b-tab>
-          <b-tab title="Box">
+          <!--<b-tab title="Box">
             <NuzzyBox
               :data="getPokemonBox"
               :version="run.version"
               :runId="run_id">
             </NuzzyBox>
-          </b-tab>
-          <b-tab title="Box Table">
-            <NuzzyBoxTable :data="box_data">
+          </b-tab>-->
+          <b-tab title="Box">
+            <NuzzyBoxTable 
+              :runId="run_id"
+              :data="getPokemonBox">
             </NuzzyBoxTable>
           </b-tab>
         </b-tabs>
@@ -75,7 +77,7 @@
 <script>
 import NuzzyInfo from '@/components/NuzzyInfo.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
-import NuzzyBox from '@/components/NuzzyBox.vue';
+//import NuzzyBox from '@/components/NuzzyBox.vue';
 import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
@@ -86,7 +88,7 @@ export default {
   components: {
     NuzzyInfo,
     NuzzyParty,
-    NuzzyBox,
+    //NuzzyBox,
     NuzzyBoxTable,
     PokeAdder,
     PokeEditor

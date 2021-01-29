@@ -2,15 +2,28 @@
   <div>
     <b-table 
       hover
+      :fields="getTableFields"
       :items="getTableItems">
+      <template #cell(Tools)="data">
+        <PokeCardToolbar 
+          :pokedata="data.value"
+          :runId="runId">
+        </PokeCardToolbar>
+      </template>
     </b-table>
   </div>
 </template>
 <script>
+import PokeCardToolbar from '@/components/PokeCardToolbar.vue';
+
 export default {
   name: 'NuzzyBoxTable',
+  components: {
+    PokeCardToolbar
+  },
   props: {
-    data: Array
+    data: Array,
+    runId: String
   },
   computed: {
     getTableItems() {
@@ -20,9 +33,20 @@ export default {
           Nickname: d.nickname,
           Lvl: d.lvl,
           Types: this.getPokeTypes(d.types),
-          Caught: this.getCaughtTxt(d.caught)
+          Caught: this.getCaughtTxt(d.caught),
+          Tools: d
         }
       });
+    },
+    getTableFields() {
+      return [
+        { key: 'Name', sortable: true },
+        { key: 'Nickname', sortable: true },
+        { key: 'Lvl.', sortable: true },
+        { key: 'Types', sortable: true },
+        { key: 'Caught', sortable: true },
+        { key: 'Tools', sortable: false, headerTitle: '' }
+      ]
     }
   },
   methods: {

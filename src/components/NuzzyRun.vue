@@ -4,12 +4,12 @@
       v-if="run"
       id="run-container">
       <PokeAdder
-        :version="run.version"
+        :run="run"
         :runId="run_id">
       </PokeAdder>
       <PokeEditor
         :pokedata="getPokemonInEdit"
-        :version="run.version"
+        :run="run"
         :runId="run_id">
       </PokeEditor>
       <NuzzyInfo

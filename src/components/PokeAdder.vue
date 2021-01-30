@@ -90,7 +90,7 @@ export default {
     PokeCard
   },
   props:  {
-    version: String,
+    run: Object,
     runId: String
   },
   data: function() {
@@ -144,41 +144,48 @@ export default {
     resetForm() {
       this.invalidMsg = '';
       this.pokemon = new Pokemon();
-      this.waiting = true;
-
       const p = new Pokedex.Pokedex();
-      p.getVersionByName(this.version).then((result) => {
-        return p.resource(result.version_group.url);
-      }).then(async (res) => {
-        if (res.regions[0]) {
-          const region = await p.resource(res.regions[0].url);
-          const pokedex = await p.resource(res.pokedexes[0].url);
-          return { region: region, pokedex: pokedex.pokemon_entries };
-        }
-      }).then((data) => {
-        this.locationsList = this.getLocationsList(data.region.locations);
-        this.pokemonNamesList = this.getPokedexNamesList(data.pokedex);
+      this.selectedPokemon = null;
+      this.pokemonNamesList = [];
+      this.locationsList = [];
+      this.waiting = true;
+      var promises = [];
+
+      this.run.pokedexes.forEach((pdx) => {
+        promises.push(p.getPokedexByName(pdx).then((pdxResult) => {
+          this.addToPokedexNamesList(pdxResult);
+        }));
+      });
+      this.run.regions.forEach((region) => {
+        promises.push(p.getRegionByName(region).then((regResult) => {
+          this.addToLocationsList(regResult.locations);
+        }));
+      });
+      Promise.all(promises).then(() => {
+        this.locationsList = this.locationsList.sort();
         this.selectedPokemon = this.pokemonNamesList[0].value;
-      }).catch((error) => {
-        console.error(error);
+      }).catch ((e) => {
+        console.error(e);
         this.validForm = false;
       }).finally(() => {
         this.waiting = false;
       });
     },
-    getPokedexNamesList(pokedex){
-      return pokedex.map(p => { 
+    addToPokedexNamesList(pokedex) {
+      pokedex.pokemon_entries.forEach(p => { 
         var name = p.pokemon_species.name;
-        return { 
+        this.pokemonNamesList.push({ 
           text: name.charAt(0).toUpperCase() + name.slice(1),
           value: p.pokemon_species
-        }
+        });
       });
     },
-    getLocationsList(locations) {
-      const sortedLocationsList = locations.map(l => l.name).sort();
-      return sortedLocationsList.map(l => {
-        return { text: this.getLocationTxt(l), value: l };
+    addToLocationsList(locations) {
+      locations.forEach(l => {
+        this.locationsList.push({ 
+          text: this.getLocationTxt(l.name), 
+          value: l.name 
+        });
       });
     },
     getLocationTxt(location) {

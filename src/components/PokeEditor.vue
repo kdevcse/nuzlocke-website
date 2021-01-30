@@ -92,7 +92,7 @@ export default {
     PokeCard
   },
   props:  {
-    version: String,
+    run: Object,
     runId: String,
     pokedata: Object
   },
@@ -129,6 +129,7 @@ export default {
   methods: {
     resetForm() {
       this.pokemon = new Pokemon();
+
       if (!this.pokedata) {
         this.validForm = false;
         return;
@@ -137,17 +138,19 @@ export default {
       this.invalidMsg = '';
       this.pokemon.setValuesFromPokeDataObj(this.pokedata);
       this.pokemonNamesList = this.getPokedexNamesList(this.pokemon.real_name);
+      var promises = [];
+      this.locationsList = [];
       this.waiting = true;
-
       const p = new Pokedex.Pokedex();
-      p.getVersionByName(this.version).then((result) => {
-        return p.resource(result.version_group.url);
-      }).then((res) => {
-        if (res.regions[0]) {
-          return p.resource(res.regions[0].url);
-        }
-      }).then((data) => {
-        this.locationsList = this.getLocationsList(data.locations);
+
+      this.run.regions.forEach((region) => {
+        promises.push(p.getRegionByName(region).then((regResult) => {
+          this.addToLocationsList(regResult.locations);
+        }));
+      });
+
+      Promise.all(promises).then(() => {
+        this.locationsList = this.locationsList.sort();
         this.validForm = true;
       }).catch((error) => {
         console.error(error);
@@ -162,10 +165,12 @@ export default {
         value: name
       }]
     },
-    getLocationsList(locations) {
-      const sortedLocationsList = locations.map(l => l.name).sort();
-      return sortedLocationsList.map(l => {
-        return { text: this.getLocationTxt(l), value: l };
+    addToLocationsList(locations) {
+      locations.forEach(l => {
+        this.locationsList.push({ 
+          text: this.getLocationTxt(l.name), 
+          value: l.name 
+        });
       });
     },
     getLocationTxt(location) {

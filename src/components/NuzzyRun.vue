@@ -68,6 +68,13 @@
               :data="getPokemonBox">
             </NuzzyBoxTable>
           </b-tab>
+          <b-tab title="Deaths">
+            <NuzzyDeathBox
+              :run="run"
+              :runId="run_id"
+              :data="getPokemonDeaths">
+            </NuzzyDeathBox>
+          </b-tab>
         </b-tabs>
       </b-card>
     </div>
@@ -82,6 +89,7 @@ import NuzzyInfo from '@/components/NuzzyInfo.vue';
 import NuzzyParty from '@/components/NuzzyParty.vue';
 //import NuzzyBox from '@/components/NuzzyBox.vue';
 import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
+import NuzzyDeathBox from '@/components/NuzzyDeathBox.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore } from 'firebase';
@@ -93,6 +101,7 @@ export default {
     NuzzyParty,
     //NuzzyBox,
     NuzzyBoxTable,
+    NuzzyDeathBox,
     PokeAdder,
     PokeEditor
   },
@@ -127,10 +136,13 @@ export default {
       return this.$store.state.pokemonInEdit;
     },
     getPokemonParty() {
-      return this.box_data.filter(p => p.party > -1);
+      return this.box_data.filter(p => p.party > -1 && !p.death);
     },
     getPokemonBox() {
-      return this.box_data.filter(p => p.party === -1);
+      return this.box_data.filter(p => p.party === -1 && !p.death);
+    },
+    getPokemonDeaths() {
+      return this.box_data.filter(p => p.death !== null || p.death !== undefined);
     }
   },
   methods: {

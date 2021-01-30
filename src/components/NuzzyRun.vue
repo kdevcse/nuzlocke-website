@@ -49,6 +49,7 @@
           <b-tab title="Party">
             <NuzzyParty
               :party="getPokemonParty"
+              :run="run"
               :runId="run_id">
             </NuzzyParty>
           </b-tab>
@@ -56,11 +57,13 @@
             <NuzzyBox
               :data="getPokemonBox"
               :version="run.version"
+              :run="run"
               :runId="run_id">
             </NuzzyBox>
           </b-tab>-->
           <b-tab title="Box">
             <NuzzyBoxTable 
+              :run="run"
               :runId="run_id"
               :data="getPokemonBox">
             </NuzzyBoxTable>

@@ -17,9 +17,9 @@ export default class Pokemon {
     return Object.assign({}, this);
   }
 
-  setValuesFromApiResultSet(realName, imgUrl, pokeId, stats, types) {
+  setValuesFromApiResultSet(realName, sprites, generation, version, pokeId, stats, types) {
     this.real_name = realName;
-    this.img_url = imgUrl;
+    this.img_url = this.getPokeImgUrl(sprites, generation, version);
     this.pokemon_id = pokeId;
     this.stats = stats.map(s => {
       return {
@@ -50,5 +50,16 @@ export default class Pokemon {
     this.caught = pokeData.caught ?? Date.now();
     this.death = pokeData.death ?? null;
     this.id = pokeData.id ?? null;
+  }
+
+  getPokeImgUrl(sprites, generation, version) {
+    if (!sprites || !generation || !version) {
+      return null;
+    }
+
+    const gens = sprites.versions[generation];
+    const versionKey = Object.keys(gens).find(o => o.includes(version));
+
+    return gens[versionKey].front_default;
   }
 }

@@ -90,6 +90,7 @@
       <PokeCardToolbar 
         :demo="demo"
         :pokedata="pokedata"
+        :run="run"
         :runId="runId">
       </PokeCardToolbar>
     </template>
@@ -108,6 +109,7 @@ export default {
     loading: Boolean,
     index: Number,
     demo: Boolean,
+    run: Object,
     runId: String
   },
   computed: {

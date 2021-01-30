@@ -7,6 +7,7 @@
       <template #cell(Tools)="data">
         <PokeCardToolbar 
           :pokedata="data.value"
+          :run="run"
           :runId="runId">
         </PokeCardToolbar>
       </template>
@@ -23,6 +24,7 @@ export default {
   },
   props: {
     data: Array,
+    run: Object,
     runId: String
   },
   computed: {

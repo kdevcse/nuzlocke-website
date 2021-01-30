@@ -7,6 +7,7 @@
         :key="pokemon.id"
         :pokedata="pokemon"
         :index="index"
+        :run="run"
         :runId="runId">
       </PokeCard>
     </div>
@@ -22,6 +23,7 @@ export default {
   },
   props: {
     data: Array,
+    run: Object,
     runId: String
   }
 }

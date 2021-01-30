@@ -54,6 +54,7 @@ export default {
   props: {
     pokedata: Object,
     demo: Boolean,
+    run: Object,
     runId: String
   },
   computed: {
@@ -152,7 +153,9 @@ export default {
         let evolvedPokemon = new Pokemon();
         evolvedPokemon.setValuesFromApiResultSet(
           result.name,
-          result.sprites.front_default,
+          result.sprites,
+          this.run.generation,
+          this.run.version,
           result.id,
           result.stats,
           result.types

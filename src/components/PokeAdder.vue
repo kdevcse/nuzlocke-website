@@ -127,10 +127,11 @@ export default {
       p.getPokemonByName(selected.name).then((result) => {
         this.loading = false;
         this.validForm = true;
-        const imgUrl = result.sprites.versions[this.run.generation][this.run.version_group].front_default;
         this.pokemon.setValuesFromApiResultSet(
           result.name,
-          imgUrl,
+          result.sprites,
+          this.run.generation,
+          this.run.version,
           result.id,
           result.stats,
           result.types

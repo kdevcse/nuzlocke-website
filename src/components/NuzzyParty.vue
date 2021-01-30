@@ -8,6 +8,7 @@
         <PokeCard
           v-if="getPartyInfo(n -1)"
           :pokedata="getPartyInfo(n - 1)"
+          :run="run"
           :runId="runId"></PokeCard>
         <div
           v-else
@@ -28,6 +29,7 @@ export default {
   },
   props: {
     party: Array,
+    run: Object,
     runId: String
   },
   methods: {

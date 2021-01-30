@@ -127,15 +127,17 @@ export default {
       p.getPokemonByName(selected.name).then((result) => {
         this.loading = false;
         this.validForm = true;
+        const imgUrl = result.sprites.versions[this.run.generation][this.run.version_group].front_default;
         this.pokemon.setValuesFromApiResultSet(
           result.name,
-          result.sprites.front_default,
+          imgUrl,
           result.id,
           result.stats,
           result.types
         );
         this.invalidMsg = '';
-      }).catch(() => {
+      }).catch((error) => {
+        console.error(error);
         this.setInvalidForm('Pokemon not found');
       });
     }
@@ -161,6 +163,7 @@ export default {
           this.addToLocationsList(regResult.locations);
         }));
       });
+
       Promise.all(promises).then(() => {
         this.locationsList = this.locationsList.sort();
         this.selectedPokemon = this.pokemonNamesList[0].value;

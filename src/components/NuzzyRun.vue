@@ -20,7 +20,10 @@
         :createdTime="run.created"
         :runId="run_id">
       </NuzzyInfo>
-      <b-card 
+      <b-card
+        border-variant="primary"
+        header-bg-variant="primary"
+        header-text-variant="white"
         header-tag="header"
         no-body>
         <template #header>

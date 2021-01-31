@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-table 
+    <b-table
+      striped
+      bordered
       hover
       :fields="getTableFields"
       :items="getTableItems">

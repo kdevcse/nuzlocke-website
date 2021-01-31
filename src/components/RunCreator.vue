@@ -86,8 +86,6 @@ export default {
         { value: 'soulsilver', text: 'SoulSilver'},
         { value: 'black', text: 'Black'},
         { value: 'white', text: 'White'},
-        { value: 'colosseum', text: 'Colosseum'},
-        { value: 'xd', text: 'XD'},
         { value: 'black-2', text: 'Black 2'},
         { value: 'white-2', text: 'White 2'},
         { value: 'x', text: 'X'},

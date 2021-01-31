@@ -3,6 +3,7 @@
     <b-button-toolbar class="pokecard-toolbar">
       <b-button-group size="sm">
         <b-button
+          v-if="!pokedata.death"
           variant="success"
           title="Add level"
           @click="onPokeLevelUp"
@@ -10,7 +11,7 @@
           +1
         </b-button>
         <b-button
-          v-if="getEvolvedPokemon"
+          v-if="getEvolvedPokemon && !pokedata.death"
           @click="onPokeEvolve"
           variant="warning"
           title="Evolve"

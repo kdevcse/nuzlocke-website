@@ -71,6 +71,11 @@
           <b-card-text class="pokecard-info-txt">
             <strong>Caught:</strong> {{getCaughtTxt}}
           </b-card-text>
+          <b-card-text 
+            v-if="pokedata.death"
+            class="pokecard-info-txt">
+            <strong>Death:</strong> {{getDeathTxt}}
+          </b-card-text>
         </b-col>
       </b-row>
     </b-skeleton-wrapper>
@@ -148,6 +153,11 @@ export default {
     },
     getCaughtTxt() {
       var dte = new Date(this.pokedata.caught);
+      const options = { dateStyle: 'short', timeStyle: 'short' };
+      return dte.toLocaleString('en-US', options);
+    },
+    getDeathTxt() {
+      var dte = new Date(this.pokedata.death);
       const options = { dateStyle: 'short', timeStyle: 'short' };
       return dte.toLocaleString('en-US', options);
     }

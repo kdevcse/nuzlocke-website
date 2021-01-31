@@ -58,6 +58,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+  min-height: 278px;
 	border: dotted black 2px;
 	border-radius: 6px;
 	justify-content: center;

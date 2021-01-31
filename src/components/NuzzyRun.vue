@@ -142,7 +142,7 @@ export default {
       return this.box_data.filter(p => p.party === -1 && !p.death);
     },
     getPokemonDeaths() {
-      return this.box_data.filter(p => p.death !== null || p.death !== undefined);
+      return this.box_data.filter(p => p.death !== null && p.death !== undefined);
     }
   },
   methods: {

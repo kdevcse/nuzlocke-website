@@ -64,7 +64,9 @@
             required>
           </b-form-select>
         </div>
-        <div class="form-option-container">
+        <div 
+          v-if="!pokemon.death"
+          class="form-option-container">
           <b-form-group label="Party Slot:">
             <b-form-radio-group
               v-model="pokemon.party"

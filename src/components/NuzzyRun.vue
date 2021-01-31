@@ -24,26 +24,18 @@
         header-tag="header"
         no-body>
         <template #header>
-          <b-container class="poke-toolbar-container">
-            <b-row>
-              <b-col>
-                <h3 class="ml-1">
-                  Pokemon
-                </h3>
-              </b-col>
-              <b-col>
-                <b-button-toolbar class="poke-toolbar mr-1">
-                  <b-button-group size="sm">
-                    <b-button
-                      variant="success"
-                      v-b-modal.add-poke-window>
-                      Add Pokemon
-                    </b-button>
-                  </b-button-group>
-                </b-button-toolbar>
-              </b-col>
-            </b-row>
-          </b-container>
+          <div class="align-middle header-container">
+            <h3>Pokemon</h3>
+            <b-button-toolbar class="poke-toolbar float-right">
+              <b-button-group size="sm">
+                <b-button
+                  variant="success"
+                  v-b-modal.add-poke-window>
+                  Add Pokemon
+                </b-button>
+              </b-button-group>
+            </b-button-toolbar>
+          </div>
         </template>
         <b-tabs card>
           <b-tab title="Party">
@@ -196,6 +188,14 @@ export default {
   padding: 20px 0px;
   max-width: 1500px;
   margin-bottom: 50px;
+}
+.header-container {
+  text-align: left;
+  display: flex;
+}
+.header-container > h3 {
+  margin-bottom: 0;
+  flex: 1;
 }
 /* .poke-toolbar-container {
   display: flex;

@@ -7,7 +7,7 @@
     header-tag="header">
     <template #header>
       <div class="align-middle header-container">
-        <span class="">{{getCardTitle}}</span>
+        <span>{{getCardTitle}}</span>
         <div
           :id="getPartyCardId"
           v-show="!loading"
@@ -178,7 +178,7 @@ export default {
 }
 .poke-info-container {
 	text-align: left;
-    margin: 10px;
+  margin: 10px;
 }
 .pokecard-info-txt {
   margin: 7px 0;

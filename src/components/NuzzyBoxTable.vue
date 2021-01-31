@@ -6,6 +6,13 @@
       hover
       :fields="getTableFields"
       :items="getTableItems">
+      <template #cell(Image)="data">
+        <b-img
+          :width="getGenerationSize"
+          :height="getGenerationSize"
+          :src="data.value">
+        </b-img>
+      </template>
       <template #cell(Tools)="data">
         <PokeCardToolbar 
           :pokedata="data.value"
@@ -33,6 +40,7 @@ export default {
     getTableItems() {
       return this.data.map(d => {
         return {
+          Image: d.img_url,
           Name: this.getPokeName(d.real_name),
           Nickname: d.nickname,
           Lvl: d.lvl,
@@ -44,13 +52,34 @@ export default {
     },
     getTableFields() {
       return [
-        { key: 'Name', sortable: true },
-        { key: 'Nickname', sortable: true },
-        { key: 'Lvl.', sortable: true },
-        { key: 'Types', sortable: true },
-        { key: 'Caught', sortable: true },
-        { key: 'Tools', sortable: false, headerTitle: '' }
+        { key: 'Image', sortable: false, tdClass: 'align-middle' },
+        { key: 'Name', sortable: true, tdClass: 'align-middle' },
+        { key: 'Nickname', sortable: true, tdClass: 'align-middle' },
+        { key: 'Lvl.', sortable: true, tdClass: 'align-middle' },
+        { key: 'Types', sortable: true, tdClass: 'align-middle' },
+        { key: 'Caught', sortable: true, tdClass: 'align-middle' },
+        { key: 'Tools', sortable: false, headerTitle: '', tdClass: 'align-middle' }
       ]
+    },
+    getGenerationSize() {
+      switch (this.run.generaion) {
+      case 'generation-i':
+        return '40px';
+      case 'generation-ii':
+        return '40px';
+      case 'generation-iii':
+        return '64px';
+      case 'generation-iv':
+        return '80px';
+      case 'generation-v':
+        return '96px';
+      case 'generation-vi':
+        return '120px';
+      case 'generation-vii':
+        return '128px';
+      default:
+        return '128px';
+      }
     }
   },
   methods: {

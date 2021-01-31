@@ -138,7 +138,7 @@ export default {
       const p = new Pokedex.Pokedex();
       p.getVersionByName(this.form.version).then((result) => {
         return p.resource(result.version_group.url);
-      }).then( async (result) => {
+      }).then(async (result) => {
         firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
           badges: 0,
           version: this.form.version,

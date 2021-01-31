@@ -60,6 +60,6 @@ export default class Pokemon {
     const gens = sprites.versions[generation];
     const versionKey = Object.keys(gens).find(o => o.includes(version));
 
-    return gens[versionKey].front_default;
+    return gens[versionKey] ? gens[versionKey].front_default : sprites.front_default;
   }
 }

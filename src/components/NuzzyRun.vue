@@ -41,7 +41,9 @@
           </div>
         </template>
         <b-tabs card>
-          <b-tab title="Party">
+          <b-tab 
+            active
+            title="Party">
             <NuzzyParty
               :party="getPokemonParty"
               :run="run"

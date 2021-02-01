@@ -172,13 +172,14 @@ export default {
 	border-radius: 6px;
 	background-color: #fff;
   height: 100%;
+  min-height: 250px;
 }
 .poke-card-row {
 	height: 100%;
 }
 .poke-info-container {
 	text-align: left;
-  margin: 10px;
+  margin: .6rem;
 }
 .pokecard-info-txt {
   margin: 7px 0;

@@ -14,10 +14,6 @@
         exact
         exact-active-class="active"
         variant="light">Dashoard</b-nav-item>
-      <b-nav-item
-        to="/about"
-        exact
-        exact-active-class="active">About</b-nav-item>
       <b-nav-item>
         <b-nav-form>
           <b-input-group prepend="@">

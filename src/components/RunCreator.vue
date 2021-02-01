@@ -30,11 +30,9 @@
           id="create-run-trainer-input" 
           v-model="form.trainerName"
           :state="trainerValidation"
-          @input="checkFormValidity">
+          @input="checkFormValidity"
+          required>
         </b-input>
-        <b-form-invalid-feedback :state="trainerValidation">
-          {{trainerInputError}}
-        </b-form-invalid-feedback>
       </div>
       <div class="form-option-container">
         <label for="create-run-version-select">Version:</label>
@@ -53,6 +51,7 @@
 </template>
 <script>
 import { auth, firestore } from 'firebase';
+const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
   name: 'RunCreator',
@@ -87,8 +86,6 @@ export default {
         { value: 'soulsilver', text: 'SoulSilver'},
         { value: 'black', text: 'Black'},
         { value: 'white', text: 'White'},
-        { value: 'colosseum', text: 'Colosseum'},
-        { value: 'xd', text: 'XD'},
         { value: 'black-2', text: 'Black 2'},
         { value: 'white-2', text: 'White 2'},
         { value: 'x', text: 'X'},
@@ -108,7 +105,7 @@ export default {
   },
   methods: {
     checkFormValidity() {
-      if(this.form.name === '' || undefined){
+      if(this.form.name === '' || this.form.name === undefined){
         this.nameValidation = false;
         this.nameInputError = 'Required';
       }
@@ -117,7 +114,7 @@ export default {
         this.nameInputError = 'Required';
       }
 
-      if(this.form.trainerName === '' || undefined){
+      if(this.form.trainerName === '' || this.form.trainerName === undefined){
         this.trainerValidation = false;
         this.trainerInputError = 'Required';
       }
@@ -138,42 +135,44 @@ export default {
         return;
       }
 
-      firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
-        badges: 0,
-        version: this.form.version,
-        name: this.form.name,
-        trainerName: this.form.trainerName,
-        party: {
-          first: null,
-          second: null,
-          third: null,
-          fourth: null,
-          fifth: null,
-          sixth: null
-        },
-        created: Date.now()
-      }).then(() => {
-        this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
-          title: 'Run Added',
-          toaster: 'b-toaster-top-right',
-          variant: 'success',
-          solid: true,
-          appendToast: true
+      const p = new Pokedex.Pokedex();
+      p.getVersionByName(this.form.version).then((result) => {
+        return p.resource(result.version_group.url);
+      }).then(async (result) => {
+        firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
+          badges: 0,
+          version: this.form.version,
+          version_group: result.name,
+          generation: result.generation.name,
+          pokedexes: result.pokedexes.map(pdx => pdx.name),
+          regions: result.regions.map(r => r.name),
+          name: this.form.name,
+          trainerName: this.form.trainerName,
+          created: Date.now()
+        }).then(() => {
+          this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
+            title: 'Run Added',
+            toaster: 'b-toaster-top-right',
+            variant: 'success',
+            solid: true,
+            appendToast: true
+          });
+        }).catch((error) => {
+          this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
+            title: 'Error Adding Run',
+            toaster: 'b-toaster-top-right',
+            variant: 'danger',
+            solid: true,
+            appendToast: true
+          });
+          console.error(error);
         });
-      }).catch((error) => {
-        this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
-          title: 'Error Adding Run',
-          toaster: 'b-toaster-top-right',
-          variant: 'danger',
-          solid: true,
-          appendToast: true
+      }).finally(() => {
+        this.$nextTick(() => {
+          this.$bvModal.hide('create-run-window');
         });
-        console.error(error);
       });
 			
-      this.$nextTick(() => {
-        this.$bvModal.hide('create-run-window');
-      });
     },
     handleShow() {
       this.resetForm();

@@ -90,7 +90,7 @@ export default {
     PokeCard
   },
   props:  {
-    version: String,
+    run: Object,
     runId: String
   },
   data: function() {
@@ -129,15 +129,16 @@ export default {
         this.validForm = true;
         this.pokemon.setValuesFromApiResultSet(
           result.name,
-          result.sprites.front_default,
+          result.sprites,
+          this.run.generation,
+          this.run.version,
           result.id,
           result.stats,
           result.types
         );
-        return this.getEvolutions(result.species.url, this.pokemon.real_name.toLowerCase());
-      }).then(() => {
         this.invalidMsg = '';
-      }).catch(() => {
+      }).catch((error) => {
+        console.error(error);
         this.setInvalidForm('Pokemon not found');
       });
     }
@@ -146,41 +147,49 @@ export default {
     resetForm() {
       this.invalidMsg = '';
       this.pokemon = new Pokemon();
-      this.waiting = true;
-
       const p = new Pokedex.Pokedex();
-      p.getVersionByName(this.version).then((result) => {
-        return p.resource(result.version_group.url);
-      }).then(async (res) => {
-        if (res.regions[0]) {
-          const region = await p.resource(res.regions[0].url);
-          const pokedex = await p.resource(res.pokedexes[0].url);
-          return { region: region, pokedex: pokedex.pokemon_entries };
-        }
-      }).then((data) => {
-        this.locationsList = this.getLocationsList(data.region.locations);
-        this.pokemonNamesList = this.getPokedexNamesList(data.pokedex);
+      this.selectedPokemon = null;
+      this.pokemonNamesList = [];
+      this.locationsList = [];
+      this.waiting = true;
+      var promises = [];
+
+      this.run.pokedexes.forEach((pdx) => {
+        promises.push(p.getPokedexByName(pdx).then((pdxResult) => {
+          this.addToPokedexNamesList(pdxResult);
+        }));
+      });
+      this.run.regions.forEach((region) => {
+        promises.push(p.getRegionByName(region).then((regResult) => {
+          this.addToLocationsList(regResult.locations);
+        }));
+      });
+
+      Promise.all(promises).then(() => {
+        this.locationsList = this.locationsList.sort();
         this.selectedPokemon = this.pokemonNamesList[0].value;
-      }).catch((error) => {
-        console.error(error);
+      }).catch ((e) => {
+        console.error(e);
         this.validForm = false;
       }).finally(() => {
         this.waiting = false;
       });
     },
-    getPokedexNamesList(pokedex){
-      return pokedex.map(p => { 
+    addToPokedexNamesList(pokedex) {
+      pokedex.pokemon_entries.forEach(p => { 
         var name = p.pokemon_species.name;
-        return { 
+        this.pokemonNamesList.push({ 
           text: name.charAt(0).toUpperCase() + name.slice(1),
           value: p.pokemon_species
-        }
+        });
       });
     },
-    getLocationsList(locations) {
-      const sortedLocationsList = locations.map(l => l.name).sort();
-      return sortedLocationsList.map(l => {
-        return { text: this.getLocationTxt(l), value: l };
+    addToLocationsList(locations) {
+      locations.forEach(l => {
+        this.locationsList.push({ 
+          text: this.getLocationTxt(l.name), 
+          value: l.name 
+        });
       });
     },
     getLocationTxt(location) {
@@ -195,54 +204,38 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      firestore().collection(pokemonQuery).add(this.pokemon.object).then((doc) => {
-        const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
-        if (partyVal && partyVal.value !== -1) {
-          let partyObj = new Object();
-          partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
-          partyObj[`party.${partyVal.text.toLowerCase()}`].id = doc.id;
-          firestore().doc(runQuery).update(partyObj);
+      firestore().collection(pokemonQuery).add(this.pokemon.object).then((addedPoke) => {
+        return addedPoke.id;
+      }).then((pokeId) => {
+        return firestore()
+          .collection(pokemonQuery).where('party', '==', this.pokemon.party)
+          .get().then((querySnapshot) => {
+            var docsToRemove = [];
+            querySnapshot.forEach((doc => {
+              if (doc.id !== pokeId) {
+                docsToRemove.push(doc);
+              }
+            }));
+            return docsToRemove;
+          });
+      }).then((pokesToRemoveFromParty) => {
+        if (pokesToRemoveFromParty.length === 0) {
+          return;
         }
+
+        pokesToRemoveFromParty.forEach((poke) => {
+          let pokeData = poke.data();
+          pokeData.party = -1;
+          firestore().collection(pokemonQuery).doc(poke.id).update(pokeData);
+        });
+      }).catch((error) => {
+        console.log(error);
       });
     },
     setInvalidForm(msg) {
       this.invalidMsg = msg;
       this.validForm = false;
-    },
-    async getEvolutions(speciesUrl, pokename) {
-      if (!speciesUrl) {
-        return Promise.resolve();
-      }
-
-      const p = new Pokedex.Pokedex();
-      return await p.resource(speciesUrl).then((speciesResult) => {
-        if (!speciesResult.evolution_chain){
-          return;
-        }
-
-        return p.resource(speciesResult.evolution_chain.url);
-      }).then((evolutionResult) => {
-        let chain = evolutionResult.chain.evolves_to;
-        let startCapturingEvos = false;
-        let evos = [];
-
-        while (chain && chain.length > 0) {
-          let poke = chain[0];
-
-          if (poke.species.name === pokename) {
-            startCapturingEvos = true;
-          }
-          
-          if (startCapturingEvos && poke.species.name != pokename) {
-            evos.push(poke.species.name);
-          }
-
-          chain = poke.evolves_to;
-        }
-
-        this.pokemon.evolutions = evos;
-      });
     }
   }
 }

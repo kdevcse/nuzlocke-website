@@ -1,8 +1,5 @@
 <template>
   <div id="box-container">
-    <div class="run-box-title-bar">
-      <h3>Pokemon Box</h3>
-    </div>
     <div id="box">
       <PokeCard
         class="pokebox-card"
@@ -10,6 +7,7 @@
         :key="pokemon.id"
         :pokedata="pokemon"
         :index="index"
+        :run="run"
         :runId="runId">
       </PokeCard>
     </div>
@@ -25,6 +23,7 @@ export default {
   },
   props: {
     data: Array,
+    run: Object,
     runId: String
   }
 }

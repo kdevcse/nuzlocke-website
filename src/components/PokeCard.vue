@@ -7,7 +7,7 @@
     header-tag="header">
     <template #header>
       <div class="align-middle header-container">
-        <span class="">{{getCardTitle}}</span>
+        <span>{{getCardTitle}}</span>
         <div
           :id="getPartyCardId"
           v-show="!loading"
@@ -71,6 +71,11 @@
           <b-card-text class="pokecard-info-txt">
             <strong>Caught:</strong> {{getCaughtTxt}}
           </b-card-text>
+          <b-card-text 
+            v-if="pokedata.death"
+            class="pokecard-info-txt">
+            <strong>Death:</strong> {{getDeathTxt}}
+          </b-card-text>
         </b-col>
       </b-row>
     </b-skeleton-wrapper>
@@ -80,13 +85,17 @@
       triggers="hover"
       title="Base Stats">
       <p
+        class="stat-txt"
         v-for="s in pokedata.stats"
-        :key="s.name">{{s.name.toUpperCase()}}: {{s.val}}</p>
+        :key="s.name">
+        {{s.name.toUpperCase()}}: {{s.val}}
+      </p>
     </b-popover>
     <template #footer>
       <PokeCardToolbar 
         :demo="demo"
         :pokedata="pokedata"
+        :run="run"
         :runId="runId">
       </PokeCardToolbar>
     </template>
@@ -105,6 +114,7 @@ export default {
     loading: Boolean,
     index: Number,
     demo: Boolean,
+    run: Object,
     runId: String
   },
   computed: {
@@ -145,6 +155,11 @@ export default {
       var dte = new Date(this.pokedata.caught);
       const options = { dateStyle: 'short', timeStyle: 'short' };
       return dte.toLocaleString('en-US', options);
+    },
+    getDeathTxt() {
+      var dte = new Date(this.pokedata.death);
+      const options = { dateStyle: 'short', timeStyle: 'short' };
+      return dte.toLocaleString('en-US', options);
     }
   }
 }
@@ -156,13 +171,15 @@ export default {
 	border: 1px solid;
 	border-radius: 6px;
 	background-color: #fff;
+  height: 100%;
+  min-height: 250px;
 }
 .poke-card-row {
 	height: 100%;
 }
 .poke-info-container {
 	text-align: left;
-    margin: 10px;
+  margin: .6rem;
 }
 .pokecard-info-txt {
   margin: 7px 0;
@@ -203,5 +220,9 @@ export default {
 }
 .stats-info-icon-container {
 	cursor: pointer;
+}
+.stat-txt {
+  margin: 5px 0px;
+  padding: 0px;
 }
 </style>

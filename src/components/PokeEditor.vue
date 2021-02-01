@@ -64,7 +64,9 @@
             required>
           </b-form-select>
         </div>
-        <div class="form-option-container">
+        <div 
+          v-if="!pokemon.death"
+          class="form-option-container">
           <b-form-group label="Party Slot:">
             <b-form-radio-group
               v-model="pokemon.party"
@@ -92,7 +94,7 @@ export default {
     PokeCard
   },
   props:  {
-    version: String,
+    run: Object,
     runId: String,
     pokedata: Object
   },
@@ -129,6 +131,7 @@ export default {
   methods: {
     resetForm() {
       this.pokemon = new Pokemon();
+
       if (!this.pokedata) {
         this.validForm = false;
         return;
@@ -137,17 +140,19 @@ export default {
       this.invalidMsg = '';
       this.pokemon.setValuesFromPokeDataObj(this.pokedata);
       this.pokemonNamesList = this.getPokedexNamesList(this.pokemon.real_name);
+      var promises = [];
+      this.locationsList = [];
       this.waiting = true;
-
       const p = new Pokedex.Pokedex();
-      p.getVersionByName(this.version).then((result) => {
-        return p.resource(result.version_group.url);
-      }).then((res) => {
-        if (res.regions[0]) {
-          return p.resource(res.regions[0].url);
-        }
-      }).then((data) => {
-        this.locationsList = this.getLocationsList(data.locations);
+
+      this.run.regions.forEach((region) => {
+        promises.push(p.getRegionByName(region).then((regResult) => {
+          this.addToLocationsList(regResult.locations);
+        }));
+      });
+
+      Promise.all(promises).then(() => {
+        this.locationsList = this.locationsList.sort();
         this.validForm = true;
       }).catch((error) => {
         console.error(error);
@@ -162,10 +167,12 @@ export default {
         value: name
       }]
     },
-    getLocationsList(locations) {
-      const sortedLocationsList = locations.map(l => l.name).sort();
-      return sortedLocationsList.map(l => {
-        return { text: this.getLocationTxt(l), value: l };
+    addToLocationsList(locations) {
+      locations.forEach(l => {
+        this.locationsList.push({ 
+          text: this.getLocationTxt(l.name), 
+          value: l.name 
+        });
       });
     },
     getLocationTxt(location) {
@@ -180,18 +187,29 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
-      console.log(this.pokemon.object);
-      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).then(() => {
-        const partyVal = this.partySlots.find(s => s.value === this.pokemon.party);
 
-        if(partyVal && partyVal.value !== -1) {
-          let partyObj = new Object();
-          partyObj[`party.${partyVal.text.toLowerCase()}`] = this.pokemon.object;
-          partyObj[`party.${partyVal.text.toLowerCase()}`].id = this.pokemon.id;
-          firestore().doc(runQuery).update(partyObj);
+      firestore().collection(pokemonQuery).doc(this.pokemon.id).update(this.pokemon.object).then(() => {
+        return firestore()
+          .collection(pokemonQuery).where('party', '==', this.pokemon.party)
+          .get().then((querySnapshot) => {
+            var docsToRemove = [];
+            querySnapshot.forEach((doc => {
+              if (doc.id !== this.pokemon.id) {
+                docsToRemove.push(doc);
+              }
+            }));
+            return docsToRemove;
+          });
+      }).then((pokesToRemoveFromParty) => {
+        if (pokesToRemoveFromParty.length === 0) {
+          return;
         }
-      }).catch((error) => {
-        console.error(error);
+
+        pokesToRemoveFromParty.forEach((poke) => {
+          let pokeData = poke.data();
+          pokeData.party = -1;
+          firestore().collection(pokemonQuery).doc(poke.id).update(pokeData);
+        });
       }).finally(() => {
         this.handleClose();
       });
@@ -209,40 +227,6 @@ export default {
     setInvalidForm(msg) {
       this.invalidMsg = msg;
       this.validForm = false;
-    },
-    async getEvolutions(speciesUrl, pokename) {
-      if (!speciesUrl) {
-        return Promise.resolve();
-      }
-
-      const p = new Pokedex.Pokedex();
-      return await p.resource(speciesUrl).then((speciesResult) => {
-        if (!speciesResult.evolution_chain){
-          return;
-        }
-
-        return p.resource(speciesResult.evolution_chain.url);
-      }).then((evolutionResult) => {
-        let chain = evolutionResult.chain.evolves_to;
-        let startCapturingEvos = false;
-        let evos = [];
-
-        while (chain && chain.length > 0) {
-          let poke = chain[0];
-
-          if (poke.species.name === pokename) {
-            startCapturingEvos = true;
-          }
-          
-          if (startCapturingEvos && poke.species.name != pokename) {
-            evos.push(poke.species.name);
-          }
-
-          chain = poke.evolves_to;
-        }
-
-        this.pokemon.evolutions = evos;
-      });
     }
   }
 }

@@ -1,62 +1,20 @@
 <template>
   <div id="party-container">
-    <div class="run-party-title-bar">
-      <h3>Party</h3>
-    </div>
     <div id="all-pokes-container">
-      <PokeCard
-        v-if="party.first"
-        :pokedata="party.first"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
-      </div>
-      <PokeCard
-        v-if="party.second"
-        :pokedata="party.second"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
-      </div>
-      <PokeCard
-        v-if="party.third"
-        :pokedata="party.third"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
-      </div>
-      <PokeCard
-        v-if="party.fourth"
-        :pokedata="party.fourth"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
-      </div>
-      <PokeCard
-        v-if="party.fifth"
-        :pokedata="party.fifth"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
-      </div>
-      <PokeCard
-        v-if="party.sixth"
-        :pokedata="party.sixth"
-        :runId="runId"></PokeCard>
-      <div
-        v-else
-        class="empty-slot">
-        <h4>Empty</h4>
+      <div 
+        v-for="n in 6"
+        :key="n"
+        class="poke-party-container">
+        <PokeCard
+          v-if="getPartyInfo(n -1)"
+          :pokedata="getPartyInfo(n - 1)"
+          :run="run"
+          :runId="runId"></PokeCard>
+        <div
+          v-else
+          class="empty-slot">
+          <h4>Empty</h4>
+        </div>
       </div>
     </div>
   </div>
@@ -70,29 +28,19 @@ export default {
     PokeCard
   },
   props: {
-    party: Object,
+    party: Array,
+    run: Object,
     runId: String
   },
   methods: {
-    getCardTitle(p) {
-      const titleDataExists = p.real_name && p.lvl;
-      return titleDataExists ? `${p.real_name} - Lvl.${p.lvl}` : 'Loading...';
-    },
-    getPokeTypes(types) {
-      if(!types || types.length === 0)
-        return;
-
-      let msg = types[0];
-      if(types.length > 1){
-        for(let i = 1; i < types.length; i++) {
-          msg += `/${types[i]}`
+    getPartyInfo(partyNum) {
+      for (let i = 0; i < this.party.length; i++) {
+        if (this.party[i] && this.party[i].party === partyNum) {
+          return this.party[i];
         }
       }
 
-      return msg;
-    },
-    getPartyCardId(id) {
-      return `party-card-${id}`;
+      return null;
     }
   }
 }
@@ -110,6 +58,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+  min-height: 278px;
 	border: dotted black 2px;
 	border-radius: 6px;
 	justify-content: center;

@@ -76,9 +76,11 @@ export default {
       case 'generation-vi':
         return '120px';
       case 'generation-vii':
-        return '128px';
+        return '120px';
+      case 'generation-viii':
+        return '120px';
       default:
-        return '128px';
+        return '120px';
       }
     }
   },

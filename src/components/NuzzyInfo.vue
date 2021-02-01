@@ -27,18 +27,25 @@
           :label="`${((getProgress / 9) * 100).toFixed(2)}%`"></b-progress-bar>
       </b-progress>
     </div>
+    <div class="badges-container">
+      <div 
+        v-for="badge in badges"
+        :key="badge.id"
+        class="badge-container">
+        <b-img></b-img>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
-
 export default {
   name: 'NuzzyInfo',
   props: {
     runName: String,
     trainerName: String,
     createdTime: Number,
-    badges: Number,
+    badges: Array,
+    badgesCompleted: Number,
     version: String,
     eliteFourBeaten: Boolean
   },
@@ -58,7 +65,7 @@ export default {
       return dte.toLocaleString('en-US', options);
     },
     getProgress() {
-      return this.eliteFourBeaten ? this.badges + 1 : this.badges;
+      return this.eliteFourBeaten ? this.badgesCompleted + 1 : this.badgesCompleted;
     },
     getProgressVariant() {
       const progress = ((this.getProgress / 9) * 100);
@@ -87,7 +94,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .nuzzy-info-container {
   text-align: left;

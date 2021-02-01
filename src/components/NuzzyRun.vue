@@ -16,7 +16,7 @@
         :runName="run.name"
         :trainerName="run.trainerName"
         :version="run.version"
-        :badges="run.badges"
+        :badgesCompleted="run.badgesCompleted"
         :createdTime="run.created"
         :runId="run_id">
       </NuzzyInfo>

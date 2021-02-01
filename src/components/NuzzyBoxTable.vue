@@ -45,6 +45,7 @@ export default {
           Nickname: d.nickname,
           Lvl: d.lvl,
           Types: this.getPokeTypes(d.types),
+          Location: d.location,
           Caught: this.getCaughtTxt(d.caught),
           Tools: d
         }
@@ -57,6 +58,7 @@ export default {
         { key: 'Nickname', sortable: true, tdClass: 'align-middle' },
         { key: 'Lvl.', sortable: true, tdClass: 'align-middle' },
         { key: 'Types', sortable: true, tdClass: 'align-middle' },
+        { key: 'Location', sortable: true, tdClass: 'align-middle' },
         { key: 'Caught', sortable: true, tdClass: 'align-middle' },
         { key: 'Tools', sortable: false, headerTitle: '', tdClass: 'align-middle' }
       ]

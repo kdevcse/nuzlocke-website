@@ -33,7 +33,7 @@
         <b-card-text><strong>Trainer:</strong> {{run.trainerName}}</b-card-text>
         <b-card-text><strong>Created:</strong> {{getCreatedTimestamp(run.created)}}</b-card-text>
         <b-card-text><strong>Version:</strong> {{getVersionRunTxt(run.version)}}</b-card-text>
-        <b-card-text><strong>Badges:</strong> {{run.badges}}</b-card-text>
+        <b-card-text><strong>Badges Obtained:</strong> {{run.badgesCompleted}}</b-card-text>
       </div>
     </b-card>
   </div>

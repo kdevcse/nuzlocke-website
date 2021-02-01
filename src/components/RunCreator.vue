@@ -138,9 +138,9 @@ export default {
       const p = new Pokedex.Pokedex();
       p.getVersionByName(this.form.version).then((result) => {
         return p.resource(result.version_group.url);
-      }).then(async (result) => {
+      }).then((result) => {
         firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
-          badges: 0,
+          badgesCompleted: 0,
           version: this.form.version,
           version_group: result.name,
           generation: result.generation.name,
@@ -149,7 +149,14 @@ export default {
           name: this.form.name,
           trainerName: this.form.trainerName,
           created: Date.now()
-        }).then(() => {
+        }).then((doc) => {
+          doc.get().then((data) => {
+            var runObj = data.data();
+            p.getGenerationByName(runObj.generation).then((genResult) => {
+              runObj.main_region = genResult.main_region.name;
+              firestore().doc(`users/${auth().currentUser.uid}/runs/${doc.id}`).update(runObj);
+            });
+          });
           this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
             title: 'Run Added',
             toaster: 'b-toaster-top-right',

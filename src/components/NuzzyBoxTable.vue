@@ -62,7 +62,7 @@ export default {
       ]
     },
     getGenerationSize() {
-      switch (this.run.generaion) {
+      switch (this.run.generation) {
       case 'generation-i':
         return '40px';
       case 'generation-ii':

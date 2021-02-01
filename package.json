@@ -64,10 +64,13 @@
       "vue/html-indent": "error",
       "vue/script-indent": "error",
       "vue/html-quotes": "error",
-      "vue/html-closing-bracket-newline": ["error", {
-				"singleline": "never",
-				"multiline": "never"
-			}],
+      "vue/html-closing-bracket-newline": [
+        "error",
+        {
+          "singleline": "never",
+          "multiline": "never"
+        }
+      ],
       "vue/html-closing-bracket-spacing": "error",
       "vue/html-end-tags": "error",
       "vue/max-attributes-per-line": "warn",

@@ -32,7 +32,10 @@
         v-for="badge in badges"
         :key="badge.id"
         class="badge-container">
-        <b-img></b-img>
+        <b-img 
+          height="50px"
+          width="50px"
+          :src="badge"></b-img>
       </div>
     </div>
   </div>
@@ -117,5 +120,10 @@ export default {
 }
 .run-progress-bar {
   margin-bottom: 15px;
+}
+.badges-container {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-column-gap: 1rem;
 }
 </style>

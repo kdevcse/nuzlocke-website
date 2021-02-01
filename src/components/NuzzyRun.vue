@@ -16,6 +16,7 @@
         :runName="run.name"
         :trainerName="run.trainerName"
         :version="run.version"
+        :badges="badges"
         :badgesCompleted="run.badgesCompleted"
         :createdTime="run.created"
         :runId="run_id">
@@ -89,7 +90,7 @@ import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
 import NuzzyDeathBox from '@/components/NuzzyDeathBox.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
-import { auth, firestore } from 'firebase';
+import { auth, firestore, storage } from 'firebase';
 
 export default {
   name: 'NuzzyRun',
@@ -125,7 +126,8 @@ export default {
       runSnapshot: null,
       run: null,
       run_id: null,
-      box_data: []
+      box_data: [],
+      badges: []
     }
   },
   computed: {
@@ -149,6 +151,7 @@ export default {
         const runData = doc.data();
         if(runData) {
           this.run = runData;
+          this.setBadgesForRun();
         } 
         else {
           this.$router.push({ name: 'Dashboard' });
@@ -173,6 +176,25 @@ export default {
 				
         this.box_data = allPokemon;
       });
+    },
+    setBadgesForRun() {
+      firestore().collection('leagues').where('region', '==', this.run.main_region).get()
+        .then((querySnapshot) => {
+          var badges = [];
+          querySnapshot.docs.length > 0 ? badges = querySnapshot.docs[0].data().badges : [];
+          return badges;
+        }).then(async (badges) => {
+          var urls = [];
+          for (var badge of badges){
+            var b = await this.getBadgeUrl(badge);
+            urls.push(b);
+          }
+          this.badges = urls;
+        });
+    },
+    getBadgeUrl(badgeName){
+      const path = `${badgeName.charAt(0).toUpperCase() + badgeName.slice(1)}_Badge.png`
+      return storage().ref('badges').child(path).getDownloadURL();
     },
     errorHandler(titleTxt, toastTxt, consoleTxt){
       this.$bvToast.toast(toastTxt, {

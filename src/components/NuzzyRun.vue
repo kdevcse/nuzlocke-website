@@ -185,11 +185,15 @@ export default {
           return badges;
         }).then(async (badges) => {
           var urls = [];
-          for (var badge of badges){
+          for (var badge of badges) {
             var b = await this.getBadgeUrl(badge);
             urls.push(b);
           }
           this.badges = urls;
+        }).catch((error) => {
+          console.log(`Error getting badges for region: ${this.run.main_region}`);
+          console.error(error);
+          this.badges = [];
         });
     },
     getBadgeUrl(badgeName){

@@ -6,7 +6,10 @@ import Vuex from 'vuex';
 import firebase from 'firebase';
 import App from './App.vue';
 import router from './router';
-import { ToastPlugin, IconsPlugin } from 'bootstrap-vue'
+import { ToastPlugin, IconsPlugin } from 'bootstrap-vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGenderless, faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 Vue.config.productionTip = false;
 
@@ -31,6 +34,10 @@ Vue.use(Vuex);
 /* Bootstrap plugins */
 Vue.use(ToastPlugin);
 Vue.use(IconsPlugin);
+
+/* Font Awesome */
+library.add(faGenderless, faMars, faVenus);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 const store = new Vuex.Store({
   state: {

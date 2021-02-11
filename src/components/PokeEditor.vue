@@ -64,6 +64,18 @@
             required>
           </b-form-select>
         </div>
+        <div class="form-option-container">
+          <b-form-group label="Gender:">
+            <b-form-radio-group
+              v-model="pokemon.gender"
+              :disabled="waiting"
+              :options="genderOptions"
+              required
+              buttons
+              button-variant="outline-primary">
+            </b-form-radio-group>
+          </b-form-group>
+        </div>
         <div 
           v-if="!pokemon.death"
           class="form-option-container">
@@ -106,6 +118,11 @@ export default {
       pokemon: new Pokemon(),
       locationsList: [],
       pokemonNamesList:[],
+      genderOptions: [
+        { text: 'M', value: 0 },
+        { text: 'F', value: 1 },
+        { text: 'None', value: -1 }
+      ],
       partySlots: [
         { text: 'Box', value: -1 },
         { text: 'First', value: 0 },

@@ -8,7 +8,7 @@ import App from './App.vue';
 import router from './router';
 import { ToastPlugin, IconsPlugin } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGenderless, faMars, faVenus, faHeartbeat } from '@fortawesome/free-solid-svg-icons';
+import { faGenderless, faMars, faVenus, faHeartbeat, faSkullCrossbones} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 Vue.config.productionTip = false;
@@ -36,7 +36,7 @@ Vue.use(ToastPlugin);
 Vue.use(IconsPlugin);
 
 /* Font Awesome */
-library.add(faGenderless, faMars, faVenus, faHeartbeat);
+library.add(faGenderless, faMars, faVenus, faHeartbeat, faSkullCrossbones);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 const store = new Vuex.Store({

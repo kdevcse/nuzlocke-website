@@ -32,7 +32,7 @@
           title="Death"
           @click="onPokeDeath"
           :disabled="!canPress">
-          <b-icon icon="emoji-dizzy"></b-icon>
+          <font-awesome-icon :icon="['fas', 'skull-crossbones']"></font-awesome-icon>
         </b-button>
         <b-button
           v-if="!isNotDead"

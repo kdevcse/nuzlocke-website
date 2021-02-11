@@ -22,7 +22,9 @@
         </PokeCardToolbar>
       </template>
     </b-table>
-    <p>No pokemon are present in the box</p>
+    <p v-else>
+      No pokemon are present in the box
+    </p>
   </div>
 </template>
 <script>

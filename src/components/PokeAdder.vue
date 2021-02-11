@@ -19,6 +19,32 @@
       ref="form"
       class="form-container">
       <b-input-group>
+        <div class="radio-group-containers">
+          <div class="form-option-container">
+            <b-form-group label="Gender:">
+              <b-form-radio-group
+                v-model="pokemon.gender"
+                :disabled="waiting"
+                :options="genderOptions"
+                required
+                buttons
+                button-variant="outline-primary">
+              </b-form-radio-group>
+            </b-form-group>
+          </div>
+          <div class="form-option-container">
+            <b-form-group label="Party Slot:">
+              <b-form-radio-group
+                v-model="pokemon.party"
+                :disabled="waiting"
+                :options="partySlots"
+                required
+                buttons
+                button-variant="outline-primary">
+              </b-form-radio-group>
+            </b-form-group>
+          </div>
+        </div>
         <div class="form-option-container">
           <label for="add-pokemon-name-input">Pokemon Name:</label>
           <b-form-select
@@ -62,30 +88,6 @@
             required>
           </b-form-select>
         </div>
-        <div class="form-option-container">
-          <b-form-group label="Gender:">
-            <b-form-radio-group
-              v-model="pokemon.gender"
-              :disabled="waiting"
-              :options="genderOptions"
-              required
-              buttons
-              button-variant="outline-primary">
-            </b-form-radio-group>
-          </b-form-group>
-        </div>
-        <div class="form-option-container">
-          <b-form-group label="Party Slot:">
-            <b-form-radio-group
-              v-model="pokemon.party"
-              :disabled="waiting"
-              :options="partySlots"
-              required
-              buttons
-              button-variant="outline-primary">
-            </b-form-radio-group>
-          </b-form-group>
-        </div>
       </b-input-group>
     </b-form>
   </b-modal>
@@ -122,12 +124,12 @@ export default {
       ],
       partySlots: [
         { text: 'Box', value: -1 },
-        { text: 'First', value: 0 },
-        { text: 'Second', value: 1 },
-        { text: 'Third', value: 2 },
-        { text: 'Fourth', value: 3 },
-        { text: 'Fifth', value: 4 },
-        { text: 'Sixth', value: 5 }
+        { text: '1', value: 0 },
+        { text: '2', value: 1 },
+        { text: '3', value: 2 },
+        { text: '4', value: 3 },
+        { text: '5', value: 4 },
+        { text: '6', value: 5 }
       ]
     }
   },
@@ -258,6 +260,13 @@ export default {
 }
 </script>
 <style scoped>
+.radio-group-containers {
+  display: flex;
+}
+.radio-group-containers > div {
+  flex: 1;
+  margin-right: 20px;
+}
 #example-pokecard {
 	max-width: 380px;
 	margin-left: auto;

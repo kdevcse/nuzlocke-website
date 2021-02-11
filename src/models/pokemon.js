@@ -2,6 +2,7 @@ export default class Pokemon {
   img_url = null;
   real_name = '';
   nickname = '';
+  gender = -1;
   pokemon_id = null;
   lvl = 1;
   location = '';
@@ -40,6 +41,7 @@ export default class Pokemon {
     this.img_url = pokeData.img_url ?? null;
     this.real_name = pokeData.real_name ?? '';
     this.nickname = pokeData.nickname ?? '';
+    this.gender = pokeData.gender ?? -1;
     this.pokemon_id = pokeData.pokemon_id ?? null;
     this.lvl = pokeData.lvl ?? 1;
     this.location = pokeData.location ?? '';

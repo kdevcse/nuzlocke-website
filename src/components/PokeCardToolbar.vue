@@ -19,7 +19,7 @@
           <b-icon icon="chevron-double-up"></b-icon>
         </b-button>
         <b-button
-          v-if="canMoveToBox"
+          v-if="canMoveToBox && isNotDead"
           @click="onPokeMoveToBox"
           variant="info"
           title="Move to Box"
@@ -32,7 +32,15 @@
           title="Death"
           @click="onPokeDeath"
           :disabled="!canPress">
-          <b-icon icon="emoji-dizzy"></b-icon>
+          <font-awesome-icon :icon="['fas', 'skull-crossbones']"></font-awesome-icon>
+        </b-button>
+        <b-button
+          v-if="!isNotDead"
+          variant="info"
+          title="Revive"
+          @click="onPokeRevive"
+          :disabled="!canPress">
+          <font-awesome-icon :icon="['fas', 'heartbeat']"></font-awesome-icon>
         </b-button>
         <b-button 
           title="Edit"
@@ -117,6 +125,21 @@ export default {
       let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.death = Date.now();
+
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+    },
+    onPokeRevive() {
+      if (!this.pokedata.id) {
+        console.warn('Edit window did not open because there was no associated ID');
+        return;
+      }
+
+      const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      const pokemonQuery = `${runQuery}/pokemon`;
+      let pokemon = new Pokemon();
+      pokemon.setValuesFromPokeDataObj(this.pokedata);
+      pokemon.death = null;
+      pokemon.party = -1;
 
       firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
     },

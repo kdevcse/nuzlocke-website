@@ -1,6 +1,8 @@
 <template>
   <div id="party-container">
-    <div id="all-pokes-container">
+    <div 
+      v-if="party.length > 0"
+      id="all-pokes-container">
       <div 
         v-for="n in 6"
         :key="n"
@@ -17,6 +19,9 @@
         </div>
       </div>
     </div>
+    <p v-else>
+      No pokemon are present in the party. Click the "Add Pokemon" button to get started!
+    </p>
   </div>
 </template>
 <script>

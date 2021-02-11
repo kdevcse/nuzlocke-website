@@ -1,13 +1,19 @@
 <template>
   <b-card
     class="poke-container"
-    border-variant="primary"
-    header-bg-variant="primary"
+    :border-variant="getHeaderBackgroundColor"
+    :header-bg-variant="getHeaderBackgroundColor"
     header-text-variant="white"
     header-tag="header">
     <template #header>
       <div class="align-middle header-container">
-        <span>{{getCardTitle}}</span>
+        <span>
+          {{getCardTitle}}
+          <font-awesome-icon 
+            v-if="getGenderIcon"
+            :icon="getGenderIcon">
+          </font-awesome-icon>
+        </span>
         <div
           :id="getPartyCardId"
           v-show="!loading"
@@ -160,6 +166,21 @@ export default {
       var dte = new Date(this.pokedata.death);
       const options = { dateStyle: 'short', timeStyle: 'short' };
       return dte.toLocaleString('en-US', options);
+    },
+    getGenderIcon() {
+      switch(this.pokedata.gender) {
+      case -1:
+        return ['fas', 'genderless'];
+      case 0:
+        return ['fas', 'mars'];
+      case 1:
+        return ['fas', 'venus'];
+      default: 
+        return null;
+      }
+    },
+    getHeaderBackgroundColor() {
+      return this.pokedata.death ? 'danger' : 'primary';
     }
   }
 }

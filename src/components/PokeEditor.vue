@@ -64,7 +64,9 @@
             required>
           </b-form-select>
         </div>
-        <div class="form-option-container">
+        <div 
+          v-if="!pokemon.death"
+          class="form-option-container">
           <b-form-group label="Gender:">
             <b-form-radio-group
               v-model="pokemon.gender"
@@ -119,9 +121,9 @@ export default {
       locationsList: [],
       pokemonNamesList:[],
       genderOptions: [
+        { text: 'None', value: -1 },
         { text: 'M', value: 0 },
-        { text: 'F', value: 1 },
-        { text: 'None', value: -1 }
+        { text: 'F', value: 1 }
       ],
       partySlots: [
         { text: 'Box', value: -1 },

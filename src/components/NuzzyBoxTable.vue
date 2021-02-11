@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-table
+      v-if="data.length > 0"
       striped
       bordered
       hover
@@ -21,6 +22,7 @@
         </PokeCardToolbar>
       </template>
     </b-table>
+    <p>No pokemon are present in the box</p>
   </div>
 </template>
 <script>

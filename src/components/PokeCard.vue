@@ -1,8 +1,8 @@
 <template>
   <b-card
     class="poke-container"
-    border-variant="primary"
-    header-bg-variant="primary"
+    :border-variant="getHeaderBackgroundColor"
+    :header-bg-variant="getHeaderBackgroundColor"
     header-text-variant="white"
     header-tag="header">
     <template #header>
@@ -178,6 +178,9 @@ export default {
       default: 
         return null;
       }
+    },
+    getHeaderBackgroundColor() {
+      return this.pokedata.death ? 'danger' : 'primary';
     }
   }
 }

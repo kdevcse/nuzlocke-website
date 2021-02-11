@@ -4,6 +4,7 @@
       v-if="data.length > 0"
       class="deathbox-container">
       <div
+        class="deathcard-container"
         v-for="d in data"
         :key="d.id">
         <PokeCard
@@ -34,4 +35,7 @@ export default {
 }
 </script>
 <style scoped>
+.deathcard-container {
+  margin: 15px 0px;
+}
 </style>

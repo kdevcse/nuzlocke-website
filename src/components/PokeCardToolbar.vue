@@ -19,7 +19,7 @@
           <b-icon icon="chevron-double-up"></b-icon>
         </b-button>
         <b-button
-          v-if="canMoveToBox"
+          v-if="canMoveToBox && isNotDead"
           @click="onPokeMoveToBox"
           variant="info"
           title="Move to Box"

@@ -171,6 +171,13 @@ export default {
         return evolvedPokeName ? p.getPokemonByName(evolvedPokeName): null;
       }).then((result) => {
         if (!result) {
+          this.$bvToast.toast('This pokemon cannot evolve or is at the final evolution stage',{
+            title: 'Cannot evolve pokemon',
+            toaster: 'b-toaster-top-right',
+            variant: 'danger',
+            solid: true,
+            appendToast: true
+          });
           return;
         }
 

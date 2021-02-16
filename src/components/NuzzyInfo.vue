@@ -1,19 +1,5 @@
 <template>
   <div class="nuzzy-info-container">
-    <div class="nuzzy-info-title-bar">
-      <div class="toolbar-container">
-        <h1>{{runName}} - {{getVersionText}}</h1>
-        <div class="run-toolbar">
-          <b-button-toolbar class="party-toolbar">
-            <b-button-group size="sm">
-              <b-button>
-                Settings
-              </b-button>
-            </b-button-group>
-          </b-button-toolbar>
-        </div>
-      </div>
-    </div>
     <div>
       <p>Trainer Name: {{trainerName}}</p>
       <p>Run Started: {{getCreatedTimeText}}</p>
@@ -44,24 +30,13 @@
 export default {
   name: 'NuzzyInfo',
   props: {
-    runName: String,
     trainerName: String,
     createdTime: Number,
     badges: Array,
     badgesCompleted: Number,
-    version: String,
     eliteFourBeaten: Boolean
   },
   computed: {
-    getVersionText() {
-      const dashSplit = this.version.split('-');
-      let str = '';
-      dashSplit.forEach(split => {
-        str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
-      });
-
-      return str;
-    },
     getCreatedTimeText() {
       var dte = new Date(this.createdTime);
       const options = { dateStyle: 'short', timeStyle: 'short' };
@@ -102,21 +77,12 @@ export default {
   text-align: left;
   margin-bottom: 30px;
 }
-.nuzzy-info-title-bar {
-	border-bottom: black 1px solid;
-  margin-bottom: 15px;
-}
 .toolbar-container{
   display: grid;
   grid-template-columns: auto auto;
 }
 .party-toolbar {
   justify-content: flex-end;
-}
-.run-toolbar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 .run-progress-bar {
   margin-bottom: 15px;

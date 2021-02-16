@@ -5,14 +5,16 @@
       @reset="resetSettings">
       <div class="run-settings-toolbar-container">
         <b-button 
-          type="submit"
-          variant="success">
-          Save
-        </b-button>
-        <b-button 
           type="reset"
+          :disabled="!dataHasChanged"
           variant="danger">
           Cancel
+        </b-button>
+        <b-button 
+          type="submit"
+          :disabled="!dataHasChanged"
+          variant="success">
+          Save
         </b-button>
       </div>
       <div>
@@ -41,6 +43,17 @@ export default {
       }
     }
   },
+  computed: {
+    dataHasChanged() {
+      if (!this.form || !this.run) {
+        return false;
+      }
+
+      console.log(this.form.runName);
+      const runNameChanged = this.run.name != this.form.runName;
+      return runNameChanged;
+    }
+  },
   methods: {
     saveSettings() {
       console.log('Saving settings...');
@@ -49,6 +62,7 @@ export default {
     },
     resetSettings() {
       console.log('Reset settings...');
+      this.$set(this.form, 'runName', this.run.name);
     }
   }
 };

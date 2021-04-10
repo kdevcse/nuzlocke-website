@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div 
+    <div
+      class="nuzzy-run-container"
       v-if="run">
       <PokeAdder
         :run="run"
@@ -171,6 +172,10 @@ export default {
 }
 </script>
 <style scoped>
+.nuzzy-run-container{
+  margin: 0px auto;
+  max-width: 1500px;
+}
 .nuzzy-info-title-bar {
   text-align: left;
 }

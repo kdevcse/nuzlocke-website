@@ -28,9 +28,7 @@
         </div>
       </template>
       <b-tabs
-        pills
-        card
-        vertical>
+        card>
         <b-tab
           active
           title="Party">

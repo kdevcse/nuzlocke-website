@@ -28,7 +28,7 @@
 </template>
 <script>
 export default {
-  name: 'NuzzyInfo',
+  name: 'NuzzyRunInfo',
   props: {
     trainerName: String,
     createdTime: Number,

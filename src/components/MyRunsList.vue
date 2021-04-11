@@ -43,7 +43,7 @@
 import RunDeleter from '@/components/RunDeleter.vue';
 
 export default {
-  name: 'NuzzyRuns',
+  name: 'MyRunsList',
   components: {
     RunDeleter
   },

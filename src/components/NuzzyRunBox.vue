@@ -17,7 +17,7 @@
 import PokeCard from '@/components/PokeCard.vue';
 
 export default {
-  name: 'NuzzyBox',
+  name: 'NuzzyRunBox',
   components: {
     PokeCard
   },

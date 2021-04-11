@@ -31,7 +31,7 @@
 import PokeCardToolbar from '@/components/PokeCardToolbar.vue';
 
 export default {
-  name: 'NuzzyBoxTable',
+  name: 'NuzzyRunBoxTable',
   components: {
     PokeCardToolbar
   },

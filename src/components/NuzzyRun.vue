@@ -28,6 +28,12 @@
         </b-tab>
         <b-tab
           class="tab-container"
+          title="Timeline">
+          <NuzzyRunTimeline>
+          </NuzzyRunTimeline>
+        </b-tab>
+        <b-tab
+          class="tab-container"
           title="Settings">
           <NuzzyRunSettings
             :run="run"
@@ -46,6 +52,7 @@
 <script>
 import NuzzyRunSettings from '@/components/NuzzyRunSettings.vue';
 import NuzzyRunDashboard from '@/components/NuzzyRunDashboard.vue';
+import NuzzyRunTimeline from '@/components/NuzzyRunTimeline.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore, storage } from 'firebase';
@@ -55,6 +62,7 @@ export default {
   components: {
     NuzzyRunSettings,
     NuzzyRunDashboard,
+    NuzzyRunTimeline,
     PokeAdder,
     PokeEditor
   },

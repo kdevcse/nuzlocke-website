@@ -1,11 +1,10 @@
 <template>
   <div class="run-settings-container">
     <b-form 
-      @submit="saveSettings"
-      @reset="resetSettings">
+      @submit="saveSettings">
       <div class="run-settings-toolbar-container">
         <b-button 
-          type="reset"
+          @click="resetSettings"
           :disabled="!dataHasChanged"
           variant="danger">
           Cancel

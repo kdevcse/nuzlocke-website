@@ -13,7 +13,7 @@
         :runId="run_id">
       </PokeEditor>
       <div class="nuzzy-info-title-bar">
-        <h1>{{run.name}} - {{getVersionText}}</h1>
+        <h1>{{run.runName}} - {{getVersionText}}</h1>
       </div>
       <b-tabs>
         <b-tab
@@ -31,7 +31,8 @@
           title="Settings">
           <NuzzyRunSettings
             :run="run"
-            :runId="run_id">
+            :runId="run_id"
+            @saveSettings="handleSaveSettings">
           </NuzzyRunSettings>
         </b-tab>
       </b-tabs>
@@ -103,6 +104,14 @@ export default {
     },
   },
   methods: {
+    handleSaveSettings(settings) {
+      const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
+      firestore().doc(query).update(settings).then(() => {
+        console.log('updated');
+      }).catch((error) => {
+        console.error(`Error updating settings: ${error}`);
+      });
+    },
     initSnapshotForRun() {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
       this.runSnapshot = firestore().doc(query).onSnapshot((doc) => {

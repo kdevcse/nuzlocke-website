@@ -2,7 +2,7 @@
   <div id="runs-container">
     <RunDeleter
       :runId="runToDelete.id"
-      :runName="runToDelete.name"></RunDeleter>
+      :runName="runToDelete.runName"></RunDeleter>
     <b-card
       v-for="run in sortedRuns" 
       :key="run.run_id" 
@@ -14,10 +14,10 @@
         <div class="align-middle header-container">
           <span
             class="header-title"
-            @click="openRun(run.run_id)">{{run.name}}</span>
+            @click="openRun(run.run_id)">{{run.runName}}</span>
           <div
             class="delete-run-button"
-            @click="deleteRun(run.run_id, run.name)">
+            @click="deleteRun(run.run_id, run.runName)">
             <b-icon
               title="Delete run"
               icon="trash-fill"
@@ -68,7 +68,7 @@ export default {
     },
     deleteRun(runId, runName){
       this.runToDelete = {
-        name: runName,
+        runName: runName,
         id: runId
       };
       this.$bvModal.show('delete-run-window');

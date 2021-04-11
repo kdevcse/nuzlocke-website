@@ -38,7 +38,7 @@ export default {
   data: function() {
     return {
       form: {
-        runName: this.run.name
+        runName: this.run.runName
       }
     }
   },
@@ -48,20 +48,18 @@ export default {
         return false;
       }
 
-      console.log(this.form.runName);
-      const runNameChanged = this.run.name != this.form.runName;
+      const runNameChanged = this.run.runName != this.form.runName;
       return runNameChanged;
     }
   },
   methods: {
     saveSettings() {
       console.log('Saving settings...');
-      console.log(this.form);
-      console.log(this.run);
+      this.$emit('saveSettings', this.form);
     },
     resetSettings() {
       console.log('Reset settings...');
-      this.$set(this.form, 'runName', this.run.name);
+      this.$set(this.form, 'runName', this.run.runName);
     }
   }
 };

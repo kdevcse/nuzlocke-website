@@ -101,5 +101,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.header-container {
+  text-align: left;
+  display: flex;
+}
+.header-container > h3 {
+  margin-bottom: 0;
+  flex: 1;
+}
 </style>

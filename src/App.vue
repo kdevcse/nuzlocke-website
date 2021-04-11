@@ -109,8 +109,9 @@ body {
 }
 #current-view {
   display: block;
-  overflow: auto;
+  overflow: scroll;
   padding: 30px;
   height: 100%;
+  background-color: #fff;
 }
 </style>

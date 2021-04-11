@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div 
-      v-if="run"
-      id="run-container">
+    <div
+      class="nuzzy-run-container"
+      v-if="run">
       <PokeAdder
         :run="run"
         :runId="run_id">
@@ -12,69 +12,30 @@
         :run="run"
         :runId="run_id">
       </PokeEditor>
-      <NuzzyInfo
-        :runName="run.name"
-        :trainerName="run.trainerName"
-        :version="run.version"
-        :badges="badges"
-        :badgesCompleted="run.badgesCompleted"
-        :createdTime="run.created"
-        :runId="run_id">
-      </NuzzyInfo>
-      <b-card
-        border-variant="primary"
-        header-bg-variant="primary"
-        header-text-variant="white"
-        header-tag="header"
-        no-body>
-        <template #header>
-          <div class="align-middle header-container">
-            <h3>Pokemon</h3>
-            <b-button-toolbar class="poke-toolbar float-right">
-              <b-button-group size="sm">
-                <b-button
-                  variant="success"
-                  v-b-modal.add-poke-window>
-                  Add Pokemon
-                </b-button>
-              </b-button-group>
-            </b-button-toolbar>
-          </div>
-        </template>
-        <b-tabs card>
-          <b-tab 
-            active
-            title="Party">
-            <NuzzyParty
-              :party="getPokemonParty"
-              :run="run"
-              :runId="run_id">
-            </NuzzyParty>
-          </b-tab>
-          <!--<b-tab title="Box">
-            <NuzzyBox
-              :data="getPokemonBox"
-              :version="run.version"
-              :run="run"
-              :runId="run_id">
-            </NuzzyBox>
-          </b-tab>-->
-          <b-tab title="Box">
-            <NuzzyBoxTable 
-              :run="run"
-              :runId="run_id"
-              :data="getPokemonBox">
-            </NuzzyBoxTable>
-          </b-tab>
-          <b-tab title="Deaths">
-            <NuzzyDeathBox
-              :run="run"
-              :runId="run_id"
-              :data="getPokemonDeaths">
-            </NuzzyDeathBox>
-          </b-tab>
-        </b-tabs>
-      </b-card>
+      <div class="nuzzy-info-title-bar">
+        <h1>{{run.runName}} - {{getVersionText}}</h1>
+      </div>
+      <b-tabs>
+        <b-tab
+          class="tab-container"
+          title="Dashboard">
+          <NuzzyRunDashboard
+            :run="run"
+            :runId="run_id"
+            :badges="badges"
+            :boxData="box_data">
+          </NuzzyRunDashboard>
+        </b-tab>
+        <b-tab
+          class="tab-container"
+          title="Settings">
+          <NuzzyRunSettings
+            :run="run"
+            :runId="run_id"
+            @saveSettings="handleSaveSettings">
+          </NuzzyRunSettings>
+        </b-tab>
+      </b-tabs>
     </div>
     <p v-else>
       Run not found
@@ -83,11 +44,8 @@
 </template>
 
 <script>
-import NuzzyInfo from '@/components/NuzzyInfo.vue';
-import NuzzyParty from '@/components/NuzzyParty.vue';
-//import NuzzyBox from '@/components/NuzzyBox.vue';
-import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
-import NuzzyDeathBox from '@/components/NuzzyDeathBox.vue';
+import NuzzyRunSettings from '@/components/NuzzyRunSettings.vue';
+import NuzzyRunDashboard from '@/components/NuzzyRunDashboard.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore, storage } from 'firebase';
@@ -95,11 +53,8 @@ import { auth, firestore, storage } from 'firebase';
 export default {
   name: 'NuzzyRun',
   components: {
-    NuzzyInfo,
-    NuzzyParty,
-    //NuzzyBox,
-    NuzzyBoxTable,
-    NuzzyDeathBox,
+    NuzzyRunSettings,
+    NuzzyRunDashboard,
     PokeAdder,
     PokeEditor
   },
@@ -134,17 +89,29 @@ export default {
     getPokemonInEdit() {
       return this.$store.state.pokemonInEdit;
     },
-    getPokemonParty() {
-      return this.box_data.filter(p => p.party > -1 && !p.death);
+    getVersionText() {
+      if (!this.run) {
+        return '';
+      }
+
+      const dashSplit = this.run.version.split('-');
+      let str = '';
+      dashSplit.forEach(split => {
+        str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
+      });
+
+      return str;
     },
-    getPokemonBox() {
-      return this.box_data.filter(p => p.party === -1 && !p.death);
-    },
-    getPokemonDeaths() {
-      return this.box_data.filter(p => p.death !== null && p.death !== undefined);
-    }
   },
   methods: {
+    handleSaveSettings(settings) {
+      const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
+      firestore().doc(query).update(settings).then(() => {
+        console.log('updated');
+      }).catch((error) => {
+        console.error(`Error updating settings: ${error}`);
+      });
+    },
     initSnapshotForRun() {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
       this.runSnapshot = firestore().doc(query).onSnapshot((doc) => {
@@ -214,10 +181,17 @@ export default {
 }
 </script>
 <style scoped>
-#run-container {
+.nuzzy-run-container{
+  margin: 0px auto;
+  max-width: 1500px;
+}
+.nuzzy-info-title-bar {
+  text-align: left;
+}
+.tab-container {
   margin: 0px auto;
   padding: 20px 0px;
-  max-width: 1500px;
+  /*max-width: 1500px;*/
   margin-bottom: 50px;
 }
 .header-container {

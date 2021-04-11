@@ -16,7 +16,7 @@
         <label for="create-run-name-input">Run name:</label>
         <b-input
           id="create-run-name-input" 
-          v-model="form.name"
+          v-model="form.runName"
           :state="nameValidation"
           @input="checkFormValidity">
         </b-input>
@@ -58,7 +58,7 @@ export default {
   data: function() {
     return {
       form: {
-        name: '',
+        runName: '',
         trainerName: '',
         version: 'red',
         valid: false
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     checkFormValidity() {
-      if(this.form.name === '' || this.form.name === undefined){
+      if(this.form.runName === '' || this.form.runName === undefined){
         this.nameValidation = false;
         this.nameInputError = 'Required';
       }
@@ -146,7 +146,7 @@ export default {
           generation: result.generation.name,
           pokedexes: result.pokedexes.map(pdx => pdx.name),
           regions: result.regions.map(r => r.name),
-          name: this.form.name,
+          runName: this.form.runName,
           trainerName: this.form.trainerName,
           created: Date.now()
         }).then((doc) => {
@@ -157,7 +157,7 @@ export default {
               firestore().doc(`users/${auth().currentUser.uid}/runs/${doc.id}`).update(runObj);
             });
           });
-          this.$bvToast.toast(`Run "${this.form.name}" was successfully added`,{
+          this.$bvToast.toast(`Run "${this.form.runName}" was successfully added`,{
             title: 'Run Added',
             toaster: 'b-toaster-top-right',
             variant: 'success',
@@ -165,7 +165,7 @@ export default {
             appendToast: true
           });
         }).catch((error) => {
-          this.$bvToast.toast(`There was an error while attempting to add run "${this.form.name}"`,{
+          this.$bvToast.toast(`There was an error while attempting to add run "${this.form.runName}"`,{
             title: 'Error Adding Run',
             toaster: 'b-toaster-top-right',
             variant: 'danger',
@@ -186,7 +186,7 @@ export default {
     },
     resetForm() {
       this.form = {
-        name: '',
+        runName: '',
         version: 'red',
         valid: false
       };

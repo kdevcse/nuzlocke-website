@@ -1,10 +1,10 @@
 <template>
-  <div class="dashboard">
+  <div class="my-runs-page">
     <RunCreator></RunCreator>
     <b-container class="nuzzy-runs-container">
       <b-row>
         <b-col>
-          <h2 id="dashboard-title">
+          <h2 id="my-runs-page-title">
             Nuzlocke Runs
           </h2>
           <b-button
@@ -28,7 +28,7 @@ import NuzzyRuns from '@/components/NuzzyRuns.vue';
 import RunCreator from '@/components/RunCreator.vue';
 
 export default {
-  name: 'Dashboard',
+  name: 'MyRuns',
   components: {
     NuzzyRuns,
     RunCreator
@@ -48,7 +48,7 @@ export default {
   text-align: left;
   margin-bottom: 15px;
 }
-#dashboard-title {
+#my-runs-page-title {
   border-bottom: black 1px solid;
   margin-bottom: 15px;
   padding-bottom: 15px;

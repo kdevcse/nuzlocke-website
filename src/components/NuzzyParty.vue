@@ -8,8 +8,9 @@
         :key="n"
         class="poke-party-container">
         <PokeCard
-          v-if="getPartyInfo(n -1)"
+          v-if="getPartyInfo(n - 1)"
           :pokedata="getPartyInfo(n - 1)"
+          :index="n - 1"
           :run="run"
           :runId="runId"></PokeCard>
         <div

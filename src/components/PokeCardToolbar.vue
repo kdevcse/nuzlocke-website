@@ -214,6 +214,7 @@ export default {
         pokemon.real_name = evolvedPokemon.real_name;
         pokemon.pokemon_id = evolvedPokemon.pokemon_id;
         pokemon.img_url = evolvedPokemon.img_url;
+        pokemon.stats = evolvedPokemon.stats;
 
         firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
       }).catch((error) => {

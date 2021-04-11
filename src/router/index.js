@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MyRuns from '../views/MyRuns.vue'
+import News from '../views/News.vue'
 import NuzzyRun from '../components/NuzzyRun.vue'
 
 Vue.use(VueRouter);
@@ -8,6 +9,16 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
+    name: 'News',
+    component: News
+  },
+  {
+    path: '/news',
+    name: 'News',
+    component: News
+  },
+  {
+    path: '/myruns',
     name: 'MyRuns',
     component: MyRuns
   },

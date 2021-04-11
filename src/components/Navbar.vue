@@ -86,6 +86,8 @@ export default {
         this.$store.commit('set_login_status', false);
         this.$store.commit('set_user_settings', {});
         this.$store.commit('set_runs', []);
+      }).finally(() => {
+        this.$router.push({ name: 'MyRuns' });
       });
     }
   }

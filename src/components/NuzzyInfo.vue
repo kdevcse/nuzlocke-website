@@ -1,7 +1,7 @@
 <template>
   <div class="nuzzy-info-container">
     <div>
-      <p>Trainer Name: {{trainerName}}</p>
+      <h4>Trainer Name: {{trainerName}}</h4>
       <p>Run Started: {{getCreatedTimeText}}</p>
       <b-progress
         class="run-progress-bar"

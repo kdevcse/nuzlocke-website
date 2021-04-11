@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Dashboard from '../views/Dashboard.vue'
+import MyRuns from '../views/MyRuns.vue'
 import NuzzyRun from '../components/NuzzyRun.vue'
 
 Vue.use(VueRouter);
@@ -8,8 +8,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Dashboard',
-    component: Dashboard
+    name: 'MyRuns',
+    component: MyRuns
   },
   {
     path: '/run/:id',

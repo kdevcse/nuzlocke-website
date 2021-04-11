@@ -13,7 +13,7 @@
         to="/"
         exact
         exact-active-class="active"
-        variant="light">Dashoard</b-nav-item>
+        variant="light">My Runs</b-nav-item>
       <b-nav-item>
         <b-nav-form>
           <b-input-group prepend="@">

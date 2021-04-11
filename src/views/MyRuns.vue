@@ -14,7 +14,7 @@
             + Add a run
           </b-button>
           <p v-else>
-            Please login or sign up to view the dashboard
+            Please login or sign up to view your runs
           </p>
           <NuzzyRuns :runs="userRuns"></NuzzyRuns>
         </b-col>

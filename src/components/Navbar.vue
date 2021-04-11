@@ -13,6 +13,11 @@
         to="/"
         exact
         exact-active-class="active"
+        variant="light">News</b-nav-item>
+      <b-nav-item
+        to="/MyRuns"
+        exact
+        exact-active-class="active"
         variant="light">My Runs</b-nav-item>
       <b-nav-item>
         <b-nav-form>
@@ -86,6 +91,8 @@ export default {
         this.$store.commit('set_login_status', false);
         this.$store.commit('set_user_settings', {});
         this.$store.commit('set_runs', []);
+      }).finally(() => {
+        this.$router.push({ name: 'News' });
       });
     }
   }

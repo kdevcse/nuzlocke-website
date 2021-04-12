@@ -2,7 +2,7 @@
   <div id="nuzzy-dashboard-container">
     <NuzzyRunInfo
       :trainerName="run.trainerName"
-      :badges="badges"
+      :badges="run.badges"
       :badgesCompleted="run.badgesCompleted"
       :createdTime="run.created"
       :runId="runId">
@@ -84,7 +84,6 @@ export default {
   props: {
     run: Object,
     runId: String,
-    badges: Array,
     boxData: Array
   },
   computed: {

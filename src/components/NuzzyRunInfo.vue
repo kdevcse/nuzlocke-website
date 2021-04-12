@@ -15,13 +15,36 @@
     </div>
     <div class="badges-container">
       <div 
-        v-for="badge in badges"
-        :key="badge.id"
+        v-for="(badge, index) in badges"
+        :key="index"
         class="badge-container">
-        <b-img 
-          height="50px"
-          width="50px"
-          :src="badge"></b-img>
+        <svg
+          viewBox="0 0 57 57"
+          :class="{ completed: badge }"
+          class="step-container">
+          <circle 
+            class="step-container-circle" 
+            cx="30"
+            cy="30"
+            r="25"
+            transform="rotate(-90 30 30)"></circle>
+          <path
+            class="step-container-check"
+            d="M19 30.2l7.1 7.2 15.5-15.6"
+            v-if="badge">
+          </path>
+          <foreignObject
+            x="24.5"
+            y="18"
+            height="50"
+            width="10"
+            v-else>
+            <p 
+              class="step-container-number">
+              {{index + 1}}
+            </p>
+          </foreignObject>
+        </svg>
       </div>
     </div>
   </div>
@@ -33,7 +56,6 @@ export default {
     trainerName: String,
     createdTime: Number,
     badges: Array,
-    badgesCompleted: Number,
     eliteFourBeaten: Boolean
   },
   computed: {
@@ -43,7 +65,8 @@ export default {
       return dte.toLocaleString('en-US', options);
     },
     getProgress() {
-      return this.eliteFourBeaten ? this.badgesCompleted + 1 : this.badgesCompleted;
+      const badgesCompleted = this.badges.filter(x => x).length;
+      return this.eliteFourBeaten ? badgesCompleted + 1 : badgesCompleted;
     },
     getProgressVariant() {
       const progress = ((this.getProgress / 9) * 100);
@@ -75,7 +98,7 @@ export default {
 <style scoped>
 .nuzzy-info-container {
   text-align: left;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 .toolbar-container{
   display: grid;
@@ -91,5 +114,56 @@ export default {
   display: grid;
   grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px;
   grid-column-gap: 1rem;
+}
+.step-container {
+  stroke: gray;
+  stroke-width: 2;
+  color: gray;
+  fill: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.step-container > foreignObject > p {
+  margin: 0;
+  font-weight: 600;
+}
+.step-container:hover {
+  stroke: #218838;
+  color: #218838;
+}
+.step-container.completed {
+  stroke: #218838;
+  animation: complete 1s ease-in-out forwards;
+}
+.step-container.completed > .step-container-check {
+  stroke-width: 3;
+  stroke: #fff;
+  stroke-dasharray: 35;
+  stroke-dashoffset: 35;
+  animation: check 0.2s linear forwards;
+  animation-delay: 1s;
+}
+@keyframes complete {
+  0% {
+    stroke-dasharray: 197.25;
+    stroke-dashoffset: 197.25;
+    fill: #fff;
+  }
+  70% {
+    stroke-dashoffset: 0;
+    fill: #fff;
+  }
+  100% {
+    fill: #218838;
+  }
+}
+@keyframes check {
+  from {
+    stroke-dasharray: 35;
+    stroke-dashoffset: 35;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 </style>

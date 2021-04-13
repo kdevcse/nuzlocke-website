@@ -117,7 +117,7 @@ export default {
 }
 .step-container {
   stroke: gray;
-  stroke-width: 2;
+  stroke-width:2;
   color: gray;
   fill: transparent;
   text-align: center;
@@ -147,14 +147,17 @@ export default {
   0% {
     stroke-dasharray: 197.25;
     stroke-dashoffset: 197.25;
+    stroke-opacity: 0.8;
     fill: #fff;
   }
   70% {
     stroke-dashoffset: 0;
     fill: #fff;
+    stroke-opacity: 0.8;
   }
   100% {
     fill: #218838;
+    stroke-opacity: 1;
   }
 }
 @keyframes check {

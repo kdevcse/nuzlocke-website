@@ -19,6 +19,7 @@
         :key="index"
         class="badge-container">
         <svg
+          @click="toggleBadge(index)"
           viewBox="0 0 57 57"
           :class="{ completed: badge }"
           class="step-container">
@@ -50,12 +51,15 @@
   </div>
 </template>
 <script>
+import { auth, firestore } from 'firebase';
+
 export default {
   name: 'NuzzyRunInfo',
   props: {
     trainerName: String,
     createdTime: Number,
     badges: Array,
+    runId: String,
     eliteFourBeaten: Boolean
   },
   computed: {
@@ -91,6 +95,16 @@ export default {
       }
 
       return variant;
+    }
+  },
+  methods: {
+    toggleBadge(index) {
+      var copyOfBadges = this.badges.slice();
+      copyOfBadges[index] = !copyOfBadges[index];
+      const query = `users/${auth().currentUser.uid}/runs/${this.runId}`;
+      firestore().doc(query).update({ badges: copyOfBadges }).catch(error => {
+        console.error(`Error updating badges: ${error}`);
+      });
     }
   }
 }

@@ -1,12 +1,9 @@
 <template>
   <div id="nuzzy-dashboard-container">
-    <NuzzyRunInfo
-      :trainerName="run.trainerName"
+    <NuzzyRunBadgesWidget
       :badges="run.badges"
-      :badgesCompleted="run.badgesCompleted"
-      :createdTime="run.created"
       :runId="runId">
-    </NuzzyRunInfo>
+    </NuzzyRunBadgesWidget>
     <b-card
       border-variant="primary"
       header-bg-variant="primary"
@@ -66,7 +63,7 @@
 </template>
 
 <script>
-import NuzzyRunInfo from '@/components/NuzzyRunInfo.vue';
+import NuzzyRunBadgesWidget from '@/components/NuzzyRunBadgesWidget.vue';
 import NuzzyRunParty from '@/components/NuzzyRunParty.vue';
 //import NuzzyRunBox from '@/components/NuzzyRunBox.vue';
 import NuzzyRunBoxTable from '@/components/NuzzyRunBoxTable.vue';
@@ -75,7 +72,7 @@ import NuzzyRunDeathBox from '@/components/NuzzyRunDeathBox.vue';
 export default {
   name: 'NuzzyDashboardContainer',
   components: {
-    NuzzyRunInfo,
+    NuzzyRunBadgesWidget,
     NuzzyRunParty,
     //NuzzyRunBox,
     NuzzyRunBoxTable,

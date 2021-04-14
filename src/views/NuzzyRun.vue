@@ -14,6 +14,13 @@
       </PokeEditor>
       <div class="nuzzy-info-title-bar">
         <h1>{{run.runName}} - {{getVersionText}}</h1>
+        <NuzzyRunInfo
+          :trainerName="run.trainerName"
+          :badges="run.badges"
+          :badgesCompleted="run.badgesCompleted"
+          :createdTime="run.created"
+          :runId="run_id">
+        </NuzzyRunInfo>
       </div>
       <b-tabs>
         <b-tab
@@ -59,6 +66,7 @@ import NuzzyRunSettings from '@/components/NuzzyRunSettings.vue';
 import NuzzyRunDashboard from '@/components/NuzzyRunDashboard.vue';
 import NuzzyRunTimeline from '@/components/NuzzyRunTimeline.vue';
 import NuzzyRunStats from '@/components/NuzzyRunStats.vue';
+import NuzzyRunInfo from '@/components/NuzzyRunInfo.vue';
 import PokeAdder from '@/components/PokeAdder.vue';
 import PokeEditor from '@/components/PokeEditor.vue';
 import { auth, firestore } from 'firebase';
@@ -70,6 +78,7 @@ export default {
     NuzzyRunDashboard,
     NuzzyRunTimeline,
     NuzzyRunStats,
+    NuzzyRunInfo,
     PokeAdder,
     PokeEditor
   },

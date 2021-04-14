@@ -16,7 +16,7 @@
           <p v-else>
             Please login or sign up to view your runs
           </p>
-          <NuzzyRuns :runs="userRuns"></NuzzyRuns>
+          <MyRunsList :runs="userRuns"></MyRunsList>
         </b-col>
       </b-row>
     </b-container>
@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import NuzzyRuns from '@/components/NuzzyRuns.vue';
+import MyRunsList from '@/components/MyRunsList.vue';
 import RunCreator from '@/components/RunCreator.vue';
 
 export default {
   name: 'MyRuns',
   components: {
-    NuzzyRuns,
+    MyRunsList,
     RunCreator
   },
   computed: {

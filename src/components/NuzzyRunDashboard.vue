@@ -1,12 +1,12 @@
 <template>
   <div id="nuzzy-dashboard-container">
-    <NuzzyInfo
+    <NuzzyRunInfo
       :trainerName="run.trainerName"
-      :badges="badges"
+      :badges="run.badges"
       :badgesCompleted="run.badgesCompleted"
       :createdTime="run.created"
       :runId="runId">
-    </NuzzyInfo>
+    </NuzzyRunInfo>
     <b-card
       border-variant="primary"
       header-bg-variant="primary"
@@ -32,33 +32,33 @@
         <b-tab
           active
           title="Party">
-          <NuzzyParty
+          <NuzzyRunParty
             :party="getPokemonParty"
             :run="run"
             :runId="runId">
-          </NuzzyParty>
+          </NuzzyRunParty>
         </b-tab>
         <!--<b-tab title="Box">
-              <NuzzyBox
+              <NuzzyRunBox
                 :data="getPokemonBox"
                 :version="run.version"
                 :run="run"
                 :runId="runId">
-              </NuzzyBox>
+              </NuzzyRunBox>
             </b-tab>-->
         <b-tab title="Box">
-          <NuzzyBoxTable
+          <NuzzyRunBoxTable
             :run="run"
             :runId="runId"
             :data="getPokemonBox">
-          </NuzzyBoxTable>
+          </NuzzyRunBoxTable>
         </b-tab>
         <b-tab title="Deaths">
-          <NuzzyDeathBox
+          <NuzzyRunDeathBox
             :run="run"
             :runId="runId"
             :data="getPokemonDeaths">
-          </NuzzyDeathBox>
+          </NuzzyRunDeathBox>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -66,25 +66,24 @@
 </template>
 
 <script>
-import NuzzyInfo from '@/components/NuzzyInfo.vue';
-import NuzzyParty from '@/components/NuzzyParty.vue';
-//import NuzzyBox from '@/components/NuzzyBox.vue';
-import NuzzyBoxTable from '@/components/NuzzyBoxTable.vue';
-import NuzzyDeathBox from '@/components/NuzzyDeathBox.vue';
+import NuzzyRunInfo from '@/components/NuzzyRunInfo.vue';
+import NuzzyRunParty from '@/components/NuzzyRunParty.vue';
+//import NuzzyRunBox from '@/components/NuzzyRunBox.vue';
+import NuzzyRunBoxTable from '@/components/NuzzyRunBoxTable.vue';
+import NuzzyRunDeathBox from '@/components/NuzzyRunDeathBox.vue';
 
 export default {
   name: 'NuzzyDashboardContainer',
   components: {
-    NuzzyInfo,
-    NuzzyParty,
-    //NuzzyBox,
-    NuzzyBoxTable,
-    NuzzyDeathBox,
+    NuzzyRunInfo,
+    NuzzyRunParty,
+    //NuzzyRunBox,
+    NuzzyRunBoxTable,
+    NuzzyRunDeathBox,
   },
   props: {
     run: Object,
     runId: String,
-    badges: Array,
     boxData: Array
   },
   computed: {

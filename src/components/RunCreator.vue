@@ -140,7 +140,16 @@ export default {
         return p.resource(result.version_group.url);
       }).then((result) => {
         firestore().collection(`users/${auth().currentUser.uid}/runs`).add({
-          badgesCompleted: 0,
+          badges: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
           version: this.form.version,
           version_group: result.name,
           generation: result.generation.name,

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MyRuns from '../views/MyRuns.vue'
 import News from '../views/News.vue'
-import NuzzyRun from '../components/NuzzyRun.vue'
+import NuzzyRun from '../views/NuzzyRun.vue'
 
 Vue.use(VueRouter);
 

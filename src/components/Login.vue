@@ -1,7 +1,7 @@
 <template>
   <b-modal
     centered
-    size="sm"
+    size="md"
     id="login-window"
     ok-title="Login"
     ok-variant="primary"

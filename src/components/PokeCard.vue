@@ -18,9 +18,9 @@
           :id="getPartyCardId"
           v-show="!loading"
           class="float-right stats-info-icon-container">
-          <b-icon
-            icon="info-circle"
-            class="stats-info-icon"></b-icon>
+          <font-awesome-icon
+            :icon="['fas', 'chart-bar']"
+            class="stats-info-icon"></font-awesome-icon>
         </div>
       </div>
     </template>

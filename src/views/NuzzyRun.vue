@@ -35,7 +35,8 @@
         <b-tab
           class="tab-container"
           title="Timeline">
-          <NuzzyRunTimeline>
+          <NuzzyRunTimeline
+            :events="event_data">
           </NuzzyRunTimeline>
         </b-tab>
         <b-tab
@@ -88,6 +89,7 @@ export default {
     if(this.$store.state.isLoggedIn) {
       this.initSnapshotForRun();
       this.initSnapshotForPokemon();
+      this.initSnapshotForEvents();
     }
   },
   beforeDestroy(){
@@ -103,9 +105,11 @@ export default {
     return {
       pokemonSnapshot: null,
       runSnapshot: null,
+      eventSnapshot: null,
       run: null,
       run_id: null,
       box_data: [],
+      event_data: [],
       badges: []
     }
   },
@@ -156,7 +160,7 @@ export default {
     initSnapshotForPokemon() {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}/pokemon`;
       this.pokemonSnapshot = firestore().collection(query).onSnapshot((querySnapshot) => {
-        const allPokemon = [];
+        var allPokemon = [];
 
         querySnapshot.forEach((doc) => {
           var pokeObj = doc.data();
@@ -165,6 +169,18 @@ export default {
         });
 				
         this.box_data = allPokemon;
+      });
+    },
+    initSnapshotForEvents() {
+      const query = `users/${auth().currentUser.uid}/runs/${this.run_id}/events`;
+      this.eventSnapshot = firestore().collection(query).onSnapshot((querySnapshot) => {
+        var allEvents = [];
+
+        querySnapshot.forEach((doc) => {
+          allEvents.push(doc.data());
+        });
+
+        this.event_data = allEvents;
       });
     },
     errorHandler(titleTxt, toastTxt, consoleTxt){

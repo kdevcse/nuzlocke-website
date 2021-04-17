@@ -96,6 +96,7 @@
 import PokeCard from '@/components/PokeCard.vue';
 import { auth, firestore } from 'firebase';
 import Pokemon from '@/models/pokemon.js';
+import CapturedEvent from '@/models/capturedEvent.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -223,6 +224,7 @@ export default {
     handleOk() {
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
+      const eventQuery = `${runQuery}/events`;
 
       firestore().collection(pokemonQuery).add(this.pokemon.object).then((addedPoke) => {
         return addedPoke.id;
@@ -248,6 +250,9 @@ export default {
           pokeData.party = -1;
           firestore().collection(pokemonQuery).doc(poke.id).update(pokeData);
         });
+      }).then(() => {
+        var eventData = new CapturedEvent(this.pokemon.object);
+        return firestore().collection(eventQuery).add(eventData.object)
       }).catch((error) => {
         console.log(error);
       });

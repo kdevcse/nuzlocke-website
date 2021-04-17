@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/vue-fontawesome": "^2.0.2",
+    "@growthbunker/vuetimeline": "^0.1.17",
     "bootstrap-vue": "^2.1.0",
     "core-js": "^3.6.5",
     "firebase": "^7.19.1",

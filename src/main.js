@@ -10,6 +10,7 @@ import { ToastPlugin, IconsPlugin } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGenderless, faMars, faVenus, faHeartbeat, faSkullCrossbones, faChartBar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTimeline from '@growthbunker/vuetimeline';
 
 Vue.config.productionTip = false;
 
@@ -27,6 +28,9 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+
+/*VueTimeline*/
+Vue.use(VueTimeline);
 
 /*Vuex state management*/
 Vue.use(Vuex);

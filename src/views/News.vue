@@ -1,7 +1,9 @@
 <template>
   <div class="news-container">
     <div class="timeline-container">
-      <h1>News</h1>
+      <h2 class="news-header">
+        News
+      </h2>
       <vue-timeline-update
         class="timeline"
         description="The Inaugural Developer Update"
@@ -28,6 +30,7 @@
 </template>
 
 <script>
+//Timeline docs: https://www.growthbunker.dev/vuetimeline/?ref=madewithvuejs.com
 export default {
   name: 'News',
   methods: {
@@ -49,5 +52,12 @@ export default {
 }
 .timeline {
   padding: 4px;
+}
+.news-header {
+  text-align: left;
+  border-bottom: solid 1px black;
+  margin-left: 160px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
 }
 </style>

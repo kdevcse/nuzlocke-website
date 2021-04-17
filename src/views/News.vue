@@ -5,40 +5,65 @@
         News
       </h2>
       <vue-timeline-update
+        v-for="n in news"
+        :key="n.id"
         class="timeline"
-        description="The Inaugural Developer Update"
-        category="Update"
-        :date="getDate(1618683428309)"
-        title="Hello World!"
+        :description="n.description"
+        :category="n.category"
+        :date="getDate(n.date)"
+        :title="n.title"
         theme="light"
-        icon="code"
-        color="blue"
+        :icon="getIcon(n.category)"
+        :color="getColor(n.category)"
         is-last>
-        Welcome to the Pokemon Run Logger app! (Yikes.. we'll call this a working title)
-        This application was designed to provide a way for Pokemon fans to track their
-        playthroughs in a sophisticated manner, whether it be a Nuzlocke or a normal playthrough.
-        
-        <br><br>This app is still in development and will likely have very few users initially.
-        I plan to open it up to more users in the future once it has gone trough proper testing.
-        So if you have access to use the app consider yourself lucky &#128522; hopefully you enjoy it!
-
-        <br><br>Anyway I will continue to post updates about my progress here to keep you guys 
-        updated on any development/news regarding the application.
+        <span v-html="n.html"></span>
       </vue-timeline-update>
     </div>
   </div>
 </template>
 
 <script>
+import { firestore } from 'firebase';
 //Timeline docs: https://www.growthbunker.dev/vuetimeline/?ref=madewithvuejs.com
 export default {
   name: 'News',
+  mounted() {
+    firestore().collection('news').get().then((data) => {
+      var newsObjects = [];
+      data.docs.forEach((doc) => {
+        newsObjects.push(doc.data());
+      });
+
+      this.news = newsObjects;
+    })
+  },
+  data: function() {
+    return {
+      news: []
+    }
+  },
   methods: {
     goToMyRuns() {
       this.$router.push({ name: 'MyRuns' });
     },
     getDate(milliseconds) {
       return new Date(milliseconds);
+    },
+    getIcon(cateogry) {
+      switch(cateogry) {
+      case "update":
+        return "code";
+      default:
+        return "code";
+      }
+    },
+    getColor(cateogry) {
+      switch(cateogry) {
+      case "update":
+        return "blue";
+      default:
+        return "blue";
+      }
     }
   }
 }

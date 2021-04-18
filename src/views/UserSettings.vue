@@ -6,20 +6,6 @@
       <h2 class="user-settings-header">
         User Settings
       </h2>
-      <div class="user-settings-toolbar-container">
-        <b-button 
-          @click="resetSettings"
-          :disabled="!dataHasChanged"
-          variant="danger">
-          Cancel
-        </b-button>
-        <b-button 
-          type="submit"
-          :disabled="!dataHasChanged"
-          variant="success">
-          Save
-        </b-button>
-      </div>
       <div class="user-settings-option">
         <label for="edit-username-input">Username:</label>
         <b-input
@@ -39,6 +25,20 @@
             required>
           </b-form-radio-group>
         </b-form-group>
+      </div>
+      <div class="user-settings-toolbar-container">
+        <b-button 
+          @click="resetSettings"
+          :disabled="!dataHasChanged"
+          variant="danger">
+          Cancel
+        </b-button>
+        <b-button 
+          type="submit"
+          :disabled="!dataHasChanged"
+          variant="success">
+          Save
+        </b-button>
       </div>
     </b-form>
   </div>
@@ -113,6 +113,7 @@ export default {
   max-width: 86rem;
 }
 .user-settings-toolbar-container {
+  position: relative;
   display: flex;
   justify-content: flex-end;
 }

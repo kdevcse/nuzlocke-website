@@ -1,7 +1,15 @@
 <template>
   <div class="run-settings-container">
     <b-form 
-      @submit="saveSettings">
+      @submit.prevent="saveSettings">
+      <div class="run-settings-option">
+        <label for="edit-run-name-input">Run Name:</label>
+        <b-input
+          id="edit-run-name-input"
+          v-model="form.runName"
+          required>
+        </b-input>
+      </div>
       <div class="run-settings-toolbar-container">
         <b-button 
           @click="resetSettings"
@@ -15,14 +23,6 @@
           variant="success">
           Save
         </b-button>
-      </div>
-      <div>
-        <label for="edit-run-name-input">Run Name:</label>
-        <b-input
-          id="edit-run-name-input"
-          v-model="form.runName"
-          required>
-        </b-input>
       </div>
     </b-form>
   </div>
@@ -54,11 +54,9 @@ export default {
   },
   methods: {
     saveSettings() {
-      console.log('Saving settings...');
       this.$emit('saveSettings', this.form);
     },
     resetSettings() {
-      console.log('Reset settings...');
       this.$set(this.form, 'runName', this.run.runName);
     }
   }
@@ -69,7 +67,11 @@ export default {
 .run-settings-container {
   text-align: left;
 }
+.run-settings-option {
+  margin-bottom: 1.5rem;
+}
 .run-settings-toolbar-container {
+  position: relative;
   display: flex;
   justify-content: flex-end;
 }

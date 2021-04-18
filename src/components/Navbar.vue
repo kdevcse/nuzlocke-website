@@ -57,7 +57,7 @@
             variant="light"
             icon="person-circle"></b-icon>
         </template>
-        <b-dropdown-item href="#">
+        <b-dropdown-item @click="goToUserSettings">
           Settings
         </b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
@@ -94,6 +94,9 @@ export default {
       }).finally(() => {
         this.$router.push({ name: 'News' });
       });
+    },
+    goToUserSettings() {
+      this.$router.push({ name: 'UserSettings' });
     }
   }
 }

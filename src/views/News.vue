@@ -5,8 +5,8 @@
         News
       </h2>
       <vue-timeline-update
-        v-for="n in news"
-        :key="n.id"
+        v-for="(n, index) in news"
+        :key="index"
         class="timeline"
         :description="n.description"
         :category="n.category"
@@ -15,7 +15,7 @@
         theme="light"
         :icon="getIcon(n.category)"
         :color="getColor(n.category)"
-        is-last>
+        :is-last="isLastNews(index)">
         <span v-html="n.html"></span>
       </vue-timeline-update>
     </div>
@@ -36,6 +36,11 @@ export default {
 
       this.news = newsObjects;
     })
+  },
+  computed: {
+    sortedNews() {
+      return this.news.slice().sort(function (a, b) { return a.date - b.date });
+    }
   },
   data: function() {
     return {
@@ -64,6 +69,9 @@ export default {
       default:
         return "blue";
       }
+    },
+    isLastNews(index){
+      return index === this.sortedNews.length - 1;
     }
   }
 }

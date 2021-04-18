@@ -135,9 +135,15 @@ export default {
     handleSaveSettings(settings) {
       const query = `users/${auth().currentUser.uid}/runs/${this.run_id}`;
       firestore().doc(query).update(settings).then(() => {
-        console.log('updated');
+        this.$bvToast.toast(`The run settings were updated`,{
+          title: 'Run Settings Updated',
+          toaster: 'b-toaster-top-right',
+          variant: 'success',
+          solid: true,
+          appendToast: true
+        });
       }).catch((error) => {
-        console.error(`Error updating settings: ${error}`);
+        console.error(`Error updating run settings: ${error}`);
       });
     },
     initSnapshotForRun() {

@@ -83,12 +83,19 @@ export default {
   methods: {
     saveSettings() {
       const query = `users/${auth().currentUser.uid}`;
-      firestore().doc(query).update(this.form).catch((error) => {
+      firestore().doc(query).update(this.form).then(() => {
+        this.$bvToast.toast(`The user settings were updated`,{
+          title: 'User Settings Updated',
+          toaster: 'b-toaster-top-right',
+          variant: 'success',
+          solid: true,
+          appendToast: true
+        });
+      }).catch((error) => {
         console.error(`User setting failed to update: ${error}`);
       });
     },
     resetSettings() {
-      console.log('Reset settings...');
       this.form = this.userSettings;
     }
   }

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import MyRuns from '../views/MyRuns.vue'
 import News from '../views/News.vue'
 import NuzzyRun from '../views/NuzzyRun.vue'
+import UserSettings from '../views/UserSettings.vue'
 
 Vue.use(VueRouter);
 
@@ -25,6 +26,11 @@ const routes = [
     path: '/run/:id',
     name: 'Run',
     component: NuzzyRun
+  },
+  {
+    path: '/user/settings',
+    name: 'UserSettings',
+    component: UserSettings
   }
 ];
 

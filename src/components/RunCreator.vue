@@ -51,6 +51,7 @@
 </template>
 <script>
 import { auth, firestore } from 'firebase';
+import RunStatusEvent from '@/models/events/runStatusEvent.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -163,15 +164,19 @@ export default {
             var runObj = data.data();
             p.getGenerationByName(runObj.generation).then((genResult) => {
               runObj.main_region = genResult.main_region.name;
-              doc.update(runObj);
+              doc.update(runObj).then(() => {
+                const runStatusEvent = new RunStatusEvent(runObj);
+                doc.collection('events').add(runStatusEvent.object).then(() => {
+                  this.$bvToast.toast(`Run "${this.form.runName}" was successfully added`,{
+                    title: 'Run Added',
+                    toaster: 'b-toaster-top-right',
+                    variant: 'success',
+                    solid: true,
+                    appendToast: true
+                  });
+                });
+              });
             });
-          });
-          this.$bvToast.toast(`Run "${this.form.runName}" was successfully added`,{
-            title: 'Run Added',
-            toaster: 'b-toaster-top-right',
-            variant: 'success',
-            solid: true,
-            appendToast: true
           });
         }).catch((error) => {
           this.$bvToast.toast(`There was an error while attempting to add run "${this.form.runName}"`,{

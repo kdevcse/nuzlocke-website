@@ -1,5 +1,6 @@
 export var EventTypes = {
-  CAPTURED: 0
+  RUNSTATUS: 0,
+  CAPTURED: 1
 }
 
 export default class Event {

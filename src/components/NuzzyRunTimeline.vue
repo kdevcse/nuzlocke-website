@@ -9,7 +9,6 @@
       class="timeline-container">
       <b-card
         :class="getEventClass(event.eventType)"
-        border-variant="primary"
         :header="getHeaderTxt(event)">
         <div class="content-container">
           <span 
@@ -49,6 +48,8 @@ export default {
     },
     getEventTypeName(type) {
       switch(type) {
+      case EventTypes.RUNSTATUS:
+        return 'Run Status';
       case EventTypes.CAPTURED:
         return 'Captured Pokemon';
       default:
@@ -58,6 +59,8 @@ export default {
     getEventClass(type) {
       var className = null;
       switch(type) {
+      case EventTypes.RUNSTATUS:
+        return 'run-status';
       case EventTypes.CAPTURED:
         className = 'captured';
         break;
@@ -76,15 +79,26 @@ export default {
   text-align: left;
   margin-bottom: 1rem;
 }
-/*captured event */
-.captured.content > strong {
+/* run status event */
+.run-status.content > strong {
   color: var(--primary);
 }
-.captured > .card-header {
+.run-status > .card-header {
   background-color: var(--primary);
 }
-.captured.card {
+.run-status.card {
   border-color: var(--primary);
+  color: white;
+}
+/* captured event */
+.captured.content > strong {
+  color: var(--success);
+}
+.captured > .card-header {
+  background-color: var(--success);
+}
+.captured.card {
+  border-color: var(--success);
   color: white;
 }
 .content {

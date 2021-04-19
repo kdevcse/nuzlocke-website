@@ -56,6 +56,8 @@
 <script>
 import { auth, firestore } from 'firebase';
 import Pokemon from '@/models/pokemon.js';
+import PokeStatusEvent from '@/models/events/pokeStatusEvent.js';
+import { EventTypes } from '@/models/events/event.js'
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {
@@ -86,11 +88,19 @@ export default {
 
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
+      const eventQuery = `${runQuery}/events`;
       let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.lvl += 1;
 
-      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object).then(() => {
+        var pokeStatusEvent = new PokeStatusEvent(pokemon.object, EventTypes.LVLUP);
+        firestore().collection(eventQuery).add(pokeStatusEvent.object).catch((error) => {
+          console.log(`Failed to add pokemon lvl up event: ${error}`);
+        });
+      }).catch((error) => {
+        console.log(`Failed to update pokemon lvl up: ${error}`);
+      });
     },
     onPokeMoveToBox() {
       if (!this.pokedata.id) {
@@ -122,11 +132,19 @@ export default {
 
       const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
       const pokemonQuery = `${runQuery}/pokemon`;
+      const eventQuery = `${runQuery}/events`;
       let pokemon = new Pokemon();
       pokemon.setValuesFromPokeDataObj(this.pokedata);
       pokemon.death = Date.now();
 
-      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+      firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object).then(() => {
+        var pokeStatusEvent = new PokeStatusEvent(pokemon.object, EventTypes.DEATH);
+        firestore().collection(eventQuery).add(pokeStatusEvent.object).catch((error) => {
+          console.log(`Failed to add pokemon death event: ${error}`);
+        });
+      }).catch((error) => {
+        console.log(`Failed to update pokemon death: ${error}`);
+      });
     },
     onPokeRevive() {
       if (!this.pokedata.id) {
@@ -209,6 +227,7 @@ export default {
 
         const runQuery = `users/${auth().currentUser.uid}/runs/${this.runId}`;
         const pokemonQuery = `${runQuery}/pokemon`;
+        const eventQuery = `${runQuery}/events`;
         let pokemon = new Pokemon();
         pokemon.setValuesFromPokeDataObj(this.pokedata);
         pokemon.real_name = evolvedPokemon.real_name;
@@ -216,7 +235,12 @@ export default {
         pokemon.img_url = evolvedPokemon.img_url;
         pokemon.stats = evolvedPokemon.stats;
 
-        firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object);
+        firestore().collection(pokemonQuery).doc(pokemon.id).update(pokemon.object).then(() => {
+          var pokeStatusEvent = new PokeStatusEvent(pokemon.object, EventTypes.EVOLVED);
+          firestore().collection(eventQuery).add(pokeStatusEvent.object).catch((error) => {
+            console.log(`Failed to add pokemon evolve event: ${error}`);
+          });
+        });
       }).catch((error) => {
         console.error(error);
       });

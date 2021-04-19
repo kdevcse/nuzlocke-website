@@ -51,25 +51,32 @@ export default {
       case EventTypes.RUNSTATUS:
         return 'Run Status';
       case EventTypes.CAPTURED:
-        return 'Captured Pokemon';
+        return 'Pokemon Status';
+      case EventTypes.DEATH:
+        return 'Pokemon Status';
+      case EventTypes.LVLUP:
+        return 'Pokemon Status';
+      case EventTypes.EVOLVED:
+        return 'Pokemon Status';
       default:
         return '';
       }
     },
     getEventClass(type) {
-      var className = null;
       switch(type) {
       case EventTypes.RUNSTATUS:
         return 'run-status';
       case EventTypes.CAPTURED:
-        className = 'captured';
-        break;
+        return 'captured';
+      case EventTypes.DEATH:
+        return 'poke-death';
+      case EventTypes.LVLUP:
+        return 'poke-lvl-up';
+      case EventTypes.EVOLVED:
+        return 'poke-evolved';
       default:
-        className = null;
-        break;
+        return null
       }
-
-      return className;
     }
   }
 }
@@ -95,10 +102,43 @@ export default {
   color: var(--success);
 }
 .captured > .card-header {
-  background-color: var(--success);
+  background-color: var(--info);
 }
 .captured.card {
-  border-color: var(--success);
+  border-color: var(--info);
+  color: white;
+}
+/* death event */
+.poke-death.content > strong {
+  color: var(--danger);
+}
+.poke-death > .card-header {
+  background-color: var(--info);
+}
+.poke-death.card {
+  border-color: var(--info);
+  color: white;
+}
+/* lvl up event */
+.poke-lvl.content > strong {
+  color: var(--info);
+}
+.poke-lvl > .card-header {
+  background-color: var(--info);
+}
+.poke-lvl.card {
+  border-color: var(--info);
+  color: white;
+}
+/* evovled event */
+.poke-evolved.content > strong {
+  color: var(--purple);
+}
+.poke-evolved > .card-header {
+  background-color: var(--info);
+}
+.poke-evolved.card {
+  border-color: var(--info);
   color: white;
 }
 .content {

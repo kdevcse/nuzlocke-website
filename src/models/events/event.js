@@ -1,6 +1,9 @@
 export var EventTypes = {
   RUNSTATUS: 0,
-  CAPTURED: 1
+  CAPTURED: 1,
+  DEATH: 2,
+  LVLUP: 3,
+  EVOLVED: 4
 }
 
 export default class Event {

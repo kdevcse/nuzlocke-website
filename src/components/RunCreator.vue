@@ -163,7 +163,7 @@ export default {
             var runObj = data.data();
             p.getGenerationByName(runObj.generation).then((genResult) => {
               runObj.main_region = genResult.main_region.name;
-              firestore().doc(`users/${auth().currentUser.uid}/runs/${doc.id}`).update(runObj);
+              doc.update(runObj);
             });
           });
           this.$bvToast.toast(`Run "${this.form.runName}" was successfully added`,{

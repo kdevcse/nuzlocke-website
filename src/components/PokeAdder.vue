@@ -96,7 +96,7 @@
 import PokeCard from '@/components/PokeCard.vue';
 import { auth, firestore } from 'firebase';
 import Pokemon from '@/models/pokemon.js';
-import CapturedEvent from '@/models/capturedEvent.js';
+import CapturedEvent from '@/models/events/capturedEvent.js';
 const Pokedex = require('pokeapi-js-wrapper');
 
 export default {

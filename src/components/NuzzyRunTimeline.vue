@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import { EventTypes } from '@/models/event.js'
+import { EventTypes } from '@/models/events/event.js'
 
 export default {
   name: 'NuzzyRunTimeline',

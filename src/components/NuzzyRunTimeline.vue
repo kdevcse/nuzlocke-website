@@ -8,8 +8,16 @@
       :key="event.id"
       class="timeline-container">
       <b-card
-        :class="getEventClass(event.eventType)"
-        :header="getHeaderTxt(event)">
+        :class="getEventClass(event.eventType)">
+        <template #header>
+          <div class="timeline-header">
+            <b-badge 
+              class="timeline-header-badge">
+              {{getBadgeTxt(event.eventType)}}
+            </b-badge>
+            <strong>{{getHeaderTxt(event)}}</strong>
+          </div>
+        </template>
         <div class="content-container">
           <span 
             :class="getEventClass(event.eventType)"
@@ -39,14 +47,30 @@ export default {
       return event.eventType === EventTypes.CAPTURED;
     },
     getHeaderTxt(event) {
-      return `${this.getEventTypeName(event.eventType)} - ${this.getEventDate(event)}`
+      return `${this.getEventHeaderName(event.eventType)} - ${this.getEventDate(event)}`
     },
     getEventDate(event) {
       var dte = new Date(event.date);
       const options = { dateStyle: 'short', timeStyle: 'short' };
       return dte.toLocaleString('en-US', options);
     },
-    getEventTypeName(type) {
+    getBadgeTxt(type) {
+      switch(type) {
+      case EventTypes.RUNSTATUS:
+        return 'Run Started';
+      case EventTypes.CAPTURED:
+        return 'Captured';
+      case EventTypes.DEATH:
+        return 'Death';
+      case EventTypes.LVLUP:
+        return 'Lvl. Up';
+      case EventTypes.EVOLVED:
+        return 'Evolve';
+      default:
+        return '';
+      }
+    },
+    getEventHeaderName(type) {
       switch(type) {
       case EventTypes.RUNSTATUS:
         return 'Run Status';
@@ -86,6 +110,9 @@ export default {
   text-align: left;
   margin-bottom: 1rem;
 }
+.timeline-header-badge {
+  margin-right: 0.5rem;
+}
 /* run status event */
 .run-status.content > strong {
   color: var(--primary);
@@ -95,54 +122,72 @@ export default {
 }
 .run-status.card {
   border-color: var(--primary);
-  color: white;
+  color: #fff;
+}
+.run-status > .card-header > .timeline-header > .timeline-header-badge {
+  background-color: var(--orange);
 }
 /* captured event */
 .captured.content > strong {
-  color: var(--success);
+  color: darkslateblue;
 }
 .captured > .card-header {
-  background-color: var(--info);
+  background-color: darkslateblue;
 }
 .captured.card {
-  border-color: var(--info);
-  color: white;
+  border-color: darkslateblue;
+  color: #fff;
+}
+.captured > .card-header > .timeline-header > .timeline-header-badge {
+  background-color: green;
 }
 /* death event */
 .poke-death.content > strong {
-  color: var(--danger);
+  color: darkslateblue;
 }
 .poke-death > .card-header {
-  background-color: var(--info);
+  background-color: darkslateblue;
 }
 .poke-death.card {
-  border-color: var(--info);
-  color: white;
+  border-color: darkslateblue;
+  color: #fff;
+}
+.poke-death > .card-header > .timeline-header > .timeline-header-badge {
+  background-color: var(--danger);
 }
 /* lvl up event */
-.poke-lvl.content > strong {
-  color: var(--info);
+.poke-lvl-up.content > strong {
+  color: darkslateblue;
 }
-.poke-lvl > .card-header {
-  background-color: var(--info);
+.poke-lvl-up > .card-header {
+  background-color: darkslateblue;
 }
-.poke-lvl.card {
-  border-color: var(--info);
-  color: white;
+.poke-lvl-up.card {
+  border-color: darkslateblue;
+  color: #fff;
+}
+.poke-lvl-up > .card-header > .timeline-header > .timeline-header-badge {
+  background-color: var(--pink);
 }
 /* evovled event */
 .poke-evolved.content > strong {
-  color: var(--purple);
+  color: darkslateblue;
 }
 .poke-evolved > .card-header {
-  background-color: var(--info);
+  background-color: darkslateblue;
 }
 .poke-evolved.card {
-  border-color: var(--info);
-  color: white;
+  border-color: darkslateblue;
+  color: #fff;
+}
+.poke-evolved > .card-header > .timeline-header > .timeline-header-badge {
+  background-color: var(--info);
 }
 .content {
   /* leave at end */
   color: black;
+}
+.content > strong {
+  color: var(--primary);
 }
 </style>

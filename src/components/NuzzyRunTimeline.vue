@@ -1,21 +1,22 @@
 <template>
   <div>
+    <p v-if="sortedEventsByDate.length === 0">
+      No events were found
+    </p>
     <div
       v-for="event in sortedEventsByDate"
       :key="event.id"
       class="timeline-container">
       <b-card
+        :class="getEventClass(event.eventType)"
         border-variant="primary"
-        :header="getHeaderTxt(event)"
-        header-bg-variant="primary"
-        header-text-variant="white">
-        <div :v-if="isCapturedEvent(event)">
-          <strong>
-            {{getCapturedPokemonName(event)}}
-          </strong> was captured at
-          <strong>
-            {{getLocationTxt(event)}}
-          </strong>
+        :header="getHeaderTxt(event)">
+        <div class="content-container">
+          <span 
+            :class="getEventClass(event.eventType)"
+            class="content"
+            v-html="event.html">
+          </span>
         </div>
       </b-card>
     </div>
@@ -31,16 +32,12 @@ export default {
   },
   computed: {
     sortedEventsByDate() {
-      return this.events.slice().sort(function (a, b) { return a.date - b.date });
-    }
+      return this.events ? this.events.slice().sort(function (a, b) { return a.date - b.date }) : [];
+    },
   },
   methods: {
     isCapturedEvent(event) {
       return event.eventType === EventTypes.CAPTURED;
-    },
-    getCapturedPokemonName(event) {
-      const nicknameTxt = event.nickname ? ` (${event.nickname}) ` : '';
-      return event.capturedPokemon.charAt(0).toUpperCase() + event.capturedPokemon.slice(1) + nicknameTxt;
     },
     getHeaderTxt(event) {
       return `${this.getEventTypeName(event.eventType)} - ${this.getEventDate(event)}`
@@ -58,27 +55,40 @@ export default {
         return '';
       }
     },
-    getLocationTxt(event) {
-      if (!event.location)
-        return '';
+    getEventClass(type) {
+      var className = null;
+      switch(type) {
+      case EventTypes.CAPTURED:
+        className = 'captured';
+        break;
+      default:
+        className = null;
+        break;
+      }
 
-      const dashSplit = event.location.split('-');
-      let str = '';
-      dashSplit.forEach(split => {
-        str += (split.charAt(0).toUpperCase() + split.slice(1)) + ' ';
-      });
-
-      return str;
+      return className;
     }
   }
 }
 </script>
-<style scoped>
+<style>
 .timeline-container {
   text-align: left;
   margin-bottom: 1rem;
 }
-strong {
+/*captured event */
+.captured.content > strong {
   color: var(--primary);
+}
+.captured > .card-header {
+  background-color: var(--primary);
+}
+.captured.card {
+  border-color: var(--primary);
+  color: white;
+}
+.content {
+  /* leave at end */
+  color: black;
 }
 </style>

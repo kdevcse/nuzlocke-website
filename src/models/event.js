@@ -5,6 +5,7 @@ export var EventTypes = {
 export default class Event {
   eventType = null;
   date = null;
+  html = '';
 
   constructor(type, date) {
     this.eventType = type;

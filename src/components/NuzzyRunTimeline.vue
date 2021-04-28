@@ -9,15 +9,13 @@
       class="timeline-container">
       <b-card
         :class="getEventClass(event.eventType)">
-        <template #header>
-          <div class="timeline-header">
-            <b-badge 
-              class="timeline-header-badge">
-              {{getBadgeTxt(event.eventType)}}
-            </b-badge>
-            <strong>{{getHeaderTxt(event)}}</strong>
-          </div>
-        </template>
+        <h5 class="timeline-header">
+          <b-badge 
+            class="timeline-header-badge">
+            {{getBadgeTxt(event.eventType)}}
+          </b-badge>
+          <strong>{{getEventDate(event)}}</strong>
+        </h5>
         <div class="content-container">
           <span 
             :class="getEventClass(event.eventType)"
@@ -46,9 +44,6 @@ export default {
     isCapturedEvent(event) {
       return event.eventType === EventTypes.CAPTURED;
     },
-    getHeaderTxt(event) {
-      return `${this.getEventHeaderName(event.eventType)} - ${this.getEventDate(event)}`
-    },
     getEventDate(event) {
       var dte = new Date(event.date);
       const options = { dateStyle: 'short', timeStyle: 'short' };
@@ -66,22 +61,6 @@ export default {
         return 'Lvl. Up';
       case EventTypes.EVOLVED:
         return 'Evolve';
-      default:
-        return '';
-      }
-    },
-    getEventHeaderName(type) {
-      switch(type) {
-      case EventTypes.RUNSTATUS:
-        return 'Run Status';
-      case EventTypes.CAPTURED:
-        return 'Pokemon Status';
-      case EventTypes.DEATH:
-        return 'Pokemon Status';
-      case EventTypes.LVLUP:
-        return 'Pokemon Status';
-      case EventTypes.EVOLVED:
-        return 'Pokemon Status';
       default:
         return '';
       }
@@ -120,68 +99,48 @@ export default {
 .run-status > .card-header {
   background-color: var(--primary);
 }
-.run-status.card {
-  border-color: var(--primary);
-  color: #fff;
-}
-.run-status > .card-header > .timeline-header > .timeline-header-badge {
-  background-color: var(--orange);
+.run-status > .card-body > .timeline-header > .timeline-header-badge {
+  background-color: var(--primary);
 }
 /* captured event */
 .captured.content > strong {
-  color: darkslateblue;
+  color: var(--primary);
 }
 .captured > .card-header {
-  background-color: darkslateblue;
+  background-color: var(--primary);
 }
-.captured.card {
-  border-color: darkslateblue;
-  color: #fff;
-}
-.captured > .card-header > .timeline-header > .timeline-header-badge {
+.captured > .card-body > .timeline-header > .timeline-header-badge {
   background-color: green;
 }
 /* death event */
 .poke-death.content > strong {
-  color: darkslateblue;
+  color: var(--primary);
 }
 .poke-death > .card-header {
-  background-color: darkslateblue;
+  background-color: var(--primary);
 }
-.poke-death.card {
-  border-color: darkslateblue;
-  color: #fff;
-}
-.poke-death > .card-header > .timeline-header > .timeline-header-badge {
+.poke-death > .card-body > .timeline-header > .timeline-header-badge {
   background-color: var(--danger);
 }
 /* lvl up event */
 .poke-lvl-up.content > strong {
-  color: darkslateblue;
+  color: var(--primary);
 }
 .poke-lvl-up > .card-header {
-  background-color: darkslateblue;
+  background-color: var(--primary);
 }
-.poke-lvl-up.card {
-  border-color: darkslateblue;
-  color: #fff;
-}
-.poke-lvl-up > .card-header > .timeline-header > .timeline-header-badge {
-  background-color: var(--pink);
+.poke-lvl-up > .card-body > .timeline-header > .timeline-header-badge {
+  background-color: var(--info);
 }
 /* evovled event */
 .poke-evolved.content > strong {
-  color: darkslateblue;
+  color: var(--primary);
 }
 .poke-evolved > .card-header {
-  background-color: darkslateblue;
+  background-color: var(--primary);
 }
-.poke-evolved.card {
-  border-color: darkslateblue;
-  color: #fff;
-}
-.poke-evolved > .card-header > .timeline-header > .timeline-header-badge {
-  background-color: var(--info);
+.poke-evolved > .card-body > .timeline-header > .timeline-header-badge {
+  background-color: var(--orange);
 }
 .content {
   /* leave at end */

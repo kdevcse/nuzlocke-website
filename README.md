@@ -14,7 +14,7 @@ Sluglocke is a web application currently in development that is designed to allo
 - More features to come!
 
 ## Contributors
-Currently [klewiscse](https://github.com/klewiscse) is the sole contributor to this project, but of course more are welcome to help with this project!
+Currently [klewiscse](https://github.com/kdevcse) is the sole contributor to this project, but of course more are welcome to help with this project!
 
 ## Technologies
 - [Vue.js](https://vuejs.org/)
